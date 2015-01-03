@@ -1,0 +1,4 @@
+RobustCD
+========
+
+Robust variable selection
