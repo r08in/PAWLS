@@ -1,2 +1,4 @@
 exportPattern("^[[:alpha:]]+")
 useDynLib(RobustCD, standardize)
+useDynLib(RobustCD, GroupStandardize)
+useDynLib(RobustCD, MaxProduct)

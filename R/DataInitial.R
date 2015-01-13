@@ -6,11 +6,11 @@ InitBeta=function(x,y,method="LAD",nlambda=300,selector="BIC")
   require("flare")
   if(method=="LAD")
   {    
-    res=slim(x,y,method="lq",q=1,nlambda=nlambda)
+    res=slim(x,y,method="lq",q=1,nlambda=nlambda,verbose=FALSE)
   }
   else if(method=="LASSO")
   {
-    res=slim(x,y,method="lasso",nlambda=nlambda)
+    res=slim(x,y,method="lasso",nlambda=nlambda,verbose=FALSE)
   }
   
   #get loss

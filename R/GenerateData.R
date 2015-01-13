@@ -7,7 +7,7 @@
 GenerateData = function (n,p,pNum,dataSetNum=1,r=0.9,errorSigma=1,offSet=0,outlier.op="NONE",outlier.pro=0.1,outlier.r=10)
 {
   #for test
-  set.seed(120)
+  #set.seed(120)
   
   require("MASS")
   #check data
