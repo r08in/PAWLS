@@ -4,12 +4,30 @@
 # r paramter of variance in generating X matrix
 # errorSigma variance of ramdom error
 # offSet indicate the offset of position of non-zero beta
-GenerateData = function (n,p,pNum,dataSetNum=1,r=0.9,errorSigma=1,offSet=0,outlier.op="NONE",outlier.pro=0.1,outlier.r=10)
+GenerateData = function (n,p=NULL,pNum=NULL,dataSetNum=1,beta=NULL,
+                         r=0.9,errorSigma=1,offSet=0,outlier.op="NONE",outlier.pro=0.1,outlier.r=10)
 {
   #for test
   #set.seed(120)
   
   require("MASS")
+  if(!missing(beta))
+  {
+    if(dataSetNum==1)
+    {
+      p=length(beta)
+      pNum=sum(beta!=0+0)
+    }
+    else
+    {
+      if(!is.matrix(beta)||dim(beta)[1]!=dataSetNum)
+        stop("dimention of beta should match data set Num!")
+      p=dim(beta)[2]
+      pNum=sum(beta[1,]!=0+0)
+    }
+  }
+   
+  
   #check data
   if(n<=0||p<=0||pNum<=0)
     stop("n or p or pNum cannot smaller than 0.")
@@ -38,15 +56,21 @@ GenerateData = function (n,p,pNum,dataSetNum=1,r=0.9,errorSigma=1,offSet=0,outli
   
   #generate beta  
   tempBeta=array(0,dim=c(dataSetNum,p))
-  if(length(offSet)!=dataSetNum)
+  if(missing(beta))
   {
-    offSet=rep(0,dataSetNum)
+    if(length(offSet)!=dataSetNum)
+    {
+      offSet=rep(0,dataSetNum)
+    }
+    for(j in 1:dataSetNum)
+    {
+      tempBeta[j,] =c(rep(0,offSet[j]),rep(1.5,pNum),rep(0,p-offSet[j]-pNum))
+    }
   }
-  for(j in 1:dataSetNum)
+  else
   {
-    tempBeta[j,] =c(rep(0,offSet[j]),rep(1.5,pNum),rep(0,p-offSet[j]-pNum))
+    tempBeta=matrix(beta,nrow=dataSetNum,ncol=p)
   }
-  
   #generate observation y
   tempy=array(0,dim=c(dataSetNum,n))
   for(j in 1:dataSetNum)
@@ -57,7 +81,7 @@ GenerateData = function (n,p,pNum,dataSetNum=1,r=0.9,errorSigma=1,offSet=0,outli
     }
     else
     {
-      error=rnorm(n,0,errorSigma);
+      error=errorSigma*rnorm(n,0,1);
     }
     if(outlier.op!="NONE") #generate outliers
     {

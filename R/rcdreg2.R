@@ -71,7 +71,7 @@ RCDReg2=function(x, y,penalty,lambda1,lambda2,beta0,w0,delta, maxIter)
         ##update w
         absr=abs(r)
         w[[l1]][l2,]=ifelse(absr>lam1,lam1/absr,1)
-        shift[m+1:m+n]=w[[l1]][l2,]-wPre
+        shift[(m+1):(m+n)]=w[[l1]][l2,]-wPre
         
         ##update betaPre and wPre for next iteration
         betaPre=beta[[l1]][l2,]
