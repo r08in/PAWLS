@@ -16,10 +16,12 @@ beta0=ifelse(init$beta==0,0.01,init$beta)
 w0=ifelse(init$weight==1,0.99,init$weight)
 res=rcdreg(out$x,out$y,penalty="ADL",nlambda1=50,nlambda2=100,
       beta0=beta0,w0=w0,delta=0.000001,maxIter=1000)
-final=BICPWLQ(res$wloss,res$beta,res$w,res$lambda1,res$lambda2,n)
-s=MySummary(res$beta,res$w,8,round(n*oPro))
+
+
+final=BICPWLQ2(res$wloss,res$beta,w=res$w,res$lambda1,res$lambda2,n)
+s=MySummary(res$beta,res$w,pNum,round(n*oPro))
 b=s$b
-w=s$w
+ww=s$w
 
 bic=final$res$bic
 save(res,file = "res.rda")

@@ -1,5 +1,41 @@
-RCDReg2=function(x, y,penalty,lambda1,lambda2,beta0,w0,delta, maxIter)
+RCDReg3=function(x, y,penalty,lambda1,lambda2,beta0,w0,delta, maxIter)
 {  
+  L1=length(lambda1)
+  L2=length(lambda2)
+  m=dim(x)[2]
+  n=length(y)
+  
+  #initial lambda
+  index1=L1-1
+  res1=InnerReg(x,y,penalty,lambda1[index1],lambda2,beta0,w0,delta,maxIter) #fix lambda1
+  index2=BIC(as.vector(res1$wloss),apply(matrix(res1$beta,L2,m)!=0+0,1,sum),n,m) #find best lambda2
+  
+  ##estimate and find the best
+  res2=InnerReg(x,y,penalty,lambda1,lambda2[index2],beta0,w0,delta,maxIter) #fix lambda2
+  index1=BIC(as.vector(res2$wloss),apply(matrix(res2$w,L1,n)!=1+0,1,sum),n,m) #find best lambda1
+
+  res3=InnerReg(x,y,penalty,lambda1[index1],lambda2,beta0,w0,delta,maxIter) #fix lambda1
+  beta=matrix(res3$beta,L2,m)
+  bdf=apply(beta!=0+0,1,sum)
+  wloss=as.vector(res3$wloss)
+  w=matrix(res3$w,L2,n)
+  wdf=apply(w!=1+0,1,sum)
+  index2=BIC(wloss,bdf,n,m) #find best lambda2
+
+  #return 
+  i=index1
+  j=index2
+  res=list(lambda1=lambda1,lambda2=lambda2,bdf=bdf,wdf=wdf,wloss=wloss)
+  list(lambda1=lambda1[i],lambda2=lambda2[j],
+       beta=beta[j,],w=w[j,],
+       wloss=wloss[j],bdf=bdf[j],wdf=wdf[j],
+       index1=i,index2=j,res=res)
+  
+}
+
+InnerReg=function(x, y,penalty,lambda1,lambda2,beta0,w0,delta, maxIter)
+{
+  
   ##declaration
   n=length(y)
   m=dim(x)[2]
@@ -90,20 +126,4 @@ RCDReg2=function(x, y,penalty,lambda1,lambda2,beta0,w0,delta, maxIter)
   }#end iteration for each lambda1
   
   list(beta=beta,loss=loss,iter=iter,w=w,wloss=wloss)
-}
-
-UpdateBeta=function(zj,lambda,c=1)
-{
-  if(zj>lambda)
-  {
-    return((zj-lambda)/c)
-  }
-  else if(zj+lambda<0)
-  {
-    return((zj+lambda)/c)
-  }
-  else
-  {
-    return(0)
-  }
 }

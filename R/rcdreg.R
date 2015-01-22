@@ -44,28 +44,34 @@ rcdreg=function (x,y,penalty=c("MCP", "SCAD", "ADL"),lambda1=NULL,lambda2=NULL,n
   }
   
   ##Fit
-  res=RCDReg2(XX, yy,penalty,lambda1,lambda2,beta0,w0,delta, maxIter)
-  m<-ncol(XX)
-  n<-nrow(XX)
+  #res=RCDReg2(XX, yy,penalty,lambda1,lambda2,beta0,w0,delta, maxIter)
+  #m<-ncol(XX)
+  #n<-nrow(XX)
 
   
   ##unstandardize
-  scale=ifelse(scale==0,0,1/scale)
-  for(i in 1:length(res$beta))
-  {
-    res$beta[[i]]=t(t(res$beta[[i]])*(scale))
-  }
+  #scale=ifelse(scale==0,0,1/scale)
+  #for(i in 1:dim(res$beta)[1])
+  #{
+   # res$beta[i,,]=t(t(res$beta[i,,])*(scale))
+  #}
   
   ##output
-  val <- structure(list(beta = res$beta,
-                        w=res$w,
-                        iter = res$iter,
-                        lambda1 = lambda1,
-                        lambda2=lambda2,
-                        penalty = penalty,
-                        loss = res$loss,
-                        wloss= res$wloss,
-                        n = n),
-                   class = "rcdreg")
-  val
+  #val <- structure(list(beta = res$beta,
+                        #w=res$w,
+                        #iter = res$iter,
+                        #lambda1 = lambda1,
+                        #lambda2=lambda2,
+                        #penalty = penalty,
+                        #loss = res$loss,
+                        #wloss= res$wloss,
+                        #n = n),
+                   #class = "rcdreg")
+  #val
+  
+  res=RCDReg3(XX, yy,penalty,lambda1,lambda2,beta0,w0,delta, maxIter)
+  ##unstandardize 
+  scale=ifelse(scale==0,0,1/scale)
+  res$beta=res$beta*scale
+  res
 }
