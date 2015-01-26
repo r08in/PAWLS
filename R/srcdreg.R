@@ -1,6 +1,6 @@
 ## This functionn is to perform group coordinate descent regression
 
-rcdreg=function (x,y,penalty=c("MCP", "SCAD", "ADL"),lambda1=NULL,lambda2=NULL,nlambda1=100,nlambda2=100,
+srcdreg=function (x,y,penalty=c("MCP", "SCAD", "ADL"),lambda1=NULL,lambda2=NULL,nlambda1=100,nlambda2=100,
                  beta0,w0,delta,maxIter=100,...)
 {
   ##error checking
@@ -34,6 +34,7 @@ rcdreg=function (x,y,penalty=c("MCP", "SCAD", "ADL"),lambda1=NULL,lambda2=NULL,n
   yy <- std[[2]]
   scale <- std[[3]]  
   
+  
   ##setup parameter
   if (missing(lambda1)||missing(lambda2)) 
   {
@@ -47,29 +48,10 @@ rcdreg=function (x,y,penalty=c("MCP", "SCAD", "ADL"),lambda1=NULL,lambda2=NULL,n
     nlambda2=length(lambda2)
   }
   
-  ##Fit
-  res=RCDReg2(XX, yy,penalty,lambda1,lambda2,beta0,w0,delta, maxIter)
-  m<-ncol(XX)
-  n<-nrow(XX)
-
-  
-  ##unstandardize
+  ##Fit  
+  res=RCDReg3(XX, yy,penalty,lambda1,lambda2,beta0,w0,delta, maxIter)
+  ##unstandardize 
   scale=ifelse(scale==0,0,1/scale)
-  for(i in 1:dim(res$beta)[1])
-  {
-    res$beta[i,,]=t(t(res$beta[i,,])*(scale))
-  }
-  
-  ##output
-  val <- structure(list(beta = res$beta,
-                        w=res$w,
-                        iter = res$iter,
-                        lambda1 = lambda1,
-                        lambda2=lambda2,
-                        penalty = penalty,
-                        loss = res$loss,
-                        wloss= res$wloss,
-                        n = n),
-                   class = "rcdreg")
-  val
+  res$beta=res$beta*scale
+  res
 }

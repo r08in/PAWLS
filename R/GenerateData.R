@@ -5,7 +5,7 @@
 # errorSigma variance of ramdom error
 # offSet indicate the offset of position of non-zero beta
 GenerateData = function (n,p=NULL,pNum=NULL,dataSetNum=1,beta=NULL,
-                         r=0.9,errorSigma=1,offSet=0,outlier.op="NONE",outlier.pro=0.1,outlier.r=10)
+                         r=0.9,errorSigma=1,errorType="n",offSet=0,outlier.op="NONE",outlier.pro=0.1,outlier.r=10)
 {
   #for test
   #set.seed(120)
@@ -71,6 +71,7 @@ GenerateData = function (n,p=NULL,pNum=NULL,dataSetNum=1,beta=NULL,
   {
     tempBeta=matrix(beta,nrow=dataSetNum,ncol=p)
   }
+  
   #generate observation y
   tempy=array(0,dim=c(dataSetNum,n))
   for(j in 1:dataSetNum)
@@ -78,6 +79,10 @@ GenerateData = function (n,p=NULL,pNum=NULL,dataSetNum=1,beta=NULL,
     if(errorSigma==0)
     {
       error=rep(0,n);
+    }
+    else if(errorType=="t")
+    {
+      error=rt(n,errorSigma)# errorSigma is df for t distribution
     }
     else
     {
@@ -207,4 +212,35 @@ GenerateDummyModel=function(sizeInfo,groupInfo,validGroupNumInfo,offSet=0,errorS
   
   #combine each dataSet
   CombineDataset(X,sizeInfo,groupInfo,Y)
+}
+
+#Data modification for different model
+GenerateDataByModel=function(n,beta,errorSigma=2,r=0.5,model=c("A","B","C","D"))
+{
+  if(model=="A")
+  {
+    out=GenerateData(n=n,dataSetNum=1,beta=beta,errorSigma=errorSigma,r=r) #errorSigma=2
+  }
+  else if(model=="B")
+  {
+    out=GenerateData(n=n,dataSetNum=1,beta=beta,errorSigma=errorSigma,errorType="t",r=r)#errorSigma is df=2
+  }
+  else if(model=="C")
+  {
+    out=GenerateData(n=n,dataSetNum=1,beta=beta,errorSigma=errorSigma,r=r)
+    oNum=round(n*0.1)
+    u1=runif(oNum,0,1)
+    u2=runif(oNum,0,1)
+    out$y[1:oNum]=out$y[1:oNum]+ifelse(u1<0.5,-1,1)*(20+10*u2)
+  }
+  else if(model=="D")
+  {
+    out=GenerateData(n=n,dataSetNum=1,beta=beta,errorSigma=errorSigma,r=r)
+    oNum=round(n*0.2)
+    u1=runif(oNum,0,1)
+    u2=runif(oNum,0,1)
+    out$y[1:oNum]=out$y[1:oNum]+ifelse(u1<0.5,-1,1)*(20+10*u2)
+    out$x[1:oNum,1]=out$x[1:oNum,1]+10
+  }
+  return(out)
 }
