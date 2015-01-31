@@ -1,16 +1,34 @@
-simulate=function(L,n,beta,model=c("A","B","C","D"),method="PWLQ")
+simulate=function(L,n,beta,model=c("A","B","C","D"),method="PWLQ",matlab=NULL,seed=2014)
 {
+  if(!is.null(seed))
+  {
+    set.seed(seed)
+  }
   p=length(beta)
   b=array(0,dim=c(L,p))
   iter=rep(0,L)
+  #out=GenerateDataByModel(n=n,beta=beta,model=model)
+  #evaluate(matlab,"rng(2015);")
   for(i in 1:L)
   {
     out=GenerateDataByModel(n=n,beta=beta,model=model)
-   
+    #evaluate(matlab,"[X y]=GenerateData()")
+    #xm=getVariable(matlab,"X")
+    #ym=getVariable(matlab,"y")
+    #out$x=xm$X
+    #out$y=ym$y
     if(method=="LAD")
     {
       init=InitParam(out$x,out$y,method="LAD")
       b[i,]=init$beta
+    }
+    else if(method=="ROSS")
+    {
+      setVariable(matlab, X=out$x)
+      setVariable(matlab, y=out$y)
+      evaluate(matlab,"[betaRoss]=RossSimulate(X,y)")
+      betaRoss=getVariable(matlab, "betaRoss")
+      b[i,]=as.vector(betaRoss$betaRoss)
     }
     else
     {
@@ -18,7 +36,7 @@ simulate=function(L,n,beta,model=c("A","B","C","D"),method="PWLQ")
       #w0=ifelse(init$weight==1,0.99,init$weight)
       beta0=rep(1,p)
       w0=rep(0.99,n)
-      res=srcdreg(out$x,out$y,penalty="ADL",nlambda1=50,nlambda2=300,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000)
+      res=srcdreg(out$x,out$y,penalty="ADL",nlambda1=50,nlambda2=100,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000)
       #test rcdreg
       #res2=rcdreg(out$x,out$y,penalty="ADL",nlambda1=50,nlambda2=100,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000)
       #final=BICPWLQ(res2$wloss,res2$beta,w=res2$w,res2$lambda1,res2$lambda2,n)
@@ -34,7 +52,7 @@ simulate=function(L,n,beta,model=c("A","B","C","D"),method="PWLQ")
   #vs
   vs=rep(0,3)
   pNum=sum(beta!=0)
-  bb=(b!=0)
+  bb=(b>=5e-5)
   n1=apply(bb,1,sum)
   n2=apply(bb[,1:pNum],1,sum)
   vs[1]=sum((n1[n2==pNum]==pNum)+0)/L

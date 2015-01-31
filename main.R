@@ -10,7 +10,7 @@ beta2=c(3,2,1.5,0,0,0,0,0)
  out=GenerateData(n=n,dataSetNum=1,beta=beta,errorSigma=2,errorType="t",r=0.5)
 
 
-#out=GenerateData (n,p,pNum,errorSigma=1,outlier.op="MEANSHIFT",outlier.pro=oPro,outlier.r=10)
+out=GenerateData (n,p,pNum=1,errorSigma=1,outlier.op="MEANSHIFT",outlier.pro=oPro,outlier.r=10)
 init=InitParam(out$x,out$y,method="LAD")
 beta0=ifelse(init$beta==0,0.01,init$beta)
 w0=ifelse(init$weight==1,0.99,init$weight)
@@ -83,14 +83,53 @@ res=rcdreg(out$x,out$y,penalty="ADL",nlambda1=50,nlambda2=100,
 
 #---------------------simulation for 4 moedl---------------------------#
 #--------------------compute se,vs(cs,cr,an)---------------------------#
-
+#matLabDir="C:\\Users\\Administrator\\Desktop\\Sim"
+matLabDir="D:\\matlab\\Sim"
+matlab=PrepareMatlab(matLabDir)
 #setting
-L=100
+L=50
 n=50
 p=8
 beta1=c(3,2,1.5,1,1,1,1,1)
 beta2=c(3,2,1.5,0,0,0,0,0)
 beta=beta2
+#simulation
+out1=simulate(L,n,beta,"A")
+out2=simulate(L,n,beta,"B")
+out3=simulate(L,n,beta,"C")
+out4=simulate(L,n,beta,"D")
+outRoss4=simulate(L,n,beta,model="D",method="ROSS",matlab=matlab)
+outRoss3=simulate(L,n,beta,model="C",method="ROSS",matlab=matlab)
+outRoss2=simulate(L,n,beta,model="B",method="ROSS",matlab=matlab)
+outRoss1=simulate(L,n,beta,model="A",method="ROSS",matlab=matlab)
+
+#------------compare square error by boxplot----------------------#
+se1=c(out1$se,outRoss1$se)
+se2=c(out2$se,outRoss2$se)
+se3=c(out3$se,outRoss3$se)
+se4=c(out4$se,outRoss4$se)
+group=c(rep("PWLQ",L),rep("ROSS",L))
+m1=data.frame(se=se1,group=group)
+m2=data.frame(se=se2,group=group)
+m3=data.frame(se=se3,group=group)
+m4=data.frame(se=se4,group=group)
+boxplot(se~group,data=m1,main="model A")
+x11();
+boxplot(se~group,data=m2,main="model B")
+x11();
+boxplot(se~group,data=m3,main="model C")
+x11();
+boxplot(se~group,data=m4,main="model D")
+
+
+
+#----------------another setting---------------------#
+
+#setting
+L=100
+n=100
+p=500
+beta=c(rep(1,10),rep(0,p-10))
 
 #simulation
 out1=simulate(L,n,beta,"A")
@@ -98,20 +137,8 @@ out2=simulate(L,n,beta,"B")
 out3=simulate(L,n,beta,"C")
 out4=simulate(L,n,beta,"D")
 
-
-se1=cbind(out1$se,rep("A",L))
-se2=cbind(out2$se,rep("B",L))
-se3=cbind(out3$se,rep("C",L))
-se4=cbind(out4$se,rep("D",L))
-se=rbind(se1,se2,se3,se4)
-colnames(se)<-c("s","m")
-se=data.frame(se)
-boxplot(s~m,data=se)
-
-t=5
-o3=rep(0,t)
-for(i in 1:t) o3[i]=(simulate(L,n,beta,"C"))$vs[1]
-
-
-
+out1_500=out1
+out2_500=out2
+out3_500=out3
+out4_500=out4
 
