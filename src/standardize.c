@@ -65,8 +65,8 @@ SEXP GroupStandardize(SEXP X_,SEXP Y_) {
   double *Y=REAL(Y_);
   double *YY=REAL(YY_);
   double *s = REAL(s_);
-  bool hasIntercept=HasIntercept(X,n);
-
+ // bool hasIntercept=HasIntercept(X,n);
+  bool hasIntercept=false;
   //scale each collum of x
   for (int j=0; j<p; j++) 
   {

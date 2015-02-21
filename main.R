@@ -65,7 +65,7 @@ w=s$w
 
 #simulation for 4 different linear model
 
-L=100
+L=2
 n=50
 p=8
 beta1=c(3,2,1.5,1,1,1,1,1)
@@ -86,8 +86,14 @@ res=rcdreg(out$x,out$y,penalty="ADL",nlambda1=50,nlambda2=100,
 #matLabDir="C:\\Users\\Administrator\\Desktop\\Sim"
 matLabDir="D:\\matlab\\Sim"
 matlab=PrepareMatlab(matLabDir)
+out1_500=simulate(L,n,beta,"A")
+SaveResult(out1_500$vs,"out1_500.txt")
+out2_500=simulate(L,n,beta,"B")
+SaveResult(out2_500$vs,"out2_500.txt")
+out4_500=simulate(L,n,beta,"D",seed=2015)
+SaveResult(out4_500$vs,"out4_500.txt")
 #setting
-L=50
+L=100
 n=50
 p=8
 beta1=c(3,2,1.5,1,1,1,1,1)
@@ -95,20 +101,32 @@ beta2=c(3,2,1.5,0,0,0,0,0)
 beta=beta2
 #simulation
 out1=simulate(L,n,beta,"A")
+SaveResult(out1$vs,"out1.txt")
 out2=simulate(L,n,beta,"B")
+SaveResult(out2$vs,"out2.txt")
 out3=simulate(L,n,beta,"C")
+SaveResult(out3$vs,"out3.txt")
 out4=simulate(L,n,beta,"D")
+SaveResult(out4$vs,"out4.txt")
+
+OulierSummary(out3$w)
+
+out5=simulate(L,n,beta,"E")
 outRoss4=simulate(L,n,beta,model="D",method="ROSS",matlab=matlab)
 outRoss3=simulate(L,n,beta,model="C",method="ROSS",matlab=matlab)
 outRoss2=simulate(L,n,beta,model="B",method="ROSS",matlab=matlab)
 outRoss1=simulate(L,n,beta,model="A",method="ROSS",matlab=matlab)
+outADL1=simulate(L,n,beta,"A",method="ADL")
+outADL2=simulate(L,n,beta,"B",method="ADL")
+outADL3=simulate(L,n,beta,"C",method="ADL")
+outADL4=simulate(L,n,beta,"D",method="ADL")
 
 #------------compare square error by boxplot----------------------#
-se1=c(out1$se,outRoss1$se)
-se2=c(out2$se,outRoss2$se)
-se3=c(out3$se,outRoss3$se)
-se4=c(out4$se,outRoss4$se)
-group=c(rep("PWLQ",L),rep("ROSS",L))
+se1=c(out1$se,outRoss1$se,outADL1$se)
+se2=c(out2$se,outRoss2$se,outADL2$se)
+se3=c(out3$se,outRoss3$se,outADL3$se)
+se4=c(out4$se,outRoss4$se,outADL4$se)
+group=c(rep("PWLQ",L),rep("ROSS",L),rep("ADL",L))
 m1=data.frame(se=se1,group=group)
 m2=data.frame(se=se2,group=group)
 m3=data.frame(se=se3,group=group)
@@ -126,19 +144,62 @@ boxplot(se~group,data=m4,main="model D")
 #----------------another setting---------------------#
 
 #setting
-L=100
+L=50
 n=100
 p=500
-beta=c(rep(1,10),rep(0,p-10))
-
+beta=c(rep(2,10),rep(0,p-10))
 #simulation
 out1=simulate(L,n,beta,"A")
+SaveResult(out1$vs,"out1.txt")
 out2=simulate(L,n,beta,"B")
+SaveResult(out2$vs,"out2.txt")
 out3=simulate(L,n,beta,"C")
+SaveResult(out3$vs,"out3.txt")
 out4=simulate(L,n,beta,"D")
+SaveResult(out4$vs,"out4.txt")
+
+out4_500=simulate(L,n,beta,"D")
+SaveResult(out4_500$vs,"out4_500.txt")
+out3_500=simulate(L,n,beta,"C")
+SaveResult(out3_500$vs,"out3_500.txt")
+out1_500=simulate(L,n,beta,"A")
+SaveResult(out1_500$vs,"out1_500.txt")
+out2_500=simulate(L,n,beta,"B")
+SaveResult(out2_500$vs,"out2_500.txt")
+
+
+
+
+outADL1_500=simulate(L,n,beta,"A",method="ADL")
+SaveResult(outADL1_500$vs,"outADL1_500.txt")
+outADL2_500=simulate(L,n,beta,"B",method="ADL")
+SaveResult(outADL2_500$vs,"outADL2_500.txt")
+outADL3_500=simulate(L,n,beta,"C",method="ADL")
+SaveResult(outADL3_500$vs,"outADL3_500.txt")
+outADL4_500=simulate(L,n,beta,"D",method="ADL")
+SaveResult(outADL4_500$vs,"outADL4_500.txt")
+
 
 out1_500=out1
 out2_500=out2
 out3_500=out3
 out4_500=out4
+#-------------------t test for symmetricize--------------------#
+t=20
+L=50
+n=50
+p=8
+beta1=c(3,2,1.5,1,1,1,1,1)
+beta2=c(3,2,1.5,0,0,0,0,0)
+beta=beta2
+rate1=rep(0,t)
+rate2=rep(0,t)
+for(i in 1:t)
+{
+  out3=simulate(L,n,beta,"D",seed=i)
+  rate1[i]=out3$vs[1]
+  out3=simulate(L,n,beta,"D2",seed=i)
+  rate2[i]=out3$vs[1]
+}
+t.test(rate2-rate1)
 

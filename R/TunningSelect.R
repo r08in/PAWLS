@@ -107,9 +107,21 @@ BICPWLQ2=function(wloss,beta,w,lambda1,lambda2,n,inv=1)
        index1=i,index2=j,res=res)
 }
 
-BIC=function(loss,df,n,p,type=c("beta","w"))
+BIC=function(loss,df,n,p,type="beta")
 {
-  vl=(log(loss/(2*n)+1)+(log(2*n)+1)*df/(2*n))
+  if(type=="beta")
+  {
+    #vl=log(loss/(2*n)+1)+df/(n)
+    vl=(log(loss/n+1)+log(n)*df/(n))
+  }
+  else 
+  {
+    vl=(log(loss/n+1)+log(n)*df/(n))
+    
+  }
+  #vl=(log(loss/(2*n)+1)+(log(2*n)+1)*df/(2*n))
+  #vl=log(loss/(2*n)+1)+(log(2*n)+1)*df/(2*n)-log(df+1)
+ 
   l=length(df)
   index=(1:l)[vl==min(vl)]
   if(length(index)!=1)

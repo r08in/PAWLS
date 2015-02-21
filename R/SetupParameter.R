@@ -2,7 +2,7 @@ SetupParameter = function(x,y,nlambda1,nlambda2,beta0,w0)
 {
   #set lambda1
   lambda1Max=max(y^2*abs(log(w0))/n)
-  lambda1=logSeq(lambda1Max,lambda1Max*0.0001,nlambda1)
+  lambda1=logSeq(lambda1Max,lambda1Max*0.01,nlambda1)
   #set lambda2
   lambda2Max=max(abs(t(x)%*%y/n)*abs(beta0)) # max |betaj|*|xj'y/n|
   lambda2=logSeq(lambda2Max,0,nlambda2)
