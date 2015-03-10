@@ -1,7 +1,7 @@
 ## This functionn is to perform group coordinate descent regression
 
 srcdreg=function (x,y,penalty=c("MCP", "SCAD", "ADL"),lambda1=NULL,lambda2=NULL,nlambda1=100,nlambda2=100,
-                 beta0,w0,delta,maxIter=100,...)
+                 beta0,w0,delta,maxIter=100,intercept=TRUE,standardize=TRUE,...)
 {
   ##error checking
   if (class(x) != "matrix") 
@@ -28,17 +28,29 @@ srcdreg=function (x,y,penalty=c("MCP", "SCAD", "ADL"),lambda1=NULL,lambda2=NULL,
   #center <- std[[2]]
   #scale <- std[[3]]
   #yy <- y - mean(y)
-  
-  std <- .Call("GroupStandardize", x,y)
-  XX <- std[[1]]
-  yy <- std[[2]]
-  scale <- std[[3]]  
-  
+  if(intercept)
+  {
+    x=AddIntercept(x)
+  }
+  std=0
+  scale=0
+  if(standardize)
+  {
+    std <- .Call("GroupStandardize", x,y)
+    XX <- std[[1]]
+    yy <- std[[2]]
+    scale <- std[[3]]  
+  }
+  else
+  {
+    XX=x
+    yy=y
+  }
   
   ##setup parameter
   if (missing(lambda1)||missing(lambda2)) 
   {
-    lambda=SetupParameter(XX, yy,nlambda1,nlambda2,beta0,w0)
+    lambda=SetupParameter(XX, yy,nlambda1,nlambda2,beta0,w0,intercept=intercept)
     lambda1=lambda$lambda1
     lambda2=lambda$lambda2
   } 
@@ -49,9 +61,12 @@ srcdreg=function (x,y,penalty=c("MCP", "SCAD", "ADL"),lambda1=NULL,lambda2=NULL,
   }
   
   ##Fit  
-  res=RCDReg3(XX, yy,penalty,lambda1,lambda2,beta0,w0,delta, maxIter)
+  res=RCDReg3(XX, yy,penalty,lambda1,lambda2,beta0,w0,delta, maxIter,intercept=intercept)
   ##unstandardize 
-  scale=ifelse(scale==0,0,1/scale)
-  res$beta=res$beta*scale
+  if(standardize)
+  {
+    scale=ifelse(scale==0,0,1/scale)
+    res$beta=res$beta*scale
+  }
   res
 }

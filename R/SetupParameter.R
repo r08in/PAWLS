@@ -1,10 +1,24 @@
-SetupParameter = function(x,y,nlambda1,nlambda2,beta0,w0) 
+SetupParameter = function(x,y,nlambda1,nlambda2,beta0,w0,intercept=TRUE,alpha=0.1) 
 {
-  #set lambda1
-  lambda1Max=max(y^2*abs(log(w0))/n)
-  lambda1=logSeq(lambda1Max,lambda1Max*0.01,nlambda1)
   #set lambda2
-  lambda2Max=max(abs(t(x)%*%y/n)*abs(beta0)) # max |betaj|*|xj'y/n|
+  if(intercept)
+  {
+    #set lambda1
+    l1=(y-mean(y))^2*abs(1-w0)/n
+    num=round(length(y)*alpha)
+    lambda1Max=l1[order(l1,decreasing=TRUE)[num+1]]
+    
+    lambda2Max=max(abs(t(x[,-1])%*%(y-mean(y))/n)*abs(beta0[-1])) # max |betaj|*|xj'y/n|
+  }
+  else
+  {
+    l1=y^2*abs(1-w0)/n
+    num=round(length(y)*alpha)
+    lambda1Max=l1[order(l1,decreasing=TRUE)[1]]
+    lambda2Max=max(abs(t(x)%*%y/n)*abs(beta0)) # max |betaj|*|xj'y/n|
+  }
+ 
+  lambda1=logSeq(lambda1Max,lambda1Max*0.01,nlambda1)
   lambda2=logSeq(lambda2Max,0,nlambda2)
   return(list(lambda1=lambda1,lambda2=lambda2))
 }

@@ -49,7 +49,7 @@ simulate=function(L,n,beta,model=c("A","B","C","D"),method="PWLQ",matlab=NULL,se
       #w0=ifelse(init$weight==1,0.99,init$weight)
       beta0=rep(1,p)
       w0=rep(0.99,n)
-      res=srcdreg(out$x,out$y,penalty="ADL",nlambda1=50,nlambda2=100,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000)
+      res=srcdreg(out$x,out$y,penalty="ADL",nlambda1=50,nlambda2=100,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000,intercept=FALSE)
       #test rcdreg
       #res2=rcdreg(out$x,out$y,penalty="ADL",nlambda1=50,nlambda2=100,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000)
       #final=BICPWLQ(res2$wloss,res2$beta,w=res2$w,res2$lambda1,res2$lambda2,n)
@@ -67,6 +67,7 @@ simulate=function(L,n,beta,model=c("A","B","C","D"),method="PWLQ",matlab=NULL,se
   vs=rep(0,3)
   pNum=sum(beta!=0)
   bb=(abs(b)>=5e-5)
+  #bb=(b>=5e-5)
   n1=apply(bb,1,sum)
   n2=apply(bb[,1:pNum],1,sum)
   vs[1]=sum((n1[n2==pNum]==pNum)+0)/L

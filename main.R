@@ -86,12 +86,7 @@ res=rcdreg(out$x,out$y,penalty="ADL",nlambda1=50,nlambda2=100,
 #matLabDir="C:\\Users\\Administrator\\Desktop\\Sim"
 matLabDir="D:\\matlab\\Sim"
 matlab=PrepareMatlab(matLabDir)
-out1_500=simulate(L,n,beta,"A")
-SaveResult(out1_500$vs,"out1_500.txt")
-out2_500=simulate(L,n,beta,"B")
-SaveResult(out2_500$vs,"out2_500.txt")
-out4_500=simulate(L,n,beta,"D",seed=2015)
-SaveResult(out4_500$vs,"out4_500.txt")
+
 #setting
 L=100
 n=50
@@ -99,7 +94,7 @@ p=8
 beta1=c(3,2,1.5,1,1,1,1,1)
 beta2=c(3,2,1.5,0,0,0,0,0)
 beta=beta2
-#simulation
+#simulation for pwls
 out1=simulate(L,n,beta,"A")
 SaveResult(out1$vs,"out1.txt")
 out2=simulate(L,n,beta,"B")
@@ -109,13 +104,25 @@ SaveResult(out3$vs,"out3.txt")
 out4=simulate(L,n,beta,"D")
 SaveResult(out4$vs,"out4.txt")
 
-OulierSummary(out3$w)
-
-out5=simulate(L,n,beta,"E")
+#simulation for SROS
+matLabDir="D:\\matlab\\Sim"
+matlab=PrepareMatlab(matLabDir)
 outRoss4=simulate(L,n,beta,model="D",method="ROSS",matlab=matlab)
 outRoss3=simulate(L,n,beta,model="C",method="ROSS",matlab=matlab)
 outRoss2=simulate(L,n,beta,model="B",method="ROSS",matlab=matlab)
 outRoss1=simulate(L,n,beta,model="A",method="ROSS",matlab=matlab)
+
+#simulation for ADL
+
+outADL1=simulate(L,n,beta,"A",method="ADL")
+outADL2=simulate(L,n,beta,"B",method="ADL")
+outADL3=simulate(L,n,beta,"C",method="ADL")
+outADL4=simulate(L,n,beta,"D",method="ADL")
+
+OulierSummary(out3$w)
+
+out5=simulate(L,n,beta,"E")
+
 outADL1=simulate(L,n,beta,"A",method="ADL")
 outADL2=simulate(L,n,beta,"B",method="ADL")
 outADL3=simulate(L,n,beta,"C",method="ADL")
@@ -126,18 +133,22 @@ se1=c(out1$se,outRoss1$se,outADL1$se)
 se2=c(out2$se,outRoss2$se,outADL2$se)
 se3=c(out3$se,outRoss3$se,outADL3$se)
 se4=c(out4$se,outRoss4$se,outADL4$se)
-group=c(rep("PWLQ",L),rep("ROSS",L),rep("ADL",L))
+
+se1=c(out1$se,outRoss1$se)
+se2=c(out2$se,outRoss2$se)
+se3=c(out3$se,outRoss3$se)
+se4=c(out4$se,outRoss4$se)
+group=c(rep("PWLQ",L),rep("SROS",L))
 m1=data.frame(se=se1,group=group)
 m2=data.frame(se=se2,group=group)
 m3=data.frame(se=se3,group=group)
 m4=data.frame(se=se4,group=group)
+attach(mtcars)
+par(mfrow=c(2,2))
 boxplot(se~group,data=m1,main="model A")
-x11();
 boxplot(se~group,data=m2,main="model B")
-x11();
 boxplot(se~group,data=m3,main="model C")
-x11();
-boxplot(se~group,data=m4,main="model D")
+boxplot(se~group,data=m4,main="model D",ylim=c(0,8))
 
 
 
@@ -197,9 +208,63 @@ rate2=rep(0,t)
 for(i in 1:t)
 {
   out3=simulate(L,n,beta,"D",seed=i)
-  rate1[i]=out3$vs[1]
-  out3=simulate(L,n,beta,"D2",seed=i)
   rate2[i]=out3$vs[1]
+  #out3=simulate(L,n,beta,"C3",seed=i)
+  #rate2[i]=out3$vs[1]
 }
 t.test(rate2-rate1)
 
+#-------------real data analysis-------------#
+require(MASS)
+y=log(Boston$medv)
+x=Boston[,-14]
+out=list(y=y,x=x)
+
+out=PrepareData(screenNum=1000)
+p=dim(out$x)[2]
+n=dim(out$x)[1]
+init=sparseLTS(out$x,out$y)
+beta0=SetBeta0(init$coefficients)
+w0=ifelse(init$wt==1,0.99,0.01)
+nlambda1=50
+nlambda2=100
+res=srcdreg(out$x,out$y,penalty="ADL",nlambda1=50,nlambda2=100,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000)
+
+res=rcdreg(out$x,out$y,penalty="ADL",nlambda1=nlambda1,nlambda2=nlambda2,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000)
+
+
+
+#---------ADL----------#
+init2=InitParam(out$x,out$y,method="LASSO")''
+beta0=SetBeta0(init$beta)
+w0=ifelse(init$weight==1,(0.99+max(init$weight[init$weight!=1])*0.01),init$weight)
+res=rcdreg(out$x,out$y,penalty="ADL",nlambda1=2,nlambda2=nlambda2,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000)
+index=BIC(res$wloss[1,],apply(matrix(res$beta[1,,],100,p)!=0+0,1,sum),n,p)
+bbb=res$beta[1,index,]
+
+ltsReg(out$x,out$y)
+
+
+res=slim(out$x,out$y,method="lq",q=1,nlambda=100,verbose=FALSE)
+res=InitParam(out$x,out$y,method="LAD")
+
+
+
+#============Boston Housing==========#
+# first pwls-vs
+
+
+#pwls under selected space of beta
+
+
+# calculate varinace of beta hat
+
+#=========end of Boston Housing=====#
+
+#-----------------------------------------------------------------------------------------------------------------
+
+#======real data analysis============#
+
+
+
+#======end of data analysis===========#

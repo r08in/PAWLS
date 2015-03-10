@@ -111,16 +111,17 @@ BIC=function(loss,df,n,p,type="beta")
 {
   if(type=="beta")
   {
-    #vl=log(loss/(2*n)+1)+df/(n)
     vl=(log(loss/n+1)+log(n)*df/(n))
+    #vl=loss/n+log(n)*df/(n)
+    #vl=loss/n+log(n)*df/(n)+log(choose(p,df))/n
   }
   else 
   {
     vl=(log(loss/n+1)+log(n)*df/(n))
-    
+    #vl=loss/n+log(n)*df/(n)
+    #vl=loss/n+log(n)*df/(n)+log(choose(p,df))/n
   }
-  #vl=(log(loss/(2*n)+1)+(log(2*n)+1)*df/(2*n))
-  #vl=log(loss/(2*n)+1)+(log(2*n)+1)*df/(2*n)-log(df+1)
+
  
   l=length(df)
   index=(1:l)[vl==min(vl)]
@@ -132,4 +133,20 @@ BIC=function(loss,df,n,p,type="beta")
   {
     index
   }
+}
+
+dfs=function(x,beta,w)
+{
+  if(dim(beta)[1]!=dim(w)[1])
+    stop("in df: beta and w should have the same row!")
+  require('Matrix')
+  m=dim(beta)[1]
+  df=rep(0,m)
+  b=abs(beta)>5e-5
+  for(i in 1:m)
+  {
+    if(sum(b[i,])==0) next
+    df[i]=rankMatrix(as.matrix(w[i,]*x[,b[i,]]))
+  }
+  df
 }

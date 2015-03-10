@@ -277,6 +277,20 @@ GenerateDataByModel=function(n,beta,errorSigma=2,r=0.5,model=c("A","B","C","D"))
     index=u<0.5
     out$y[index]=-out$y[index]
     out$x[index,]=-out$x[index,]
+    set.seed(round(out$x[1,1]*100))
+    
+    
+  }
+  else if(model=="C3")
+  {
+    out=GenerateData(n=n,dataSetNum=1,beta=beta,errorSigma=errorSigma,r=r)
+    oNum=round(n*0.1)
+    u1=runif(oNum,0,1)
+    u2=runif(oNum,0,1)
+    out$y[1:oNum]=out$y[1:oNum]+ifelse(u1<1,-1,1)*(20+10*u2)
+    ##random change sign method
+    set.seed(round(out$x[1,1]*100))
+    
   }
   
   ##random change sign method
