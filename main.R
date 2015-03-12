@@ -207,7 +207,7 @@ rate1=rep(0,t)
 rate2=rep(0,t)
 for(i in 1:t)
 {
-  out3=simulate(L,n,beta,"D",seed=i)
+  out3=simulate(L,n,beta,"C",seed=i)
   rate2[i]=out3$vs[1]
   #out3=simulate(L,n,beta,"C3",seed=i)
   #rate2[i]=out3$vs[1]
@@ -251,10 +251,26 @@ res=InitParam(out$x,out$y,method="LAD")
 
 
 #============Boston Housing==========#
+require(MASS)
+require(robustHD)
+y=log(Boston$medv)
+x=Boston[,-14]
+out=list(y=y,x=x)
+p=dim(out$x)[2]
+n=dim(out$x)[1]
+init=sparseLTS(out$x,out$y)
+beta0=SetBeta0(init$coefficients)
+w0=ifelse(init$wt==1,0.99,0.01)
+nlambda1=50
+nlambda2=100
 # first pwls-vs
-
+res=srcdreg(out$x,out$y,penalty="ADL",nlambda1=nlambda1,nlambda2=nlambda2,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000)
 
 #pwls under selected space of beta
+select=(res$beta!=0)
+xx=x[,select]
+res2=pwlsreg(xx,out$y,nlambda=50,w0=res$w,delta=0.0001,maxIter=1000)
+
 
 
 # calculate varinace of beta hat

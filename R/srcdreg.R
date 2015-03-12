@@ -1,7 +1,7 @@
 ## This functionn is to perform group coordinate descent regression
 
-srcdreg=function (x,y,penalty=c("MCP", "SCAD", "ADL"),lambda1=NULL,lambda2=NULL,nlambda1=100,nlambda2=100,
-                 beta0,w0,delta,maxIter=100,intercept=TRUE,standardize=TRUE,...)
+srcdreg=function (x,y,penalty1=c("log","1-w0"),penalty2=c("MCP", "SCAD", "ADL"),lambda1=NULL,lambda2=NULL,nlambda1=100,nlambda2=100,
+                 beta0,w0,delta,maxIter=100,intercept=TRUE,standardize=FALSE,updateInitial=TRUE,...)
 {
   ##error checking
   if (class(x) != "matrix") 
@@ -16,7 +16,8 @@ srcdreg=function (x,y,penalty=c("MCP", "SCAD", "ADL"),lambda1=NULL,lambda2=NULL,
     if (class(tmp)[1] == "try-error") 
       stop("y must numeric or able to be coerced to numeric")
   }
-  penalty <- match.arg(penalty)
+  penalty2 <- match.arg(penalty2)
+  penalty1 <- match.arg(penalty1)
   if (nlambda1 < 2||nlambda2<2) 
     stop("nlambda must be at least 2")
   if (any(is.na(y)) | any(is.na(x))) 
@@ -61,7 +62,7 @@ srcdreg=function (x,y,penalty=c("MCP", "SCAD", "ADL"),lambda1=NULL,lambda2=NULL,
   }
   
   ##Fit  
-  res=RCDReg3(XX, yy,penalty,lambda1,lambda2,beta0,w0,delta, maxIter,intercept=intercept)
+  res=RCDReg3(XX, yy,penalty1=penalty1,penalty2=penalty2,lambda1,lambda2,beta0,w0,delta, maxIter,intercept=intercept,updateInitial=updateInitial)
   ##unstandardize 
   if(standardize)
   {

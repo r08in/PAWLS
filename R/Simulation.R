@@ -1,4 +1,5 @@
-simulate=function(L,n,beta,model=c("A","B","C","D"),method="PWLQ",matlab=NULL,seed=2014)
+simulate=function(L,n,beta,model=c("A","B","C","D"),method="PWLQ",matlab=NULL,seed=2014,
+                  standardize=FALSE,penalty1="1-w0",updateInitial=TRUE)
 {
   if(!is.null(seed))
   {
@@ -45,11 +46,21 @@ simulate=function(L,n,beta,model=c("A","B","C","D"),method="PWLQ",matlab=NULL,se
     }
     else
     {
-      #beta0=ifelse(init$beta==0,0.01,init$beta)
-      #w0=ifelse(init$weight==1,0.99,init$weight)
-      beta0=rep(1,p)
-      w0=rep(0.99,n)
-      res=srcdreg(out$x,out$y,penalty="ADL",nlambda1=50,nlambda2=100,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000,intercept=FALSE)
+      if(!updateInitial)
+      {
+        require(robustHD)
+        init=sparseLTS(out$x,out$y,intercept=FALSE)
+        beta0=SetBeta0(init$coefficients)
+        w0=ifelse(init$wt==1,0.99,0.01)
+      }
+      else
+      {
+        beta0=rep(1,p)
+        w0=rep(0.99,n)
+      }
+      
+      res=srcdreg(out$x,out$y,penalty="ADL",nlambda1=50,nlambda2=100,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000,
+                  intercept=FALSE,standardize=standardize,penalty1=penalty1,updateInitial=updateInitial)
       #test rcdreg
       #res2=rcdreg(out$x,out$y,penalty="ADL",nlambda1=50,nlambda2=100,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000)
       #final=BICPWLQ(res2$wloss,res2$beta,w=res2$w,res2$lambda1,res2$lambda2,n)
