@@ -29,7 +29,7 @@ RCDReg3=function(x, y,penalty1=c("log","1-w0"),penalty2=c("MCP", "SCAD", "ADL"),
     pre1=index1
     pre2=index2
     
-    if(updateInitial)
+    if(updateInitial||iter==1)
     {
       beta0=matrix(res$beta,L2,m)[index2,]    
       w0=matrix(res$w,L2,n)[index2,]
@@ -72,7 +72,7 @@ RCDReg3=function(x, y,penalty1=c("log","1-w0"),penalty2=c("MCP", "SCAD", "ADL"),
   
 }
 
-InnerReg=function(x, y,penalty1=c("log","1-w0"),penalty2=c("MCP", "SCAD", "ADL"),lambda1,lambda2,beta0,w0,delta, maxIter,intercept=TRUE)
+InnerReg=function(x, y,penalty1="1-w0",penalty2="ADL",lambda1,lambda2,beta0,w0,delta, maxIter,intercept=TRUE)
 {
   
   ##declaration
@@ -181,7 +181,13 @@ InnerReg=function(x, y,penalty1=c("log","1-w0"),penalty2=c("MCP", "SCAD", "ADL")
 
 SetBeta0=function(beta0)
 {
-  #b=min(abs(beta0[beta0!=0]))*0.01
-  b=0.01
+  if(sum(beta0)==0)
+  {
+    b=0.01
+  }
+  else
+  {
+    b=min(abs(beta0[beta0!=0]))*0.01
+  }
   ifelse(beta0==0,b,beta0)
 }

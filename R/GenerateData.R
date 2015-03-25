@@ -117,6 +117,41 @@ GenerateData = function (n,p=NULL,pNum=NULL,dataSetNum=1,beta=NULL,
   
 }
 
+##Generate X and Y seperately(without beta)
+GenerateDataSep=function(n=150,p=50,k=6,r=0.3,delta=5)
+{
+  #check data
+  if(n<=0||p<=0||k<=0)
+    stop("n or p or k cannot smaller than 0.")
+  if(n<=3*k)
+    stop("3K cannot be larger or equal to n.")
+  
+  #generate Y
+  mu=rep(0,k)
+  sigma=diag(k)
+  require("MASS")
+  l=mvrnorm(n,mu,sigma)
+  errorSigma=sqrt(k)/3
+  yerror=rnorm(n,0,errorSigma)
+  y=apply(l,1,sum)+yerror
+  
+  #generate X
+  xerror=mvrnorm(n,rep(0,p),diag(p))
+  x=matrix(nrow=n,ncol=p,0)
+  range=1:k
+  x[,range]=l+r*xerror[,range]
+  range=(k+1):(2*k)
+  x[,range]=l+delta*xerror[,range]
+  range=(2*k+1):(3*k)
+  x[,range]=l+delta*xerror[,range]
+  range=(3*k+1):p
+  x[,range]=xerror[,range]
+  
+  #return
+  list(x=x,y=y,k=k)
+}
+
+
 ## Generate group data
 GenerateGroupData=function(groupSize,groupNum,validGroupNum,dataSize,offSet=0)
 {
@@ -215,7 +250,7 @@ GenerateDummyModel=function(sizeInfo,groupInfo,validGroupNumInfo,offSet=0,errorS
 }
 
 #Data modification for different model
-GenerateDataByModel=function(n,beta,errorSigma=2,r=0.5,model=c("A","B","C","D"))
+GenerateDataByModel=function(n,beta=NULL,p=NULL,errorSigma=2,r=0.5,model=c("A","B","C","D"))
 {
   if(model=="A")
   {
@@ -292,11 +327,74 @@ GenerateDataByModel=function(n,beta,errorSigma=2,r=0.5,model=c("A","B","C","D"))
     set.seed(round(out$x[1,1]*100))
     
   }
-  
-  ##random change sign method
-  #u=runif(n,0,1)
-  #index=u<0.5
-  #out$y[index]=-out$y[index]
-  #out$x[index,]=-out$x[index,]
+  else if(model=="LA") #nocontamination
+  {
+    out=GenerateDataSep(n=n,p=p)
+  }
+  else if(model=="LB") #verticle outliers
+  {
+    out=GenerateDataSep(n=n,p=p)
+    oNum=round(n*0.1)
+    out$y[1:oNum]=out$y[1:oNum]+20
+  }
+  else if(model=="LC")
+  {
+    out=GenerateDataSep(n=n,p=p)
+    oNum=round(n*0.1)
+    out$y[1:oNum]=out$y[1:oNum]+20
+    mu=rep(50,p)
+    sigma=diag(p)
+    require("MASS")
+    out$x[1:oNum,]=mvrnorm(oNum,mu,sigma)
+  }
+  else if(model=="LD")
+  {
+    out=GenerateDataSep(n=n,p=p)
+    oNum=round(n*0.1) 
+    #x leverage
+    mu=rep(10,p)
+    sigma=diag(0.01,p)
+    require("MASS")
+    out$x[1:oNum,]=mvrnorm(oNum,mu,sigma)
+    #y outlier
+    gama=rep(-1/p,p)
+    g=2*(1:oNum)
+    out$y[1:oNum]=out$x[1:oNum,]%*%gamma*g
+  }
+  else if(model=="HA")
+  {
+    out=GenerateData(n=n,dataSetNum=1,beta=beta,errorSigma=0.5,r=0.5)
+  }
+  else if(model=="HB") #vericle outliers
+  {
+    out=GenerateData(n=n,dataSetNum=1,beta=beta,errorSigma=errorSigma,r=r)
+    oNum=round(n*0.1)
+    out$y[1:oNum]=out$y[1:oNum]+20
+  }
+  else if(model=="HC") #vericle outliers+leverage
+  {
+    out=GenerateData(n=n,dataSetNum=1,beta=beta,errorSigma=errorSigma,r=r)
+    oNum=round(n*0.1)
+    out$y[1:oNum]=out$y[1:oNum]+20
+    mu=rep(50,p)
+    sigma=diag(p)
+    require("MASS")
+    out$x[1:oNum,]=mvrnorm(oNum,mu,sigma)
+    
+  }
+  else if(model=="HD")
+  {
+    out=GenerateData(n=n,dataSetNum=1,beta=beta,errorSigma=errorSigma,r=r)
+    oNum=round(n*0.1) 
+    #x leverage
+    mu=rep(10,p)
+    sigma=diag(0.01,p)
+    require("MASS")
+    out$x[1:oNum,]=mvrnorm(oNum,mu,sigma)
+    #y outlier
+    gama=rep(-1/p,p)
+    g=2*(1:oNum)
+    out$y[1:oNum]=out$x[1:oNum,]%*%gamma*g
+  }
   return(out)
 }

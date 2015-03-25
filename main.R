@@ -95,12 +95,13 @@ beta1=c(3,2,1.5,1,1,1,1,1)
 beta2=c(3,2,1.5,0,0,0,0,0)
 beta=beta2
 #simulation for pwls
-out1=simulate(L,n,beta,"A")
+out1=simulate(L,n,beta,"A",method="MMNNG")
 SaveResult(out1$vs,"out1.txt")
 out2=simulate(L,n,beta,"B")
 SaveResult(out2$vs,"out2.txt")
-out3=simulate(L,n,beta,"C")
+out3=simulate(L,n,beta,"C",method="MMNNG")
 SaveResult(out3$vs,"out3.txt")
+out4=simulate(L,n,beta,"D",method="MMNNG",seed=20)
 out4=simulate(L,n,beta,"D")
 SaveResult(out4$vs,"out4.txt")
 
@@ -155,7 +156,7 @@ boxplot(se~group,data=m4,main="model D",ylim=c(0,8))
 #----------------another setting---------------------#
 
 #setting
-L=50
+L=100
 n=100
 p=500
 beta=c(rep(2,10),rep(0,p-10))
@@ -166,7 +167,7 @@ out2=simulate(L,n,beta,"B")
 SaveResult(out2$vs,"out2.txt")
 out3=simulate(L,n,beta,"C")
 SaveResult(out3$vs,"out3.txt")
-out4=simulate(L,n,beta,"D")
+out4=simulate(L,n,beta,"D",penalty1="log")
 SaveResult(out4$vs,"out4.txt")
 
 out4_500=simulate(L,n,beta,"D")
@@ -226,9 +227,12 @@ n=dim(out$x)[1]
 init=sparseLTS(out$x,out$y)
 beta0=SetBeta0(init$coefficients)
 w0=ifelse(init$wt==1,0.99,0.01)
+
+beta0=rep(1,p+1)
+w0=rep(0.99,n)
 nlambda1=50
 nlambda2=100
-res=srcdreg(out$x,out$y,penalty="ADL",nlambda1=50,nlambda2=100,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000)
+res=srcdreg(out$x,out$y,nlambda1=50,nlambda2=100,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000)
 
 res=rcdreg(out$x,out$y,penalty="ADL",nlambda1=nlambda1,nlambda2=nlambda2,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000)
 
@@ -264,7 +268,7 @@ w0=ifelse(init$wt==1,0.99,0.01)
 nlambda1=50
 nlambda2=100
 # first pwls-vs
-res=srcdreg(out$x,out$y,penalty="ADL",nlambda1=nlambda1,nlambda2=nlambda2,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000)
+res=srcdreg(out$x,out$y,nlambda1=nlambda1,nlambda2=nlambda2,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000,updateInitial=FALSE)
 
 #pwls under selected space of beta
 select=(res$beta!=0)

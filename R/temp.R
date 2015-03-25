@@ -92,7 +92,7 @@ GCDReg2=function(x, y, groupInfo, penalty,gamma, lamda, delta, maxIter)
   
   list(beta,loss,iter)
 }
-SaveResult=function(res,file)
+SaveResult=function(res,file,dir="C:\\Users\\Administrator\\Dropbox\\result\\")
 {
-  write.table(res,paste("C:\\Users\\Administrator\\Dropbox\\result\\",file,sep=""))
+  write.table(res,paste(dir,file,sep=""))
 }

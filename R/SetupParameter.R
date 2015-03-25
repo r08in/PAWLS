@@ -1,11 +1,19 @@
-SetupParameter = function(x,y,nlambda1,nlambda2,beta0,w0,intercept=TRUE,alpha=0.1) 
+SetupParameter = function(x,y,nlambda1,nlambda2,beta0,w0,intercept=TRUE,alpha=0.1,penalty1="1-w0") 
 {
   #set lambda2
   if(intercept)
   {
     #set lambda1
-    #l1=(y-mean(y))^2*abs(1-w0)/n
-    l1=(y-mean(y))^2*abs(log(w0))/n
+    if(penalty1=="log")
+    {
+      l1=(y-mean(y))^2*abs(log(w0))/n
+      
+    }
+    else #penalty1="1-w0"
+    {
+      l1=(y-mean(y))^2*abs(1-w0)/n
+    }
+    #
     num=round(length(y)*alpha)
     lambda1Max=l1[order(l1,decreasing=TRUE)[num+1]]
     
@@ -13,8 +21,14 @@ SetupParameter = function(x,y,nlambda1,nlambda2,beta0,w0,intercept=TRUE,alpha=0.
   }
   else
   {
-    #l1=y^2*abs(1-w0)/n
-    l1=y^2*abs(log(w0))/n
+    if(penalty1=="log")
+    {
+      l1=y^2*abs(log(w0))/n
+    }
+    else #penalty1="1-w0"
+    {
+      l1=y^2*abs(1-w0)/n
+    }
     num=round(length(y)*alpha)
     lambda1Max=l1[order(l1,decreasing=TRUE)[1]]
     lambda2Max=max(abs(t(x)%*%y/n)*abs(beta0)) # max |betaj|*|xj'y/n|
