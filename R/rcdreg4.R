@@ -1,3 +1,4 @@
+#use CV
 RCDReg4=function(x, y,penalty1=c("log","1-w0"),penalty2=c("MCP", "SCAD", "ADL"),lambda1,lambda2,beta0,w0,delta, 
                  maxIter,intercept=TRUE,updateInitial=TRUE,K=5)
 {

@@ -1,10 +1,12 @@
-simulate=function(L,n,beta,model=c("A","B","C","D"),method="PWLQ",matlab=NULL,seed=2014,useDataFile=FALSE,
-                  standardize=FALSE,penalty1="1-w0",updateInitial=FALSE,criterion="BIC",intercept=FALSE,initial="plain")
+simulate=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PWLQ",matlab=NULL,seed=2014,useDataFile=FALSE,
+                  standardize=FALSE,penalty1="1-w0",updateInitial=FALSE,criterion="BIC",intercept=FALSE,initial="plain",
+                  range="cross")
 {
   if(!is.null(seed))
   {
     set.seed(seed)
   }
+  p=length(beta)
   if(useDataFile)
   {
     f=paste("data\\",model,n,"X",p,".rda",sep="")
@@ -12,7 +14,6 @@ simulate=function(L,n,beta,model=c("A","B","C","D"),method="PWLQ",matlab=NULL,se
     beta=data[[1]]$beta
     n=length(data[[1]]$y)
   }
-  p=length(beta)
   b=array(0,dim=c(L,p))
   w=array(0,dim=c(L,n))
   iter=rep(0,L)
@@ -109,6 +110,7 @@ simulate=function(L,n,beta,model=c("A","B","C","D"),method="PWLQ",matlab=NULL,se
         require(robustHD)
         init=sparseLTS(out$x,out$y,intercept=intercept)
         beta0=SetBeta0(init$coefficients)
+       
         w0=ifelse(init$wt==1,0.99,0.01)
       }
       else if(initial=="plain")
@@ -133,7 +135,8 @@ simulate=function(L,n,beta,model=c("A","B","C","D"),method="PWLQ",matlab=NULL,se
         require(robustHD)
         init=sparseLTS(out$x,out$y,intercept=intercept)
         beta0=SetBeta0(init$coefficients)
-        w0=ifelse(init$wt==1,0.99,0.01)
+        w0=UpdateWeight(out$x,out$y,beta0)
+        w0=ifelse(as.vector(w0)==1,0.99,w0)
       }
       else if(initial=="plain")
       {
@@ -145,12 +148,21 @@ simulate=function(L,n,beta,model=c("A","B","C","D"),method="PWLQ",matlab=NULL,se
         beta0=rep(1,p)
         w0=rep(0.99,n)
       }
+      if(range=="cross")
+      {
+        res=srcdreg(out$x,out$y,penalty1=penalty1,nlambda1=50,nlambda2=100,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000,
+                    intercept=intercept,standardize=standardize,updateInitial=updateInitial,criterion=criterion)
+      }
+      else if(range=="all")
+      {
+        res=rcdreg(out$x,out$y,penalty1=penalty1,nlambda1=50,nlambda2=100,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000,
+                    intercept=intercept,standardize=standardize,updateInitial=updateInitial,criterion=criterion)
+      }
+                 
       
-      res=srcdreg(out$x,out$y,penalty1=penalty1,nlambda1=50,nlambda2=100,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000,
-                  intercept=intercept,standardize=standardize,updateInitial=updateInitial,criterion=criterion)
       #test rcdreg
       #res2=rcdreg(out$x,out$y,penalty="ADL",nlambda1=50,nlambda2=100,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000)
-      #final=BICPWLQ(res2$wloss,res2$beta,w=res2$w,res2$lambda1,res2$lambda2,n)
+     #final=BICPWLQ(res2$wloss,res2$beta,w=res2$w,res2$lambda1,res2$lambda2,n)
       b[i,]=res$beta
       w[i,]=res$w
       iter[i]=res$iter

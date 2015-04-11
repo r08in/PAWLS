@@ -118,7 +118,7 @@ GenerateData = function (n,p=NULL,pNum=NULL,dataSetNum=1,beta=NULL,
 }
 
 ##Generate X and Y seperately(without beta)
-GenerateDataSep=function(n=150,p=50,k=6,r=0.3,delta=5)
+GenerateDataSep=function(n=150,p=50,k=6,r=0.3,delta=5,beta=NULL)
 {
   #check data
   if(n<=0||p<=0||k<=0)
@@ -133,7 +133,14 @@ GenerateDataSep=function(n=150,p=50,k=6,r=0.3,delta=5)
   l=mvrnorm(n,mu,sigma)
   errorSigma=sqrt(k)/3
   yerror=rnorm(n,0,errorSigma)
-  y=apply(l,1,sum)+yerror
+  if(is.null(beta))
+  {
+    y=apply(l,1,sum)+yerror
+  }
+  else
+  {
+    y=l%*%beta[1:k]+yerror
+  }
   
   #generate X
   xerror=mvrnorm(n,rep(0,p),diag(p))
@@ -148,7 +155,7 @@ GenerateDataSep=function(n=150,p=50,k=6,r=0.3,delta=5)
   x[,range]=xerror[,range]
   
   #return
-  list(x=x,y=y,k=k)
+  list(x=x,y=y,beta=c(rep(1,k),rep(0,p-k)))
 }
 
 
@@ -250,7 +257,7 @@ GenerateDummyModel=function(sizeInfo,groupInfo,validGroupNumInfo,offSet=0,errorS
 }
 
 #Data modification for different model
-GenerateDataByModel=function(n,beta=NULL,p=NULL,errorSigma=2,r=0.5,model=c("A","B","C","D"))
+GenerateDataByModel=function(n,beta,errorSigma=2,r=0.5,model=c("A","B","C","D"))
 {
   if(model=="A")
   {
@@ -329,7 +336,9 @@ GenerateDataByModel=function(n,beta=NULL,p=NULL,errorSigma=2,r=0.5,model=c("A","
   }
   else if(model=="LA") #nocontamination
   {
-    out=GenerateDataSep(n=n,p=p)
+    p=length(beta)
+    k=sum(beta!=0)
+    out=GenerateDataSep(n=n,p=p,k=k)
   }
   else if(model=="LB") #verticle outliers
   {
@@ -339,7 +348,7 @@ GenerateDataByModel=function(n,beta=NULL,p=NULL,errorSigma=2,r=0.5,model=c("A","
   }
   else if(model=="LC")
   {
-    out=GenerateDataSep(n=n,p=p)
+    out=GenerateDataSep(n=n,p=p,beta=beta)
     oNum=round(n*0.1)
     out$y[1:oNum]=out$y[1:oNum]+20
     mu=rep(50,p)
@@ -357,9 +366,9 @@ GenerateDataByModel=function(n,beta=NULL,p=NULL,errorSigma=2,r=0.5,model=c("A","
     require("MASS")
     out$x[1:oNum,]=mvrnorm(oNum,mu,sigma)
     #y outlier
-    gama=rep(-1/p,p)
+    gam=rep(-1/p,p)
     g=2*(1:oNum)
-    out$y[1:oNum]=out$x[1:oNum,]%*%gamma*g
+    out$y[1:oNum]=out$x[1:oNum,]%*%gam*g
   }
   else if(model=="HA")
   {

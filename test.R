@@ -95,10 +95,10 @@ outB_LTS50=simulate(L,n,beta,"B",method="LTS",useDataFile=TRUE)
 outC_LTS50=simulate(L,n,beta,"C",method="LTS",useDataFile=TRUE)
 outD_LTS50=simulate(L,n,beta,"D",method="LTS",useDataFile=TRUE)
 #PWLQ-low dimension
-outA_50=simulate(L,n,beta,"A",method="PWLQ",initial="LTS",seed=NULL,useDataFile=TRUE)
-outB_50=simulate(L,n,beta,"B",method="PWLQ",initial="LTS",seed=NULL,useDataFile=TRUE)
-outC_50=simulate(L,n,beta,"C",method="PWLQ",initial="LTS",seed=NULL,useDataFile=TRUE)
-outD_50=simulate(L,n,beta,"D",method="PWLQ",initial="LTS",seed=NULL,useDataFile=TRUE)
+outA_50_1=simulate(L,n,beta,"A",method="PWLQ",initial="LTS",seed=NULL,useDataFile=TRUE)
+outB_50_1=simulate(L,n,beta,"B",method="PWLQ",initial="LTS",seed=NULL,useDataFile=TRUE)
+outC_50_1=simulate(L,n,beta,"C",method="PWLQ",initial="LTS",seed=NULL,useDataFile=TRUE)
+outD_50_1=simulate(L,n,beta,"D",method="PWLQ",initial="LTS",seed=NULL,useDataFile=TRUE)
 #-------------------------------------------------------------------------------------
 
 #n=100,500
@@ -124,5 +124,29 @@ beta[2]=0.5
 beta[c(4,11)]=1
 res=simulate(1,n,beta,"HA",method="PWLQ",initial="LTS",seed=2015)
 
+#low
+n=150
+p=50
+k=6
+L=100
+beta=c(rep(1,k),rep(0,p-k))
+resLA=simulate(L,n,beta=beta,model="LA",method="PWLQ",initial="LTS",seed=2015)
+resLB=simulate(L,n,beta=beta,model="LB",method="PWLQ",initial="LTS",seed=2015)
+resLC=simulate(L,n,beta=beta,model="LC",method="PWLQ",initial="LTS",seed=2015,range="cross")
+resLD=simulate(L,n,beta=beta,model="LD",method="PWLQ",initial="LTS",seed=2015)
+
+
+resLC=simulate(L,n,beta=beta,model="LC",method="LTS",seed=2015)
+#MMNNG collect data
+simulate(L,n,beta,"LA",method="MMNNG_DATA",seed=NULL)
+simulate(L,n,beta,"LB",method="MMNNG_DATA",seed=NULL)
+simulate(L,n,beta,"LC",method="MMNNG_DATA",seed=NULL)
+simulate(L,n,beta,"LD",method="MMNNG_DATA",seed=NULL)
+
+#MMNNG-low dimension
+outLA_MM=simulate(L,n,beta,"LA",method="MMNNG",useDataFile=FALSE)
+outB_MM50=simulate(L,n,beta,"B",method="MMNNG",useDataFile=TRUE)
+outC_MM50=simulate(L,n,beta,"C",method="MMNNG",useDataFile=TRUE)
+outD_MM50=simulate(L,n,beta,"D",method="MMNNG",useDataFile=TRUE)
 
 out=GenerateDataSep(n=10,p=10,k=2)

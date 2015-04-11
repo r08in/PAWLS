@@ -3,11 +3,8 @@ mmnngreg=function(x,y)
 {
   require(robustbase)
   #Compute initial estimate with MM-regression:
-  #beta_init <- coef(lmrob(y~x))
+  beta_init <- coef(lmrob(y~x))
   #beta_init
-  
-  require(robustHD)
-  beta_init=sparseLTS(x,y)$coefficients
   #Compute S-nonnegative garrote estimate using the initial estimate beta_init
   #and the BIC-criterion to select lambda:
   sol_S <- SnngarroteGrid(x,y,TRUE, lambda=seq(0.001,0.5,length=50), crit="BIC", beta=beta_init)
@@ -92,7 +89,7 @@ SnngarroteGrid <- function(X, Y, intercept=TRUE, lambda, crit=c("L", "BIC", "AIC
     X <- cbind(rep(1,n), X)
     d[2] <- d[2] + 1
   }
-  initial <- replicate(N, sample(n, d[2],replace=TRUE))
+  initial <- replicate(N, sample(n, d[2]))
   if(missing(beta) || any(!is.finite(beta))){
     beta <- as.vector(coef(lmrob(Y~X-1)))
     warning("missing or infinite values of 'beta'; using default values")

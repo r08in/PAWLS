@@ -1,6 +1,6 @@
-#without search the whole grid of lambda
-RCDReg3=function(x, y,penalty1=c("log","1-w0"),penalty2=c("MCP", "SCAD", "ADL"),lambda1,lambda2,beta0,w0,delta, 
-                 maxIter,intercept=TRUE,updateInitial=TRUE)
+#update weight and Beta seperately with lambda1 and lambda2 fixed
+RCDReg3_2=function(x, y,penalty1=c("log","1-w0"),penalty2=c("MCP", "SCAD", "ADL"),lambda1,lambda2,beta0,w0,delta, 
+                   maxIter,intercept=TRUE,updateInitial=TRUE)
 {  
   #lambda2=lambda2[round(length(lambda2)/2):length(lambda2)]
   #lambda1=lambda1[1:length(lambda1)-1]
@@ -14,10 +14,10 @@ RCDReg3=function(x, y,penalty1=c("log","1-w0"),penalty2=c("MCP", "SCAD", "ADL"),
   
   #initial lambda
   index2=L2/2
-  res=InnerReg(x,y,penalty1=penalty1,penalty2=penalty2,lambda1,lambda2[index2],beta0,w0,delta,maxIter,intercept=intercept) #fix lambda2
+  res=InnerReg_2(x,y,penalty1=penalty1,penalty2=penalty2,lambda1,lambda2[index2],beta0,w0,delta,maxIter,intercept=intercept) #fix lambda2
   index1=BIC(as.vector(res$wloss),apply(matrix(res$w,L1,n)!=1+0,1,sum)+apply(matrix(res$beta,L1,m)!=0+0,1,sum),n,m,type="w") #find best lambda1
   #index1=BIC(as.vector(res$wloss),dfs(x,matrix(res$beta,L1,m),matrix(res$w,L1,n)),n,m,type="w") #find best lambda1
-  res=InnerReg(x,y,penalty1=penalty1,penalty2=penalty2,lambda1[index1],lambda2,beta0,w0,delta,maxIter,intercept=intercept) #fix lambda1
+  res=InnerReg_2(x,y,penalty1=penalty1,penalty2=penalty2,lambda1[index1],lambda2,beta0,w0,delta,maxIter,intercept=intercept) #fix lambda1
   #index2=BIC(as.vector(res$wloss),dfs(x,matrix(res$beta,L2,m),matrix(res$w,L2,n)),n,m) #find best lambda2
   index2=BIC(as.vector(res$wloss),apply(matrix(res$w,L2,n)!=1+0,1,sum)+apply(matrix(res$beta,L2,m)!=0+0,1,sum),n,m) #find best lambda2
   
@@ -30,14 +30,14 @@ RCDReg3=function(x, y,penalty1=c("log","1-w0"),penalty2=c("MCP", "SCAD", "ADL"),
     pre1=index1
     pre2=index2
     
-    if(updateInitial||iter==100)
+    if(updateInitial||iter==1)
     {
       beta0=matrix(res$beta,L2,m)[index2,]    
       w0=matrix(res$w,L2,n)[index2,]
       beta0=SetBeta0(beta0)
       w0=ifelse(w0==1,0.99,w0)
     }    
-    res=InnerReg(x,y,penalty1=penalty1,penalty2=penalty2,lambda1,lambda2[index2],beta0,w0,delta,maxIter,intercept=intercept) #fix lambda2
+    res=InnerReg_2(x,y,penalty1=penalty1,penalty2=penalty2,lambda1,lambda2[index2],beta0,w0,delta,maxIter,intercept=intercept) #fix lambda2
     #index1=BIC(as.vector(res$wloss),dfs(x,matrix(res$beta,L1,m),matrix(res$w,L1,n)),n,m,type="w") #find best lambda1  
     index1=BIC(as.vector(res$wloss),apply(matrix(res$w,L1,n)!=1+0,1,sum)+apply(matrix(res$beta,L1,m)!=0+0,1,sum),n,m,type="w") #find best lambda1  
     
@@ -48,10 +48,10 @@ RCDReg3=function(x, y,penalty1=c("log","1-w0"),penalty2=c("MCP", "SCAD", "ADL"),
       beta0=SetBeta0(beta0)
       w0=ifelse(w0==1,0.99,w0)
     }    
-    res=InnerReg(x,y,penalty1=penalty1,penalty2=penalty2,lambda1[index1],lambda2,beta0,w0,delta,maxIter,intercept=intercept) #fix lambda1
+    res=InnerReg_2(x,y,penalty1=penalty1,penalty2=penalty2,lambda1[index1],lambda2,beta0,w0,delta,maxIter,intercept=intercept) #fix lambda1
     #index2=BIC(as.vector(res$wloss),dfs(x,matrix(res$beta,L2,m),matrix(res$w,L2,n)),n,m) #find best lambda2
     index2=BIC(as.vector(res$wloss),apply(matrix(res$w,L2,n)!=1+0,1,sum)+apply(matrix(res$beta,L2,m)!=0+0,1,sum),n,m) #find best lambda2
-    if(pre2==index2&&pre1==index1) break;
+    if(pre2==index2||pre1==index1) break;
   }
   
   if(updateInitial)
@@ -62,7 +62,7 @@ RCDReg3=function(x, y,penalty1=c("log","1-w0"),penalty2=c("MCP", "SCAD", "ADL"),
     w0=ifelse(w0==1,0.99,w0)
   }  
   #test##
-  res=InnerReg(x,y,penalty1=penalty1,penalty2=penalty2,lambda1[index1],lambda2[index2],beta0,w0,delta,maxIter,intercept=intercept) #fix lambda2 and lambda2
+  res=InnerReg_2(x,y,penalty1=penalty1,penalty2=penalty2,lambda1[index1],lambda2[index2],beta0,w0,delta,maxIter,intercept=intercept) #fix lambda2 and lambda2
   #return 
   i=index1
   j=index2
@@ -73,7 +73,7 @@ RCDReg3=function(x, y,penalty1=c("log","1-w0"),penalty2=c("MCP", "SCAD", "ADL"),
   
 }
 
-InnerReg=function(x, y,penalty1="1-w0",penalty2="ADL",lambda1,lambda2,beta0,w0,delta, maxIter,intercept=TRUE)
+InnerReg_2=function(x, y,penalty1="1-w0",penalty2="ADL",lambda1,lambda2,beta0,w0,delta, maxIter,intercept=TRUE,wPre=rep(1,n))
 {
   
   ##declaration
@@ -93,7 +93,6 @@ InnerReg=function(x, y,penalty1="1-w0",penalty2="ADL",lambda1,lambda2,beta0,w0,d
   iter=matrix(ncol=L2,nrow=L1,0)
   
   betaPre=rep(0,m)
-  wPre=rep(1,n)
   r=y
   ##iteration for each lamda1
   for(l1 in lstart1:L1)
@@ -129,22 +128,33 @@ InnerReg=function(x, y,penalty1="1-w0",penalty2="ADL",lambda1,lambda2,beta0,w0,d
         c=apply((x*wPre)^2,2,sum)/n
         
         ##iteration for each beta
-        for(j in 1:m)
-        {        
-          ##(1)calculate zj 
-          zj=t(x[,j]*wPre^2)%*%r/n+c[j]*betaPre[j]
-          ##(2)update betaj
-          if (penalty2=="ADL")
-          {
-            beta[l1,l2,j]=UpdateBeta(zj,lam2[j],c[j])
-            #beta[[l1]][l2,j]=UpdateBeta(zj,lam2[j]*sqrt(c[j]),c[j])
-            #beta[[l1]][l2,j]=zj
+        while(TRUE)
+        {
+          for(j in 1:m)
+          {        
+            ##(1)calculate zj 
+            zj=t(x[,j]*wPre^2)%*%r/n+c[j]*betaPre[j]
+            ##(2)update betaj
+            if (penalty2=="ADL")
+            {
+              beta[l1,l2,j]=UpdateBeta(zj,lam2[j],c[j])
+              #beta[[l1]][l2,j]=UpdateBeta(zj,lam2[j]*sqrt(c[j]),c[j])
+              #beta[[l1]][l2,j]=zj
+            }
+            
+            ##(3)update r
+            shift[j]=beta[l1,l2,j]-betaPre[j]
+            r=r-x[,j]*shift[j]   
           }
           
-          ##(3)update r
-          shift[j]=beta[l1,l2,j]-betaPre[j]
-          r=r-x[,j]*shift[j]   
+          betaPre=beta[l1,l2,]
+          if(t(shift[1:m])%*%shift[1:m]<delta)
+          {
+            break;
+          }
+          
         }
+        
         
         ##update w
         if(penalty1=="log")
@@ -160,10 +170,10 @@ InnerReg=function(x, y,penalty1="1-w0",penalty2="ADL",lambda1,lambda2,beta0,w0,d
         shift[(m+1):(m+n)]=w[l1,l2,]-wPre
         
         ##update betaPre and wPre for next iteration
-        betaPre=beta[l1,l2,]
+        #betaPre=beta[l1,l2,]
         wPre=w[l1,l2,]
         ## Check for convergence
-        if(t(shift)%*%shift<delta)
+        if(t(shift[(m+1):(m+n)])%*%shift[(m+1):(m+n)]<delta)
         {
           break;
         }
@@ -173,6 +183,9 @@ InnerReg=function(x, y,penalty1="1-w0",penalty2="ADL",lambda1,lambda2,beta0,w0,d
       ##compute square of loss
       loss[l1,l2]=t(r)%*%r
       wloss[l1,l2]=t(r*wPre)%*%(r*wPre)
+      wPre=w0
+      betaPre=rep(0,m)
+      r=y
     }#end iteration for each lambda2 fixed lambda1
     
   }#end iteration for each lambda1

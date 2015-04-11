@@ -1,4 +1,5 @@
-RCDReg2=function(x, y,penalty,lambda1,lambda2,beta0,w0,delta, maxIter)
+#search the whole lambda grid
+RCDReg2=function(x, y,penalty1="1-w0",penalty2="ADL",lambda1,lambda2,beta0,w0,delta, maxIter,intercept=TRUE)
 {  
   ##declaration
   n=length(y)
@@ -18,6 +19,7 @@ RCDReg2=function(x, y,penalty,lambda1,lambda2,beta0,w0,delta, maxIter)
   
   betaPre=rep(0,m)
   wPre=rep(1,n)
+  z=rep(0,m)
   r=y
   ##iteration for each lamda1
   for(l1 in lstart1:L1)
@@ -26,15 +28,28 @@ RCDReg2=function(x, y,penalty,lambda1,lambda2,beta0,w0,delta, maxIter)
     
     shift=rep(0,m+n)
     c=rep(0,m)
-    #z=t(x)%*%r/n#init z z=r%*%t(apply(x*wPre^2,2,sum)/n)
     loss[l1,1]=t(y)%*%y ##initial loss[l1,1]
-    lam1=sqrt((lambda1[l1]/abs(log(w0)))*n) #init sqrt(lambda1/abs(log(w0))n)
+    if(penalty1=="log")
+    {
+      lam1=sqrt((lambda1[l1]/abs(log(w0)))*n) #init sqrt(lambda1/abs(log(w0))n)
+    }
+    else #1-wo
+    {
+      lam1=(lambda1[l1]/abs(1-w0))*n
+    }
     
     ##iteration for each lamda2
     for(l2 in lstart2:L2)
     {  
+      if(l1==41&&l2==92)
+      {
+        woailuo=0
+      }
       lam2=lambda2[l2]/abs(beta0)
-      
+      if(intercept)
+      {
+        lam2[1]=0
+      }
       ##iteration for all covariates
       while(iter[l1,l2]<maxIter)
       {
@@ -46,19 +61,14 @@ RCDReg2=function(x, y,penalty,lambda1,lambda2,beta0,w0,delta, maxIter)
         ##iteration for each beta
         for(j in 1:m)
         {        
-          ##(1)calculate zj 
-          zj=t(x[,j]*wPre^2)%*%r/n+c[j]*betaPre[j]
-          if(is.na(zj))
-          {
-            cd=1
-          }
-          
+          ##(1)calculate z[j] 
+          z[j]=t(x[,j]*wPre^2)%*%r/n+c[j]*betaPre[j]
           ##(2)update betaj
-          if (penalty=="ADL")
+          if (penalty2=="ADL")
           {
-            beta[l1,l2,j]=UpdateBeta(zj,lam2[j],c[j])
-            #beta[[l1]][l2,j]=UpdateBeta(zj,lam2[j]*sqrt(c[j]),c[j])
-            #beta[[l1]][l2,j]=zj
+            beta[l1,l2,j]=UpdateBeta(z[j],lam2[j],c[j])
+            #beta[[l1]][l2,j]=UpdateBeta(z[j],lam2[j]*sqrt(c[j]),c[j])
+            #beta[[l1]][l2,j]=z[j]
           }
           
           ##(3)update r
@@ -67,10 +77,16 @@ RCDReg2=function(x, y,penalty,lambda1,lambda2,beta0,w0,delta, maxIter)
         }
         
         ##update w
-        absr=abs(r)
-        #test W=1
-        # w[l1,l2,]=ifelse(absr>lam1,lam1/absr,1)
-        w[l1,l2,]=rep(1,n)
+        if(penalty1=="log")
+        {
+          absr=abs(r)
+          w[l1,l2,]=ifelse(absr>lam1,lam1/absr,1)
+        }
+        else #1-w0
+        {
+          sqr=r^2
+          w[l1,l2,]=ifelse(sqr>lam1,lam1/sqr,1)
+        }
         shift[(m+1):(m+n)]=w[l1,l2,]-wPre
         
         ##update betaPre and wPre for next iteration
@@ -94,15 +110,15 @@ RCDReg2=function(x, y,penalty,lambda1,lambda2,beta0,w0,delta, maxIter)
   list(beta=beta,loss=loss,iter=iter,w=w,wloss=wloss)
 }
 
-UpdateBeta=function(zj,lambda,c=1)
+UpdateBeta=function(z,lambda,c=1)
 {
-  if(zj>lambda)
+  if(z>lambda)
   {
-    return((zj-lambda)/c)
+    return((z-lambda)/c)
   }
-  else if(zj+lambda<0)
+  else if(z+lambda<0)
   {
-    return((zj+lambda)/c)
+    return((z+lambda)/c)
   }
   else
   {

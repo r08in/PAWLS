@@ -61,7 +61,7 @@ BICPWLQ=function(wloss,beta,w,lambda1,lambda2,n,inv=1)
   {
     wdf[i,j]=sum(w[i,j,]!=1+0)
     bdf[i,j]=sum(beta[i,j,]!=0+0)
-    bicTemp[i,j]=log(wloss[i,j]/(2*n)+1)+(bdf[i,j]+wdf[i,j])*log(n)/(2*n)
+    bicTemp[i,j]=log(wloss[i,j]/(n)+1)+(bdf[i,j]+wdf[i,j])*log(n)/(n)
     if(bicTemp[i,j]<=bicPre)
     {
       index1=i

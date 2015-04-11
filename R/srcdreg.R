@@ -55,16 +55,14 @@ srcdreg=function (x,y,penalty1="1-w0",penalty2="ADL",lambda1=NULL,lambda2=NULL,n
     lambda1=lambda$lambda1
     lambda2=lambda$lambda2
   } 
-  else 
-  {
-    nlambda1=length(lambda1)
-    nlambda2=length(lambda2)
-  }
-  
+  nlambda1=length(lambda1)
+  nlambda2=length(lambda2)
   ##Fit  
+ 
   if(criterion=="BIC")
   {
     res=RCDReg3(XX, yy,penalty1=penalty1,penalty2=penalty2,lambda1,lambda2,beta0,w0,delta, maxIter,intercept=intercept,updateInitial=updateInitial)
+    #res=RCDReg5(XX, yy,penalty1=penalty1,penalty2=penalty2,lambda1,lambda2,beta0,w0,delta, maxIter,intercept=intercept,updateInitial=updateInitial)
   }
   else if(criterion=="CV")
   {
