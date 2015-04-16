@@ -95,10 +95,23 @@ outB_LTS50=simulate(L,n,beta,"B",method="LTS",useDataFile=TRUE)
 outC_LTS50=simulate(L,n,beta,"C",method="LTS",useDataFile=TRUE)
 outD_LTS50=simulate(L,n,beta,"D",method="LTS",useDataFile=TRUE)
 #PWLQ-low dimension
-outA_50_1=simulate(L,n,beta,"A",method="PWLQ",initial="LTS",seed=NULL,useDataFile=TRUE)
-outB_50_1=simulate(L,n,beta,"B",method="PWLQ",initial="LTS",seed=NULL,useDataFile=TRUE)
-outC_50_1=simulate(L,n,beta,"C",method="PWLQ",initial="LTS",seed=NULL,useDataFile=TRUE)
-outD_50_1=simulate(L,n,beta,"D",method="PWLQ",initial="LTS",seed=NULL,useDataFile=TRUE)
+outA_50=simulate(L,n,beta,"A",method="PWLQ",initial="LTS",seed=NULL,useDataFile=TRUE)
+outB_50=simulate(L,n,beta,"B",method="PWLQ",initial="LTS",seed=NULL,useDataFile=TRUE)
+outC_50=simulate(L,n,beta,"C",method="PWLQ",initial="LTS",seed=NULL,useDataFile=TRUE)
+outD_50=simulate(L,n,beta,"D",method="PWLQ",initial="LTS",seed=NULL,useDataFile=TRUE)
+
+#ROSS
+matLabDir="D:\\matlab\\Sim"
+matlab=PrepareMatlab(matLabDir)
+outA_ROSS50=simulate(L,n,beta,"A",method="ROSS",matlab=matlab,useDataFile=TRUE)
+outB_ROSS50=simulate(L,n,beta,"B",method="ROSS",matlab=matlab,useDataFile=TRUE)
+outC_ROSS50=simulate(L,n,beta,"C",method="ROSS",matlab=matlab,useDataFile=TRUE)
+outD_ROSS50=simulate(L,n,beta,"D",method="ROSS",matlab=matlab,useDataFile=TRUE)
+#ADL
+outA_ADL50=simulate(L,n,beta,"A",method="ADL",useDataFile=TRUE)
+outB_ADL50=simulate(L,n,beta,"B",method="ADL",useDataFile=TRUE)
+outC_ADL50=simulate(L,n,beta,"C",method="ADL",useDataFile=TRUE)
+outD_ADL50=simulate(L,n,beta,"D",method="ADL",useDataFile=TRUE)
 #-------------------------------------------------------------------------------------
 
 #n=100,500
@@ -112,6 +125,24 @@ simulate(L,n,beta,"B",method="MMNNG_DATA",seed=NULL)
 simulate(L,n,beta,"C",method="MMNNG_DATA",seed=NULL)
 simulate(L,n,beta,"D",method="MMNNG_DATA",seed=NULL)
 
+#ROSS
+matLabDir="D:\\matlab\\Sim"
+matlab=PrepareMatlab(matLabDir)
+outA_ROSS500=simulate(L,n,beta,model="D",method="ROSS",matlab=matlab)
+outA_ROSS500=simulate(L,n,beta,model="C",method="ROSS",matlab=matlab)
+outA_ROSS500=simulate(L,n,beta,model="B",method="ROSS",matlab=matlab)
+outA_ROSS500=simulate(L,n,beta,model="A",method="ROSS",matlab=matlab)
+#pwlq
+outA_500_test=simulate(L,n,beta,"A",method="PWLQ",initial="plain",seed=2015,updateInitial=TRUE)
+outC_500=simulate(L,n,beta,"C",method="PWLQ",initial="plain",seed=2015,updateInitial=TRUE)
+outD_500=simulate(L,n,beta,"D",method="PWLQ",initial="plain",seed=2015,updateInitial=TRUE)
+outB_500=simulate(L,n,beta,"B",method="PWLQ",initial="plain",seed=2015,updateInitial=TRUE)
+
+#ADL
+outA_ADL500=simulate(L,n,beta,"A",method="ADL",seed=2015)
+outC_ADL500=simulate(L,n,beta,"C",method="ADL",seed=2015)
+outB_ADL500=simulate(L,n,beta,"B",method="ADL",useDataFile=TRUE)
+outD_ADL500=simulate(L,n,beta,"D",method="ADL",useDataFile=TRUE)
 
 #-------------------------------example 2---------------------#
 
@@ -130,23 +161,30 @@ p=50
 k=6
 L=100
 beta=c(rep(1,k),rep(0,p-k))
-resLA=simulate(L,n,beta=beta,model="LA",method="PWLQ",initial="LTS",seed=2015)
-resLB=simulate(L,n,beta=beta,model="LB",method="PWLQ",initial="LTS",seed=2015)
-resLC=simulate(L,n,beta=beta,model="LC",method="PWLQ",initial="LTS",seed=2015,range="cross")
-resLD=simulate(L,n,beta=beta,model="LD",method="PWLQ",initial="LTS",seed=2015)
-
-
-resLC=simulate(L,n,beta=beta,model="LC",method="LTS",seed=2015)
 #MMNNG collect data
 simulate(L,n,beta,"LA",method="MMNNG_DATA",seed=NULL)
 simulate(L,n,beta,"LB",method="MMNNG_DATA",seed=NULL)
 simulate(L,n,beta,"LC",method="MMNNG_DATA",seed=NULL)
 simulate(L,n,beta,"LD",method="MMNNG_DATA",seed=NULL)
 
+#PWLQ low dimension
+outLA_PWLQ=simulate(L,n,beta=beta,model="LA",method="PWLQ",initial="LTS",useDataFile=TRUE)
+outLB_PWLQ=simulate(L,n,beta=beta,model="LB",method="PWLQ",initial="LTS",useDataFile=TRUE)
+outLc_PWLQ=simulate(L,n,beta=beta,model="LC",method="PWLQ",initial="LTS",seed=2015)
+
+#Spare LTS low dimension
+outLA_LTS=simulate(L,n,beta=beta,model="LA",method="LTS",useDataFile=TRUE)
+outLB_LTS=simulate(L,n,beta=beta,model="LB",method="LTS",useDataFile=TRUE)
+outLc_LTS=simulate(L,n,beta=beta,model="LC",method="LTS",seed=2015)
+
 #MMNNG-low dimension
-outLA_MM=simulate(L,n,beta,"LA",method="MMNNG",useDataFile=FALSE)
-outB_MM50=simulate(L,n,beta,"B",method="MMNNG",useDataFile=TRUE)
-outC_MM50=simulate(L,n,beta,"C",method="MMNNG",useDataFile=TRUE)
-outD_MM50=simulate(L,n,beta,"D",method="MMNNG",useDataFile=TRUE)
+outLA_MM=simulate(L,n,beta,"LA",method="MMNNG",useDataFile=TRUE)
+outLB_MM=simulate(L,n,beta,"LB",method="MMNNG",useDataFile=TRUE)
+#outC_MM50=simulate(L,n,beta,"C",method="MMNNG",useDataFile=TRUE)
+#outD_MM50=simulate(L,n,beta,"D",method="MMNNG",useDataFile=TRUE)
+
+#ADL low dimension
+outLA_ADL=simulate(L,n,beta,"LA",method="ADL",useDataFile=TRUE)
+outLB_ADL=simulate(L,n,beta,"LB",method="ADL",useDataFile=TRUE)
 
 out=GenerateDataSep(n=10,p=10,k=2)

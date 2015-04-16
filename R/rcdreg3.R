@@ -30,7 +30,7 @@ RCDReg3=function(x, y,penalty1=c("log","1-w0"),penalty2=c("MCP", "SCAD", "ADL"),
     pre1=index1
     pre2=index2
     
-    if(updateInitial||iter==100)
+    if(updateInitial)
     {
       beta0=matrix(res$beta,L2,m)[index2,]    
       w0=matrix(res$w,L2,n)[index2,]

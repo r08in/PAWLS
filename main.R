@@ -109,10 +109,9 @@ SaveResult(out4$vs,"out4.txt")
 matLabDir="D:\\matlab\\Sim"
 matlab=PrepareMatlab(matLabDir)
 outRoss4=simulate(L,n,beta,model="D",method="ROSS",matlab=matlab)
-outRoss3=simulate(L,n,beta,model="C",method="ROSS",matlab=matlab)
 outRoss2=simulate(L,n,beta,model="B",method="ROSS",matlab=matlab)
 outRoss1=simulate(L,n,beta,model="A",method="ROSS",matlab=matlab)
-
+outRoss3=simulate(L,n,beta,model="C",method="ROSS",matlab=matlab)
 #simulation for ADL
 
 outADL1=simulate(L,n,beta,"A",method="ADL")
@@ -268,8 +267,11 @@ w0=ifelse(init$wt==1,0.99,0.01)
 nlambda1=50
 nlambda2=100
 # first pwls-vs
-res=srcdreg(out$x,out$y,nlambda1=nlambda1,nlambda2=nlambda2,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000,updateInitial=FALSE)
-
+res=srcdreg(out$x,out$y,penalty1="1-w0",nlambda1=nlambda1,nlambda2=nlambda2,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000,
+        intercept=TRUE,standardize=FALSE,updateInitial=FALSE,criterion="BIC")
+#MMNNG
+source("mmnngreg.R")
+res_MM=mmnngreg(as.matrix(out$x),out$y)
 #pwls under selected space of beta
 select=(res$beta!=0)
 xx=x[,select]
@@ -283,8 +285,33 @@ res2=pwlsreg(xx,out$y,nlambda=50,w0=res$w,delta=0.0001,maxIter=1000)
 
 #-----------------------------------------------------------------------------------------------------------------
 
-#======real data analysis============#
+#======real data analysis(air pollution)============#
+airRaw=read.delim("airPollution.txt")
+airData=airRaw[-21,-1]
+airData$HCPot=log(airData$HCPot)
+airData$NOxPot=log(airData$NOxPot)
+airData$S02Pot=log(airData$S02Pot)
+tempData=t(airData)-apply(airData,2,median)
+data=t(tempData/apply(abs(tempData),1,median))
+y=data[,5]
+x=data[,-c(5)]
+out=list(y=y,x=x)
+colnames=names(airData[,-c(5)])
 
-
-
+# pwls-vs
+p=dim(out$x)[2]
+n=dim(out$x)[1]
+require(robustHD)
+init=sparseLTS(out$x,out$y)
+beta0=SetBeta0(init$coefficients)
+w0=ifelse(init$wt==1,0.99,0.01)
+nlambda1=50
+nlambda2=100
+res=srcdreg(out$x,out$y,penalty1="1-w0",nlambda1=nlambda1,nlambda2=nlambda2,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000,
+            intercept=TRUE,standardize=FALSE,updateInitial=FALSE,criterion="BIC")
+colnames[res$beta[-1]!=0]
+#MMNNG
+source("mmnngreg.R")
+res_MM=mmnngreg(as.matrix(out$x),out$y)
+res_MM$betac[-1]=colnames
 #======end of data analysis===========#

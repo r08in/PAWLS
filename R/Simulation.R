@@ -52,13 +52,17 @@ simulate=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PWLQ",ma
     }
     else if(method=="ADL")
     {
+      #require("parcor")
       init=InitParam(out$x,out$y,method="LAD")
       beta0=ifelse(init$beta==0,0.01,init$beta)
       w0=rep(0.99,n)
-      res=rcdreg(out$x,out$y,penalty="ADL",nlambda1=2,nlambda2=100,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000)
-      index=BIC(res$wloss[1,],apply(matrix(res$beta[1,,],100,p)!=0+0,1,sum),n,p)
+      res=rcdreg(out$x,out$y,penalty1=penalty1,nlambda1=2,nlambda2=100,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000,
+                             intercept=intercept,standardize=standardize,updateInitial=updateInitial,criterion=criterion)
+      #index=BIC(res$wloss[1,],apply(matrix(res$beta[1,,],100,p)!=0+0,1,sum),n,p)
+      b[i,]=res$beta
+      #res=adalasso(out$x,out$y,intercept=FALSE)
+      #b[i,]=res$coefficients.adalasso
       
-      b[i,]=res$beta[1,index,]
       #w[i,]=res$w
       #iter[i]=res$iter
     }
@@ -70,14 +74,14 @@ simulate=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PWLQ",ma
     }
     else if(method=="MMNNG")
     {
-      #fbeta=paste("data\\",model,n,"X",p,"_beta.rda",sep="")
-      #load(fbeta)
-      #b=betaHat
-      #break
+      fbeta=paste("data\\",model,n,"X",p,"_beta.rda",sep="")
+      load(fbeta)
+      b=betaHat
+      break
       
-      source("mmnngreg.R")
-      res=mmnngreg(out$x,out$y)
-      b[i,]=res$betac[-1]
+      #source("mmnngreg.R")
+      #res=mmnngreg(out$x,out$y)
+      #b[i,]=res$betac[-1]
     }
     else if(method=="MMNNG_DATA")
     {
