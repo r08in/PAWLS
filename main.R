@@ -298,6 +298,9 @@ x=data[,-c(5)]
 out=list(y=y,x=x)
 colnames=names(airData[,-c(5)])
 
+#OLS
+lm1=lm(y~x)
+lm0=lm(as.vector(airData[,5])~as.matrix(airData[,-c(5)]))
 # pwls-vs
 p=dim(out$x)[2]
 n=dim(out$x)[1]
@@ -310,8 +313,43 @@ nlambda2=100
 res=srcdreg(out$x,out$y,penalty1="1-w0",nlambda1=nlambda1,nlambda2=nlambda2,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000,
             intercept=TRUE,standardize=FALSE,updateInitial=FALSE,criterion="BIC")
 colnames[res$beta[-1]!=0]
+studres=studres(lm1)
+plot(studres)
+abline(2.5,0)
+identify(studres)
 #MMNNG
 source("mmnngreg.R")
 res_MM=mmnngreg(as.matrix(out$x),out$y)
 res_MM$betac[-1]=colnames
+
+
+#======real data analysis(NCI-60)============#
+#read data
+nci_pro=read.delim("nci60_Protein__Lysate_Array_log2.txt")
+nci_gene0=read.delim("RNA__Affy_HG_U133(A_B)_GCRMA.txt")
+nci_temp=read.delim("GPL96-15653.txt")
+nci_gene=nci_gene0[nci_gene0$Probe.id..b.%in%nci_temp$ID,]
+#obtain X and y
+
+x=t(nci_gene[,-c(1:9,49,70)])
+x=matrix(x,nrow=dim(x)[1])
+y=as.vector(nci_pro[92,-c(1:4,44,65)])
+y=as.vector(matrix(data=y,ncol=1))
+out=list(y=y,x=x)
+
+#
+require(robustHD)
+class(out$x)<-"numeric"
+res=sparseLTS(out$x,out$y)
+#compute
+# pwls-vs
+p=dim(out$x)[2]
+n=dim(out$x)[1]
+beta0=rep(1,p+1)
+w0=rep(0.99,n)
+nlambda1=50
+nlambda2=100
+res=srcdreg(out$x,out$y,penalty1="1-w0",nlambda1=nlambda1,nlambda2=nlambda2,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000,
+            intercept=TRUE,standardize=FALSE,updateInitial=FALSE,criterion="BIC")
+colnames[res$beta[-1]!=0]
 #======end of data analysis===========#

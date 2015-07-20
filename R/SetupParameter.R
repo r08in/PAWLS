@@ -34,7 +34,7 @@ SetupParameter = function(x,y,nlambda1,nlambda2,beta0,w0,intercept=TRUE,alpha=0.
     lambda2Max=max(abs(t(x)%*%y/n)*abs(beta0)) # max |betaj|*|xj'y/n|
   }
  
-  lambda1=logSeq(lambda1Max,lambda1Max*0.001,nlambda1)
+  lambda1=logSeq(lambda1Max,lambda1Max*0.000001,nlambda1)
   lambda2=logSeq(lambda2Max,0,nlambda2)
   #lambda1=seq(0.1,0.0001,length=50)
   #lambda2=seq(0.2,0,length=100)

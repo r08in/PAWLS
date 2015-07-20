@@ -1,5 +1,5 @@
 simulate=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PWLQ",matlab=NULL,seed=2014,useDataFile=FALSE,
-                  standardize=FALSE,penalty1="1-w0",updateInitial=FALSE,criterion="BIC",intercept=FALSE,initial="plain",
+                  standardize=FALSE,penalty1="1-w0",updateInitial=FALSE,updateInitialTimes=4,criterion="BIC",intercept=FALSE,initial="plain",
                   range="cross")
 {
   if(!is.null(seed))
@@ -17,6 +17,7 @@ simulate=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PWLQ",ma
   b=array(0,dim=c(L,p))
   w=array(0,dim=c(L,n))
   iter=rep(0,L)
+  iw=rep(0,L)
   error=NULL
   sumofy=NULL
   #out=GenerateDataByModel(n=n,beta=beta,model=model)
@@ -132,35 +133,22 @@ simulate=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PWLQ",ma
                   intercept=intercept,standardize=standardize,updateInitial=updateInitial,criterion=criterion)
       return (list(beta=res$beta,w=res$w,beta1=res1$betac[-1]))
     }
-    else
+    else #PWLQ
     {
-      if(initial=="LTS")
-      {
-        require(robustHD)
-        init=sparseLTS(out$x,out$y,intercept=intercept)
-        beta0=SetBeta0(init$coefficients)
-        w0=UpdateWeight(out$x,out$y,beta0)
-        w0=ifelse(as.vector(w0)==1,0.99,w0)
-      }
-      else if(initial=="plain")
-      {
-        beta0=rep(1,p)
-        w0=rep(0.99,n)
-      }
+      if(updateInitial)
+        updateInitialTimes=4
       else
-      {
-        beta0=rep(1,p)
-        w0=rep(0.99,n)
-      }
+        updateInitialTimes=0
+      
       if(range=="cross")
       {
-        res=srcdreg(out$x,out$y,penalty1=penalty1,nlambda1=50,nlambda2=100,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000,
-                    intercept=intercept,standardize=standardize,updateInitial=updateInitial,criterion=criterion)
+        res=srcdreg(out$x,out$y,penalty1=penalty1,nlambda1=50,nlambda2=100,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000,initial=initial,
+                    intercept=intercept,standardize=standardize,updateInitialTimes=updateInitialTimes,criterion=criterion)
       }
       else if(range=="all")
       {
         res=rcdreg(out$x,out$y,penalty1=penalty1,nlambda1=50,nlambda2=100,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000,
-                    intercept=intercept,standardize=standardize,updateInitial=updateInitial,criterion=criterion)
+                    intercept=intercept,standardize=standardize,criterion=criterion)
       }
                  
       
@@ -170,6 +158,7 @@ simulate=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PWLQ",ma
       b[i,]=res$beta
       w[i,]=res$w
       iter[i]=res$iter
+      iw[i]=res$index1
       #b[i,]=final$beta
     }
   }
@@ -189,5 +178,5 @@ simulate=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PWLQ",ma
   vs[2]=sum((n1[n2==pNum]>=pNum)+0)/L
   vs[3]=sum(n1)/L
   #return
-  list(beta=b,se=se,vs=vs,iter=iter,w=w,sum=sumofy,error=error)
+  list(beta=b,se=se,vs=vs,iter=iter,w=w,iw=iw,sum=sumofy,error=error)
 }

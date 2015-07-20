@@ -4,7 +4,7 @@ L=100
 se1=c(outA_50$se,outA_ADL50$se,outA_LTS50$se,outA_MM50$se,outA_ROSS50$se)
 se2=c(outB_50$se,outB_ADL50$se,outB_LTS50$se,outB_MM50$se,outB_ROSS50$se)
 se3=c(outC_50$se,outC_ADL50$se,outC_LTS50$se,outC_MM50$se,outC_ROSS50$se)
-se4=c(outD_50$se,outD_ADL50$se,outD_LTS50$se,outD_MM50$se,outD_ROSS50$se)
+se4=c(outD2_50$se,outD2_ADL50$se,outD2_LTS50$se,outD2_MM50$se,outD2_ROSS50$se)
 
 group=c(rep("PAWLS",L),rep("ADL",L),rep("SparseLTS",L),rep("MMNNG",L),rep("SROS",L))
 m1=data.frame(se=se1,group=group)
@@ -21,15 +21,21 @@ boxplot(se~group,data=m4,main="model D")
 
 #for high dimension
 se1=c(outA_500$se,outA_ADL500$se,outA_LTS500$se)
+se2=c(outB_500$se,outB_ADL500$se,outB_LTS500$se)
 se3=c(outC_500$se,outC_ADL500$se,outC_LTS500$se)
-group=c(rep("PWLQ-VS",L),rep("ADL",L),rep("SparseLTS",L))
+se4=c(outD2_500$se,outD2_ADL500$se,outD2_LTS500$se)
+group=c(rep("PAWL",L),rep("ADL",L),rep("SparseLTS",L))
 m1=data.frame(se=se1,group=group)
+m2=data.frame(se=se2,group=group)
 m3=data.frame(se=se3,group=group)
+m4=data.frame(se=se4,group=group)
 x11()
 attach(mtcars)
-par(mfrow=c(1,2))
+par(mfrow=c(2,2))
 boxplot(se~group,data=m1,main="model A")
+boxplot(se~group,data=m2,main="model B")
 boxplot(se~group,data=m3,main="model C")
+boxplot(se~group,data=m4,main="model D")
 #---example1 edn---#
 
 #---example2 begin---#
@@ -54,6 +60,12 @@ boxplot(se~group,data=m3,main="model LC")
 
 ##### w #####
 #---example1 begin---#
+w1=OutlierSummary(outA_50$w,pro=0)
+w2=OutlierSummary(outB_50$w,pro=0)
+w3=OutlierSummary(outC_50$w)
+W4=OutlierSummary(outD2_50$w)
+
+
 w1=OutlierSummary(outA_500$w,pro=0)
 w2=OutlierSummary(outB_500$w,pro=0)
 w3=OutlierSummary(outC_500$w)
