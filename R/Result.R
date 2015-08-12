@@ -53,3 +53,37 @@ OutlierSummary=function(w,pro=0.1)
   list(M=M,S=S,JD=JD)
   
 }
+
+##compare SpareLTS and PAWLS
+ComparePE=function(x,y,trp=0.9,ret=1500)
+{
+  require(robustHD)
+  n=length(y)
+  #iteration for ret times
+  peSumLTS=0
+  peSum=0
+  for(i in 1:ret)
+  {
+    #random split data into training set and test set
+    trainIndex=sample(1:n,size=n*trp)
+    trainx=x[trainIndex,]
+    trainy=y[trainIndex]
+    testx=x[-trainIndex,]
+    testy=y[-trainIndex]
+    
+    #get beta hap and outliers proportion
+    resLTS=sparseLTS(trainx,trainy,intercept=TRUE)
+    dpLTS=0.75
+    res=srcdreg(trainx,trainy,intercept=TRUE,initial="LTS")
+    dp=sum(res$w==1)/n
+    
+    #compute PE for current iteration
+    peLTS=(testy-testx%*%resLTS$coefficients[-1]-resLTS$coefficients[1])^2
+    pe=(testy-testx%*%res$beta[-1]-res$beta[1])^2
+    peSumLTS=peSumLTS+mean(sort(peLTS)[1:(n*(1-trp)*dpLTS)])
+    peSum=peSum+mean(sort(pe)[1:(n*(1-trp)*dp)])
+  }
+  
+  #mean PE
+  list(mpe=peSum/ret,mpeLTS=peSumLTS/ret)
+}

@@ -2,9 +2,9 @@
 #penalty1=c("log","1-w0")
 #initial=
 srcdreg=function (x,y,penalty1=c("1-w0","log"),penalty2="ADL",
-                  lambda1=NULL,lambda2=NULL,nlambda1=50,nlambda2=50,
+                  lambda1=NULL,lambda2=NULL,nlambda1=50,nlambda2=100,
                   beta0=NULL,w0=NULL,initial=c("norm","LTS"),
-                  delta=0.000001,maxIter=100,
+                  delta=0.000001,maxIter=1000,
                   intercept=TRUE,standardize=FALSE,
                   updateInitialTimes=0,criterion=c("BIC","CV"),...)
 {
@@ -42,13 +42,17 @@ srcdreg=function (x,y,penalty1=c("1-w0","log"),penalty2="ADL",
     require(robustHD)
     init=sparseLTS(x,y,intercept=intercept)
     beta0=SetBeta0(init$coefficients)
-    w0=UpdateWeight(x,y,beta0)
-    w0=ifelse(as.vector(w0)==1,0.99,w0)
+    w0=ifelse(init$wt==1,0.99,0.01)
+    #w0=UpdateWeight(x,y,beta0)
+    #w0=ifelse(as.vector(w0)==1,0.99,w0)
   }
   else if(initial=="norm")
   {
-    if(is.null(beta0)) 
+    if(is.null(beta0))
+    {
       beta0=rep(1,p)
+      if(intercept) beta0=c(1,beta0)
+    }
     if(is.null(w0))
       w0=rep(0.99,n)
   }

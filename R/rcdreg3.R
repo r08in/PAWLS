@@ -64,6 +64,20 @@ RCDReg3=function(x, y,penalty1=c("1-w0","log"),penalty2=c("MCP", "SCAD", "ADL"),
 
 InnerReg=function(x, y,penalty1="1-w0",penalty2="ADL",lambda1,lambda2,beta0,w0,delta, maxIter,intercept=TRUE)
 {
+   #return (res2=InnerReg2(x, y,penalty1,penalty2,lambda1,lambda2,beta0,w0,delta, maxIter,intercept))
+  res <- .Call("INNERREG", x, y,penalty1,penalty2,lambda1,lambda2,beta0,w0,delta,maxIter,ifelse(intercept,1,0))
+  L1=length(lambda1)
+  L2=length(lambda2)
+  m=dim(x)[2]
+  n=dim(x)[1]
+  res=list(beta=array(res[[1]],dim=c(L1,L2,m)),w=array(res[[2]],dim=c(L1,L2,n)),
+           wloss=array(res[[3]],dim=c(L1,L2)),loss=array(res[[4]],dim=c(L1,L2)),iter=array(res[[5]],dim=c(L1,L2)))
+  
+  res
+  
+}
+InnerReg2=function(x, y,penalty1="1-w0",penalty2="ADL",lambda1,lambda2,beta0,w0,delta, maxIter,intercept=TRUE)
+{
   
   ##declaration
   n=length(y)

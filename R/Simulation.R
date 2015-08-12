@@ -1,7 +1,8 @@
 simulate=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PWLQ",matlab=NULL,seed=2014,useDataFile=FALSE,
-                  standardize=FALSE,penalty1="1-w0",updateInitial=FALSE,updateInitialTimes=4,criterion="BIC",intercept=FALSE,initial="plain",
+                  standardize=FALSE,penalty1="1-w0",updateInitial=FALSE,updateInitialTimes=4,criterion="BIC",intercept=FALSE,initial="norm",
                   range="cross")
 {
+  ptm=proc.time()
   if(!is.null(seed))
   {
     set.seed(seed)
@@ -72,6 +73,7 @@ simulate=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PWLQ",ma
       require(robustHD)
       res=sparseLTS(out$x,out$y,intercept=FALSE)
       b[i,]=res$coefficients
+      w[i,]=res$wt
     }
     else if(method=="MMNNG")
     {
@@ -142,7 +144,7 @@ simulate=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PWLQ",ma
       
       if(range=="cross")
       {
-        res=srcdreg(out$x,out$y,penalty1=penalty1,nlambda1=50,nlambda2=100,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000,initial=initial,
+        res=srcdreg(out$x,out$y,penalty1=penalty1,nlambda1=50,nlambda2=100,delta=0.000001,maxIter=1000,initial=initial,
                     intercept=intercept,standardize=standardize,updateInitialTimes=updateInitialTimes,criterion=criterion)
       }
       else if(range=="all")
@@ -150,16 +152,10 @@ simulate=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PWLQ",ma
         res=rcdreg(out$x,out$y,penalty1=penalty1,nlambda1=50,nlambda2=100,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000,
                     intercept=intercept,standardize=standardize,criterion=criterion)
       }
-                 
-      
-      #test rcdreg
-      #res2=rcdreg(out$x,out$y,penalty="ADL",nlambda1=50,nlambda2=100,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000)
-     #final=BICPWLQ(res2$wloss,res2$beta,w=res2$w,res2$lambda1,res2$lambda2,n)
       b[i,]=res$beta
       w[i,]=res$w
       iter[i]=res$iter
       iw[i]=res$index1
-      #b[i,]=final$beta
     }
   }
   
@@ -175,8 +171,9 @@ simulate=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PWLQ",ma
   bb=matrix(bb[,1:pNum],nrow=L,ncol=pNum)
   n2=apply(bb,1,sum)
   vs[1]=sum((n1[n2==pNum]==pNum)+0)/L
-  vs[2]=sum((n1[n2==pNum]>=pNum)+0)/L
+  vs[2]=sum((n1[n2==pNum]>pNum)+0)/L
   vs[3]=sum(n1)/L
+  time=(proc.time()-ptm)[1]
   #return
-  list(beta=b,se=se,vs=vs,iter=iter,w=w,iw=iw,sum=sumofy,error=error)
+  list(beta=b,se=se,vs=vs,iter=iter,w=w,iw=iw,sum=sumofy,error=error,time=time)
 }

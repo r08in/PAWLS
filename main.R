@@ -305,7 +305,7 @@ lm0=lm(as.vector(airData[,5])~as.matrix(airData[,-c(5)]))
 p=dim(out$x)[2]
 n=dim(out$x)[1]
 require(robustHD)
-init=sparseLTS(out$x,out$y)
+init=sparseLTS(out$x,out$y,interface=TRUE)
 beta0=SetBeta0(init$coefficients)
 w0=ifelse(init$wt==1,0.99,0.01)
 nlambda1=50

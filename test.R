@@ -85,7 +85,12 @@ SaveResult=function(res,file,dir="C:\\Users\\Administrator\\Dropbox\\result\\")
 {
   write.table(res,paste(dir,file,sep=""))
 }
+outA_LTS500=simulate(L,n,beta,"A",method="LTS",seed=2015)
+outB_LTS500=simulate(L,n,beta,"B",method="LTS",seed=2015)
+outC_LTS500=simulate(L,n,beta,"C",method="LTS",seed=2015)
 outD2_LTS500=simulate(L,n,beta,"D2",method="LTS",seed=2015)
+
+
 outD2_500_test2=simulate(L,n,beta,"D2",method="PWLQ",initial="LTS",seed=2015,updateInitial=TRUE)
 SaveResult(outD2_500$vs,"outD2_500.txt")
 outA_500_test=simulate(L,n,beta,"A",method="PWLQ",initial="plain",seed=2015,updateInitial=TRUE,updateInitialTimes=100)
@@ -206,3 +211,14 @@ res=srcdreg(out$x,out$y,penalty1="1-w0",nlambda1=nlambda1,nlambda2=nlambda2,beta
             intercept=TRUE,standardize=FALSE,updateInitial=FALSE,criterion="BIC")
 colnames[res$beta[-1]!=0]
 #======end of data analysis===========#
+
+#=======temp==========#
+View(outD2_50$beta)
+View(outD2_LTS50$beta)
+se=c(outD2_50$se,outD2_LTS50$se)
+group=c(rep("PAWLS",100),rep("SparseLTS",100))
+m=data.frame(se=se,group=group)
+boxplot(se~group,data=m,main="model D",outline=FALSE)
+
+
+#=======end temp=======#
