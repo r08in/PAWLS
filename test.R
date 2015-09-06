@@ -27,7 +27,7 @@ outD_LTS50=simulate(L,n,beta,"D",method="LTS",useDataFile=TRUE)
 outD2_LTS50=simulate(L,n,beta,"D2",method="LTS",useDataFile=TRUE)
 
 #PWLQ-low dimension
-confirm=simulate(2,n,beta,"A",method="PWLQ",initial="LTS",seed=NULL,useDataFile=TRUE)
+confirm=simulate(L,n,beta,"A",method="PWLQ",initial="LTS",seed=NULL,useDataFile=TRUE)
 outA_50=simulate(L,n,beta,"A",method="PWLQ",initial="LTS",seed=NULL,useDataFile=TRUE)
 outB_50=simulate(L,n,beta,"B",method="PWLQ",initial="LTS",seed=NULL,useDataFile=TRUE)
 outC_50=simulate(L,n,beta,"C",method="PWLQ",initial="LTS",seed=NULL,useDataFile=TRUE)
@@ -41,7 +41,8 @@ outC_ROSS50=simulate(L,n,beta,"C",method="ROSS",matlab=matlab,useDataFile=TRUE)
 outD_ROSS50=simulate(L,n,beta,"D",method="ROSS",matlab=matlab,useDataFile=TRUE)
 outD2_ROSS50=simulate(L,n,beta,"D2",method="ROSS",matlab=matlab,useDataFile=TRUE)
 #ADL
-outA_ADL50=simulate(L,n,beta,"A",method="ADL",useDataFile=TRUE)
+confirm_ADL50=simulate(L,n,beta,"A",method="ADL",useDataFile=TRUE)
+outA_ADL50_adl=simulate(L,n,beta,"A",method="ADL",useDataFile=TRUE)
 outB_ADL50=simulate(L,n,beta,"B",method="ADL",useDataFile=TRUE)
 outC_ADL50=simulate(L,n,beta,"C",method="ADL",useDataFile=TRUE)
 outD_ADL50=simulate(L,n,beta,"D",method="ADL",useDataFile=TRUE)
@@ -73,6 +74,7 @@ outC_500=simulate(L,n,beta,"C",method="PWLQ",initial="plain",seed=2015,updateIni
 outD_500=simulate(L,n,beta,"D",method="PWLQ",initial="plain",seed=2015,updateInitial=TRUE)
 outB_500=simulate(L,n,beta,"B",method="PWLQ",initial="plain",seed=2015,updateInitial=TRUE)
 outD2_500=simulate(L,n,beta,"D2",method="PWLQ",initial="plain",seed=2015,updateInitial=TRUE)
+outD3_500=simulate(L,n,beta,"D3",method="PWLQ",initial="uniform",seed=2015,updateInitial=TRUE)
 outC_500=simulate(L,n,beta,"C",method="PWLQ",initial="plain",seed=2015,updateInitial=TRUE)
 #ADL
 outA_ADL500=simulate(L,n,beta,"A",method="ADL",seed=2015)
@@ -160,26 +162,42 @@ colnames=names(airData[,-c(5)])
 #OLS
 lm1=lm(y~x)
 lm0=lm(as.vector(airData[,5])~as.matrix(airData[,-c(5)]))
+
 # pwls-vs
-p=dim(out$x)[2]
-n=dim(out$x)[1]
-require(robustHD)
-init=sparseLTS(out$x,out$y)
-beta0=SetBeta0(init$coefficients)
-w0=ifelse(init$wt==1,0.99,0.01)
-nlambda1=50
-nlambda2=100
-res=srcdreg(out$x,out$y,penalty1="1-w0",nlambda1=nlambda1,nlambda2=nlambda2,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000,
-            intercept=TRUE,standardize=FALSE,updateInitial=FALSE,criterion="BIC")
-colnames[res$beta[-1]!=0]
+res_air=srcdreg(out$x,out$y,initial="LTS")
+#res2_air=srcdreg(out$x,out$y,initial="LTS",search="all")
+colnames[res_air$beta[-1]!=0]
 studres=studres(lm1)
 plot(studres)
 abline(2.5,0)
 identify(studres)
+
 #MMNNG
 source("mmnngreg.R")
 res_MM=mmnngreg(as.matrix(out$x),out$y)
 res_MM$betac[-1]=colnames
+
+#ADL
+res_air_ADL=srcdreg(out$x,out$y,nlambda1=2,initial="LAD",search="fixw")
+colnames[res_air_ADL$beta[-1]!=0]
+
+#sLTS
+require(robustHD)
+res_air_LTS=sparseLTS(out$x,out$y,intercept=TRUE)
+colnames[res_air_LTS$coefficients[-1]!=0]
+
+# MMNNG
+source("mmnngreg.R")
+res_air_MMNNG=mmnngreg(out$x,out$y)
+colnames[res_air_MMNNG$betac[-1]!=0]
+
+#SROS
+x=AddIntercept(out$x)
+setVariable(matlab, X=x)
+setVariable(matlab, y=out$y)
+evaluate(matlab,"[betaRoss]=RossSimulate(X,y)")
+res_air_Ross=getVariable(matlab, "betaRoss")
+colnames[res_air_Ross$betaRoss[-1]!=0]
 
 #======real data analysis(NCI-60)============#
 #read data

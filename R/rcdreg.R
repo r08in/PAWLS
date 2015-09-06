@@ -1,8 +1,11 @@
 ## This functionn is to perform group coordinate descent regression 
 ## use for adaptive lasso now
 
-rcdreg=function (x,y,penalty1="1-w0",penalty2="ADL",lambda1=NULL,lambda2=NULL,nlambda1=100,nlambda2=100,
-                  beta0,w0,delta,maxIter=100,intercept=TRUE,standardize=FALSE,updateInitial=TRUE,criterion="BIC",...)#penalty1=c("log","1-w0")
+rcdreg=function (x,y,penalty1="1-w0",penalty2="ADL",lambda1=NULL,lambda2=NULL,
+                 nlambda1=100,nlambda2=100,
+                  beta0,w0,delta,maxIter=100,
+                 intercept=TRUE,standardize=FALSE,
+                 updateInitial=TRUE,criterion="BIC",...)#penalty1=c("log","1-w0")
 {
   ###error checking
   if (class(x) != "matrix") 

@@ -3,10 +3,10 @@
 #initial=
 srcdreg=function (x,y,penalty1=c("1-w0","log"),penalty2="ADL",
                   lambda1=NULL,lambda2=NULL,nlambda1=50,nlambda2=100,
-                  beta0=NULL,w0=NULL,initial=c("norm","LTS"),
+                  beta0=NULL,w0=NULL,initial=c("uniform","LTS","LAD"),
                   delta=0.000001,maxIter=1000,
                   intercept=TRUE,standardize=FALSE,
-                  updateInitialTimes=0,criterion=c("BIC","CV"),...)
+                  updateInitialTimes=0,criterion=c("BIC","CV"),search=c("cross","all","fixw"),...)
 {
   ##error checking
   if (class(x) != "matrix") 
@@ -25,18 +25,22 @@ srcdreg=function (x,y,penalty1=c("1-w0","log"),penalty2="ADL",
   penalty1 <- match.arg(penalty1)
   initial <- match.arg(initial)
   criterion <- match.arg(criterion)
+  search<-match.arg(search)
   
+  
+  if (nlambda1 < 2||nlambda2<2) 
+    stop("nlambda must be at least 2")
   if(!is.null(lambda1)) 
     nlambda1=length(lambda1)
   if(!is.null(lambda2)) 
     nlambda2=length(lambda2)
-  if (nlambda1 < 2||nlambda2<2) 
-    stop("nlambda must be at least 2")
   
   if (any(is.na(y)) | any(is.na(x))) 
     stop("Missing data (NA's) detected.Take actions to eliminate missing data before passing X and y to gcdreg.")
   
   #initial
+  n=length(y)
+  p=dim(x)[2]
   if(initial=="LTS")
   {
     require(robustHD)
@@ -46,7 +50,14 @@ srcdreg=function (x,y,penalty1=c("1-w0","log"),penalty2="ADL",
     #w0=UpdateWeight(x,y,beta0)
     #w0=ifelse(as.vector(w0)==1,0.99,w0)
   }
-  else if(initial=="norm")
+  else if(initial=="LAD")
+  {
+    init=InitParam(x,y,method="LAD")
+    beta0=ifelse(init$beta==0,0.01,init$beta)
+    if(intercept) beta0=c(1,beta0)
+    w0=rep(0.99,n)
+  }
+  else if(initial=="uniform")
   {
     if(is.null(beta0))
     {
@@ -93,7 +104,21 @@ srcdreg=function (x,y,penalty1=c("1-w0","log"),penalty2="ADL",
  
   if(criterion=="BIC")
   {
-    res=RCDReg3(XX, yy,penalty1=penalty1,penalty2=penalty2,lambda1,lambda2,beta0,w0,delta, maxIter,intercept=intercept,updateInitialTimes=updateInitialTimes)
+    if(search=="all") # search for the whole grid
+    {
+      res=InnerReg(XX, yy,penalty1=penalty1,penalty2=penalty2,lambda1,lambda2,beta0,w0,delta, maxIter,intercept=intercept)   
+      res=BICPWLQ(res$wloss,res$beta,res$w,lambda1,lambda2)
+    } 
+    else if(search=="fixw") # ALasso
+    {
+      res=RCDReg2(XX, yy,penalty1=penalty1,penalty2=penalty2,lambda1,lambda2,beta0,w0,delta, maxIter,intercept=intercept,fixW=TRUE)
+      res=BICPWLQ(res$wloss,res$beta,res$w,lambda1,lambda2,alpha=1)
+    }
+    else #(search=="cross")
+    {
+      res=RCDReg3(XX, yy,penalty1=penalty1,penalty2=penalty2,lambda1,lambda2,beta0,w0,delta, maxIter,intercept=intercept,updateInitialTimes=updateInitialTimes)
+    }
+
   }
   else if(criterion=="CV")
   {

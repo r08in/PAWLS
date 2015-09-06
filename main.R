@@ -302,21 +302,22 @@ colnames=names(airData[,-c(5)])
 lm1=lm(y~x)
 lm0=lm(as.vector(airData[,5])~as.matrix(airData[,-c(5)]))
 # pwls-vs
-p=dim(out$x)[2]
-n=dim(out$x)[1]
-require(robustHD)
-init=sparseLTS(out$x,out$y,interface=TRUE)
-beta0=SetBeta0(init$coefficients)
-w0=ifelse(init$wt==1,0.99,0.01)
-nlambda1=50
-nlambda2=100
-res=srcdreg(out$x,out$y,penalty1="1-w0",nlambda1=nlambda1,nlambda2=nlambda2,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000,
-            intercept=TRUE,standardize=FALSE,updateInitial=FALSE,criterion="BIC")
+
+res=srcdreg(out$x,out$y,interface=TRUE,initial="LTS")
 colnames[res$beta[-1]!=0]
+
+x11()
 studres=studres(lm1)
-plot(studres)
+point=1:length(studres)
+plot(studres~point,type='n',ylim=c(-4,4))
+points(point[res$w==1],studres[res$w==1],pch=19)
+points(point[res$w!=1],studres[res$w!=1],pch=17,col="red")
 abline(2.5,0)
-identify(studres)
+abline(-2.5,0)
+#LTS
+res_LTS=sparseLTS(out$x,out$y)
+
+MPE=ComparePE(out$x,out$y,ret=1000)
 #MMNNG
 source("mmnngreg.R")
 res_MM=mmnngreg(as.matrix(out$x),out$y)
@@ -343,13 +344,9 @@ class(out$x)<-"numeric"
 res=sparseLTS(out$x,out$y)
 #compute
 # pwls-vs
-p=dim(out$x)[2]
-n=dim(out$x)[1]
-beta0=rep(1,p+1)
-w0=rep(0.99,n)
-nlambda1=50
-nlambda2=100
-res=srcdreg(out$x,out$y,penalty1="1-w0",nlambda1=nlambda1,nlambda2=nlambda2,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000,
-            intercept=TRUE,standardize=FALSE,updateInitial=FALSE,criterion="BIC")
+
+res=srcdreg(out$x,out$y,,interface=TRUE,initial="LTS")
 colnames[res$beta[-1]!=0]
+
+MPE=ComparePE(out$x,out$y,ret=1000)
 #======end of data analysis===========#

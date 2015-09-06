@@ -1,5 +1,5 @@
 simulate=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PWLQ",matlab=NULL,seed=2014,useDataFile=FALSE,
-                  standardize=FALSE,penalty1="1-w0",updateInitial=FALSE,updateInitialTimes=4,criterion="BIC",intercept=FALSE,initial="norm",
+                  standardize=FALSE,penalty1="1-w0",updateInitial=FALSE,criterion="BIC",intercept=FALSE,initial="uniform",
                   range="cross")
 {
   ptm=proc.time()
@@ -54,19 +54,24 @@ simulate=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PWLQ",ma
     }
     else if(method=="ADL")
     {
-      #require("parcor")
-      init=InitParam(out$x,out$y,method="LAD")
-      beta0=ifelse(init$beta==0,0.01,init$beta)
-      w0=rep(0.99,n)
-      res=rcdreg(out$x,out$y,penalty1=penalty1,nlambda1=2,nlambda2=100,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000,
-                             intercept=intercept,standardize=standardize,updateInitial=updateInitial,criterion=criterion)
+#       require("parcor")
+#       res=adalasso(out$x,out$y, k = 10,use.Gram =TRUE,both=TRUE,intercept=FALSE)
+#       b[i,]=res$coefficients.adalasso
+#       init=InitParam(out$x,out$y,method="LAD")
+#       beta0=ifelse(init$beta==0,0.01,init$beta)
+#       w0=rep(0.99,n)
+#       res=rcdreg(out$x,out$y,penalty1=penalty1,nlambda1=2,nlambda2=100,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000,
+#                              intercept=intercept,standardize=standardize,updateInitial=updateInitial,criterion=criterion)
       #index=BIC(res$wloss[1,],apply(matrix(res$beta[1,,],100,p)!=0+0,1,sum),n,p)
-      b[i,]=res$beta
+#       b[i,]=res$beta
       #res=adalasso(out$x,out$y,intercept=FALSE)
       #b[i,]=res$coefficients.adalasso
       
       #w[i,]=res$w
       #iter[i]=res$iter
+      res=srcdreg(out$x,out$y,penalty1=penalty1,nlambda1=2,initial="LAD",
+                  intercept=intercept,standardize=standardize,updateInitialTimes=updateInitialTimes,criterion=criterion,search="fixw")
+      b[i,]=res$beta
     }
     else if(method=="LTS")
     {
@@ -142,16 +147,8 @@ simulate=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PWLQ",ma
       else
         updateInitialTimes=0
       
-      if(range=="cross")
-      {
-        res=srcdreg(out$x,out$y,penalty1=penalty1,nlambda1=50,nlambda2=100,delta=0.000001,maxIter=1000,initial=initial,
-                    intercept=intercept,standardize=standardize,updateInitialTimes=updateInitialTimes,criterion=criterion)
-      }
-      else if(range=="all")
-      {
-        res=rcdreg(out$x,out$y,penalty1=penalty1,nlambda1=50,nlambda2=100,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000,
-                    intercept=intercept,standardize=standardize,criterion=criterion)
-      }
+      res=srcdreg(out$x,out$y,penalty1=penalty1,nlambda1=50,nlambda2=100,delta=0.000001,maxIter=1000,initial=initial,
+                    intercept=intercept,standardize=standardize,updateInitialTimes=updateInitialTimes,criterion=criterion,search=range)
       b[i,]=res$beta
       w[i,]=res$w
       iter[i]=res$iter

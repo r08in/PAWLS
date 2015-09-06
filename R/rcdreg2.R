@@ -1,6 +1,6 @@
 #search the whole lambda grid
 #for adptive lasso use
-RCDReg2=function(x, y,penalty1="1-w0",penalty2="ADL",lambda1,lambda2,beta0,w0,delta, maxIter,intercept=TRUE)
+RCDReg2=function(x, y,penalty1="1-w0",penalty2="ADL",lambda1,lambda2,beta0,w0,delta, maxIter,intercept=TRUE,fixW=FALSE)
 {  
   ##declaration
   n=length(y)
@@ -85,7 +85,11 @@ RCDReg2=function(x, y,penalty1="1-w0",penalty2="ADL",lambda1,lambda2,beta0,w0,de
           w[l1,l2,]=ifelse(sqr>lam1,lam1/sqr,1)
         }
         #for adl 
-        w[l1,l2,]=rep(1,n)
+        if(fixW)
+        {
+          w[l1,l2,]=rep(1,n)
+        }
+        
         shift[(m+1):(m+n)]=w[l1,l2,]-wPre
         
         ##update betaPre and wPre for next iteration

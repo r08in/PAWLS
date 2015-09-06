@@ -41,7 +41,7 @@ GreedySelect=function(betas,lambdas,inv=0.9)
   list(lambda=lambdas[index],df=sum(betas[index,]!=0),index=index,beta=betas[index,])
 }
 
-BICPWLQ=function(wloss,beta,w,lambda1,lambda2,n,inv=1)
+BICPWLQ=function(wloss,beta,w,lambda1,lambda2,inv=1,alpha=1)
 {
   #declare and initial
   l1=length(lambda1)
@@ -55,13 +55,14 @@ BICPWLQ=function(wloss,beta,w,lambda1,lambda2,n,inv=1)
   end1=round(l1*(0.5+inv/2))
   start2=round(l2*((1-inv)/2))+1
   end2=round(l2*(0.5+inv/2))
+  n=length(w[1,1,])
   for(i in start1:end1)
   {
     for(j in start2:end2)
   {
     wdf[i,j]=sum(w[i,j,]!=1+0)
     bdf[i,j]=sum(beta[i,j,]!=0+0)
-    bicTemp[i,j]=log(wloss[i,j]/(n)+1)+(bdf[i,j]+wdf[i,j])*log(n)/(n)
+    bicTemp[i,j]=log(wloss[i,j]/(n)+alpha)+(bdf[i,j]+wdf[i,j])*log(n)/(n)
     if(bicTemp[i,j]<=bicPre)
     {
       index1=i
@@ -70,7 +71,7 @@ BICPWLQ=function(wloss,beta,w,lambda1,lambda2,n,inv=1)
     }
   }
   }
-  res=list(lambda1=lambda1,lambda2=lambda2,bdf=bdf,wdf=wdf,bic=bicTemp)
+  res=list(lambda1=lambda1,lambda2=lambda2,bdf=bdf,wdf=wdf,bic=bicTemp,w=w,beta=beta)
   i=index1
   j=index2
   list(lambda1=lambda1[i],lambda2=lambda2[j],

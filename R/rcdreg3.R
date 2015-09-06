@@ -58,7 +58,7 @@ RCDReg3=function(x, y,penalty1=c("1-w0","log"),penalty2=c("MCP", "SCAD", "ADL"),
   list(lambda1=lambda1[i],lambda2=lambda2[j],
        beta=as.vector(res$beta),w=as.vector(res$w),
        wloss=res$wloss,bdf=sum(res$beta!=0+0),wdf=sum(res$w!=1+0),
-       index1=i,index2=j,iter=iter)
+       index1=i,index2=j,iter=iter,w0=w0,beta0=beta0,lambda1s=lambda1,lambda2s=lambda2)
   
 }
 

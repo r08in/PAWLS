@@ -1,5 +1,6 @@
 SetupParameter = function(x,y,nlambda1,nlambda2,beta0,w0,intercept=TRUE,alpha=0.1,penalty1="1-w0") 
 {
+  n=length(y)
   #set lambda2
   if(intercept)
   {
@@ -14,7 +15,7 @@ SetupParameter = function(x,y,nlambda1,nlambda2,beta0,w0,intercept=TRUE,alpha=0.
       l1=(y-mean(y))^2*abs(1-w0)/n
     }
     #
-    num=round(length(y)*alpha)
+    num=round(n*alpha)
     lambda1Max=l1[order(l1,decreasing=TRUE)[num+1]]
     
     lambda2Max=max(abs(t(x[,-1])%*%(y-mean(y))/n)*abs(beta0[-1])) # max |betaj|*|xj'y/n|
