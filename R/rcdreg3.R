@@ -1,6 +1,6 @@
 #without search the whole grid of lambda
-RCDReg3=function(x, y,penalty1=c("1-w0","log"),penalty2=c("MCP", "SCAD", "ADL"),lambda1,lambda2,beta0,w0,delta, 
-                 maxIter,intercept=TRUE,updateInitialTimes=0)
+RCDReg3=function(x, y,penalty1=c("1-w0","log"),penalty2=c("LASSO", "RIDGE", "MCP"),lambda1,lambda2,beta0,w0,delta, 
+                 maxIter,intercept=TRUE,updateInitialTimes=0,criterion="BIC")
 {  
   penalty1 <- match.arg(penalty1)
   penalty2 <- match.arg(penalty2)
@@ -15,11 +15,11 @@ RCDReg3=function(x, y,penalty1=c("1-w0","log"),penalty2=c("MCP", "SCAD", "ADL"),
   #initial lambda
   index2=L2/2
   res=InnerReg(x,y,penalty1=penalty1,penalty2=penalty2,lambda1,lambda2[index2],beta0,w0,delta,maxIter,intercept=intercept) #fix lambda2
-  index1=BIC(as.vector(res$wloss),apply(matrix(res$w,L1,n)!=1+0,1,sum)+apply(matrix(res$beta,L1,m)!=0+0,1,sum),n,m,type="w") #find best lambda1
+  index1=BIC(as.vector(res$wloss),apply(matrix(res$w,L1,n)!=1+0,1,sum),apply(matrix(res$beta,L1,m)!=0+0,1,sum),n,m,type="w",criterion=criterion) #find best lambda1
   #index1=BIC(as.vector(res$wloss),dfs(x,matrix(res$beta,L1,m),matrix(res$w,L1,n)),n,m,type="w") #find best lambda1
   res=InnerReg(x,y,penalty1=penalty1,penalty2=penalty2,lambda1[index1],lambda2,beta0,w0,delta,maxIter,intercept=intercept) #fix lambda1
   #index2=BIC(as.vector(res$wloss),dfs(x,matrix(res$beta,L2,m),matrix(res$w,L2,n)),n,m) #find best lambda2
-  index2=BIC(as.vector(res$wloss),apply(matrix(res$w,L2,n)!=1+0,1,sum)+apply(matrix(res$beta,L2,m)!=0+0,1,sum),n,m) #find best lambda2
+  index2=BIC(as.vector(res$wloss),apply(matrix(res$w,L2,n)!=1+0,1,sum),apply(matrix(res$beta,L2,m)!=0+0,1,sum),n,m,criterion=criterion) #find best lambda2
   
   ##loop to estimate and find the best
   iter=0
@@ -38,7 +38,7 @@ RCDReg3=function(x, y,penalty1=c("1-w0","log"),penalty2=c("MCP", "SCAD", "ADL"),
       w0=ifelse(w0==1,0.99,w0)
     }    
     res=InnerReg(x,y,penalty1=penalty1,penalty2=penalty2,lambda1,lambda2[index2],beta0,w0,delta,maxIter,intercept=intercept) #fix lambda2
-    index1=BIC(as.vector(res$wloss),apply(matrix(res$w,L1,n)!=1+0,1,sum)+apply(matrix(res$beta,L1,m)!=0+0,1,sum),n,m,type="w") #find best lambda1  
+    index1=BIC(as.vector(res$wloss),apply(matrix(res$w,L1,n)!=1+0,1,sum),apply(matrix(res$beta,L1,m)!=0+0,1,sum),n,m,type="w",criterion=criterion) #find best lambda1  
     
     if(iter<=updateInitialTimes)
     {
@@ -48,21 +48,18 @@ RCDReg3=function(x, y,penalty1=c("1-w0","log"),penalty2=c("MCP", "SCAD", "ADL"),
       w0=ifelse(w0==1,0.99,w0)
     }    
     res=InnerReg(x,y,penalty1=penalty1,penalty2=penalty2,lambda1[index1],lambda2,beta0,w0,delta,maxIter,intercept=intercept) #fix lambda1
-    index2=BIC(as.vector(res$wloss),apply(matrix(res$w,L2,n)!=1+0,1,sum)+apply(matrix(res$beta,L2,m)!=0+0,1,sum),n,m) #find best lambda2
+    index2=BIC(as.vector(res$wloss),apply(matrix(res$w,L2,n)!=1+0,1,sum),apply(matrix(res$beta,L2,m)!=0+0,1,sum),n,m,criterion=criterion) #find best lambda2
     if(pre2==index2&&pre1==index1) break;
   }
-  res=InnerReg(x,y,penalty1=penalty1,penalty2=penalty2,lambda1[index1],lambda2[index2],beta0,w0,delta,maxIter,intercept=intercept) #fix lambda2 and lambda2
-  #return 
-  i=index1
-  j=index2
-  list(lambda1=lambda1[i],lambda2=lambda2[j],
-       beta=as.vector(res$beta),w=as.vector(res$w),
-       wloss=res$wloss,bdf=sum(res$beta!=0+0),wdf=sum(res$w!=1+0),
-       index1=i,index2=j,iter=iter,w0=w0,beta0=beta0,lambda1s=lambda1,lambda2s=lambda2)
+  
+  list(lambda1=lambda1[index1],lambda2=lambda2[index2],
+       beta=as.vector(res$beta[1,index2,]),w=as.vector(res$w[1,index2,]),
+       wloss=res$wloss[1,index2],bdf=sum(res$beta[1,index2,]!=0+0),wdf=sum(res$w[1,index2,]!=1+0),
+       index1=index1,index2=index2,iter=iter,w0=w0,beta0=beta0,lambda1s=lambda1,lambda2s=lambda2)
   
 }
 
-InnerReg=function(x, y,penalty1="1-w0",penalty2="ADL",lambda1,lambda2,beta0,w0,delta, maxIter,intercept=TRUE)
+InnerReg=function(x, y,penalty1="1-w0",penalty2=c("LASSO", "RIDGE", "MCP"),lambda1,lambda2,beta0,w0,delta, maxIter,intercept=TRUE)
 {
    #return (res2=InnerReg2(x, y,penalty1,penalty2,lambda1,lambda2,beta0,w0,delta, maxIter,intercept))
   res <- .Call("INNERREG", x, y,penalty1,penalty2,lambda1,lambda2,beta0,w0,delta,maxIter,ifelse(intercept,1,0))
@@ -193,5 +190,6 @@ SetBeta0=function(beta0)
   {
     b=min(abs(beta0[beta0!=0]))*0.01
   }
-  ifelse(beta0==0,b,beta0)
+  b=0.001
+  ifelse(beta0<b,b,beta0)
 }

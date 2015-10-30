@@ -94,7 +94,7 @@ wLC_PWLQ=OutlierSummary(outLC_PWLQ$w)
 
 ##plot air pollution ##
 
- paramPlot=function(res)
+ paramPlot=function(res,param="both")
 {
   logw=NULL
   loglambdaw=NULL 
@@ -118,10 +118,23 @@ wLC_PWLQ=OutlierSummary(outLC_PWLQ$w)
     loglambdab=cbind(loglambdab,rep(-log(res$res$lambda2[j]),p))
   }
   attach(mtcars)
-  par(mfrow=c(1,2))
-  plot(loglambdab,b,xlab=expression(paste("-log(",hat(lambda[1]),")")),ylab=expression(hat(beta)),pch="-")
-  abline(v=-log(res$lambda2),lty=2)
-  plot(loglambdaw,logw,xlab=expression(paste("-log(",hat(lambda[2]),")")),ylab=expression(-log(hat(w))),pch="-")
-  abline(v=-log(res$lambda1),lty=2)
+  if(param=="both")
+  {
+    par(mfrow=c(1,2))
+    plot(loglambdab,b,xlab=expression(paste("-log(",hat(lambda[1]),")")),ylab=expression(hat(beta)),pch="-")
+    abline(v=-log(res$lambda2),lty=2)
+    plot(loglambdaw,logw,xlab=expression(paste("-log(",hat(lambda[2]),")")),ylab=expression(-log(hat(w))),pch="-")
+    abline(v=-log(res$lambda1),lty=2)
+  }
+  else if(param=="1")
+  {
+    plot(loglambdaw,logw,xlab=expression(paste("-log(",hat(lambda[2]),")")),ylab=expression(-log(hat(w))),pch="-")
+    abline(v=-log(res$lambda1),lty=2)
+  }
+  else if(param=="2")
+  {
+    plot(loglambdab,b,xlab=expression(paste("-log(",hat(lambda[1]),")")),ylab=expression(hat(beta)),pch="-")
+    abline(v=-log(res$lambda2),lty=2)
+  }
 }
 

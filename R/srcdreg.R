@@ -1,12 +1,12 @@
 ## This functionn is to perform group coordinate descent regression
 #penalty1=c("log","1-w0")
 #initial=
-srcdreg=function (x,y,penalty1=c("1-w0","log"),penalty2="ADL",
+srcdreg=function (x,y,penalty1=c("1-w0","log"),penalty2=c("LASSO", "RIDGE", "MCP"),
                   lambda1=NULL,lambda2=NULL,nlambda1=50,nlambda2=100,
                   beta0=NULL,w0=NULL,initial=c("uniform","LTS","LAD"),
                   delta=0.000001,maxIter=1000,
                   intercept=TRUE,standardize=FALSE,
-                  updateInitialTimes=0,criterion=c("BIC","CV"),search=c("cross","all","fixw"),...)
+                  updateInitialTimes=0,criterion=c("BIC","AIC","CV"),search=c("cross","all","fixw","crossDynamic"),...)
 {
   ##error checking
   if (class(x) != "matrix") 
@@ -102,27 +102,47 @@ srcdreg=function (x,y,penalty1=c("1-w0","log"),penalty2="ADL",
   
   ##Fit  
  
-  if(criterion=="BIC")
+  if(criterion=="BIC"||criterion=="AIC")
   {
     if(search=="all") # search for the whole grid
     {
       res=InnerReg(XX, yy,penalty1=penalty1,penalty2=penalty2,lambda1,lambda2,beta0,w0,delta, maxIter,intercept=intercept)   
-      res=BICPWLQ(res$wloss,res$beta,res$w,lambda1,lambda2)
+      res=BICPWLQ(res$wloss,res$beta,res$w,lambda1,lambda2,criterion=criterion)
     } 
     else if(search=="fixw") # ALasso
     {
       res=RCDReg2(XX, yy,penalty1=penalty1,penalty2=penalty2,lambda1,lambda2,beta0,w0,delta, maxIter,intercept=intercept,fixW=TRUE)
-      res=BICPWLQ(res$wloss,res$beta,res$w,lambda1,lambda2,alpha=1)
+      res=BICPWLQ(res$wloss,res$beta,res$w,lambda1,lambda2,alpha=1,criterion=criterion)
+    }
+    else if(search=="crossDynamic")
+    {
+      while(TRUE)
+      {
+        res=RCDReg3(XX, yy,penalty1=penalty1,penalty2=penalty2,lambda1,lambda2,beta0,w0,delta, 
+                    maxIter,intercept=intercept,updateInitialTimes=updateInitialTimes,criterion=criterion)
+        #lambda2 for beta
+        if(res$index2==nlambda2-1)
+        {
+          lambda2=c(lambda2[1:(nlambda2-2)],logSeq(lambda2[nlambda2-1],lambda2[nlambda2],nlambda2))
+          beta0=res$beta0
+          w0=res$w0
+        }
+        else 
+          break;
+      }
+      
     }
     else #(search=="cross")
     {
-      res=RCDReg3(XX, yy,penalty1=penalty1,penalty2=penalty2,lambda1,lambda2,beta0,w0,delta, maxIter,intercept=intercept,updateInitialTimes=updateInitialTimes)
+      res=RCDReg3(XX, yy,penalty1=penalty1,penalty2=penalty2,lambda1,lambda2,beta0,w0,delta,
+                  maxIter,intercept=intercept,updateInitialTimes=updateInitialTimes,criterion=criterion)
     }
 
   }
   else if(criterion=="CV")
   {
-    res=RCDReg4(XX, yy,penalty1=penalty1,penalty2=penalty2,lambda1,lambda2,beta0,w0,delta, maxIter,intercept=intercept)
+    res=RCDReg4(XX, yy,penalty1=penalty1,penalty2=penalty2,lambda1,lambda2,beta0,w0,delta, 
+                maxIter,intercept=intercept)
   }
   ##unstandardize 
   if(standardize)

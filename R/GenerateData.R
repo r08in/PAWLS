@@ -5,7 +5,8 @@
 # errorSigma variance of ramdom error
 # offSet indicate the offset of position of non-zero beta
 GenerateData = function (n,p=NULL,pNum=NULL,dataSetNum=1,beta=NULL,
-                         r=0.9,errorSigma=1,errorType="n",offSet=0,outlier.op="NONE",outlier.pro=0.1,outlier.r=10)
+                         r=0.9,errorSigma=1,errorType="n",offSet=0,outlier.op="NONE",outlier.pro=0.1,outlier.r=10,
+                         dataType=c("Lasso","Ridge"))
 {
   #for test
   #set.seed(120)
@@ -37,16 +38,39 @@ GenerateData = function (n,p=NULL,pNum=NULL,dataSetNum=1,beta=NULL,
     stop("dataSetNum should be positive integer.")
   if(outlier.op!="NONE"&&(outlier.pro>1||outlier.pro<0))
     stop("the proportion of outlier is illegal!")
+  dataType <- match.arg(dataType)
+  
   ##generate design matrix x 
   #normal parameter for design matrix
   mu = rep(0,p)
   sigma=matrix(0,nrow =p, ncol = p)  
   xx=matrix(0,nrow =n, ncol = p)
-  for(i in 1:p)
-    for(j in 1:p)
-    {
-      sigma[i,j]=r^abs(i-j)   
-    }
+  
+  if(dataType=="Ridge")
+  {
+    for(i in 1:p)
+      for(j in 1:p)
+      {
+        if(i==j)
+        {
+          sigma[i,j]=1 
+        }
+        else
+        {
+          sigma[i,j]=r
+        }
+         
+      }
+  }
+  else
+  {
+    for(i in 1:p)
+      for(j in 1:p)
+      {
+        sigma[i,j]=r^abs(i-j)   
+      }
+  }
+  
   tempx=array(0,dim=c(dataSetNum,n,p))
   for(j in 1:dataSetNum)
   {
@@ -278,7 +302,7 @@ GenerateDataByModel=function(n,beta,errorSigma=2,r=0.5,model=c("A","B","C","D"))
   else if(model=="D")
   {
     out=GenerateData(n=n,dataSetNum=1,beta=beta,errorSigma=errorSigma,r=r)
-    oNum=round(n*0.2)
+    oNum=round(n*0.1)
     u1=runif(oNum,0,1)
     u2=runif(oNum,0,1)
     out$y[1:oNum]=out$y[1:oNum]+ifelse(u1<0.5,-1,1)*(20+10*u2)

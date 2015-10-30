@@ -7,12 +7,12 @@ cvreg=function(x, y,penalty1="1-w0",penalty2="ADL",lambda1,lambda2,beta0,w0,delt
   size=round(n/K)
   L=length(lambda1)*length(lambda2)
   pe=matrix(nrow=L,ncol=K,0)
-  
+  rseq=sample(1:n,n)
   #interation for each fold
   for(k in 1:K)
   {
     #prepare data
-    range=((k-1)*size+1):(k*size)
+    range=rseq[((k-1)*size+1):(k*size)]
     trainx=x[-range,]
     trainy=y[-range]
     testx=x[range,]
@@ -44,5 +44,4 @@ cvreg=function(x, y,penalty1="1-w0",penalty2="ADL",lambda1,lambda2,beta0,w0,delt
            beta0,w0,delta,maxIter,intercept=intercept)
   #return data
   list(index=index,beta=res$beta,w=res$w,wloss=res$wloss)
-  
 }

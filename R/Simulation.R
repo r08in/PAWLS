@@ -25,6 +25,10 @@ simulate=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PWLQ",ma
   #evaluate(matlab,"rng(2015);")
   for(i in 1:L)
   {
+    if(i==16)
+    {
+      test=1+1
+    }
     if(useDataFile)
     {
       out=data[[i]]

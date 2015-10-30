@@ -53,7 +53,8 @@ outD2_ADL50=simulate(L,n,beta,"D2",method="ADL",useDataFile=TRUE)
 L=100
 n=100
 p=500
-beta=c(rep(2,10),rep(0,p-10))
+num=10
+beta=c(rep(2,num),rep(0,p-num))
 
 #MMNNG collect data- high dimension
 simulate(L,n,beta,"A",method="MMNNG_DATA",seed=NULL)
@@ -69,13 +70,14 @@ outA_ROSS500=simulate(L,n,beta,model="C",method="ROSS",matlab=matlab)
 outA_ROSS500=simulate(L,n,beta,model="B",method="ROSS",matlab=matlab)
 outA_ROSS500=simulate(L,n,beta,model="A",method="ROSS",matlab=matlab)
 #pwlq
-outA_500=simulate(L,n,beta,"A",method="PWLQ",initial="plain",seed=2015,updateInitial=TRUE)
-outC_500=simulate(L,n,beta,"C",method="PWLQ",initial="plain",seed=2015,updateInitial=TRUE)
-outD_500=simulate(L,n,beta,"D",method="PWLQ",initial="plain",seed=2015,updateInitial=TRUE)
-outB_500=simulate(L,n,beta,"B",method="PWLQ",initial="plain",seed=2015,updateInitial=TRUE)
-outD2_500=simulate(L,n,beta,"D2",method="PWLQ",initial="plain",seed=2015,updateInitial=TRUE)
+confrim_500=simulate(L,n,beta,"A",method="PWLQ",seed=2015,updateInitial=TRUE)
+outA_500=simulate(L,n,beta,"A",method="PWLQ",initial="uniform",seed=2015,updateInitial=TRUE)
+outC_500=simulate(L,n,beta,"C",method="PWLQ",initial="uniform",seed=2015,updateInitial=TRUE)
+outD_500=simulate(L,n,beta,"D",method="PWLQ",initial="uniform",seed=2015,updateInitial=TRUE)
+outB_500=simulate(L,n,beta,"B",method="PWLQ",initial="uniform",seed=2015,updateInitial=TRUE)
+outD2_500=simulate(L,n,beta,"D2",method="PWLQ",initial="uniform",seed=2015,updateInitial=TRUE)
 outD3_500=simulate(L,n,beta,"D3",method="PWLQ",initial="uniform",seed=2015,updateInitial=TRUE)
-outC_500=simulate(L,n,beta,"C",method="PWLQ",initial="plain",seed=2015,updateInitial=TRUE)
+outC_500=simulate(L,n,beta,"C",method="PWLQ",initial="uniform",seed=2015,updateInitial=TRUE)
 #ADL
 outA_ADL500=simulate(L,n,beta,"A",method="ADL",seed=2015)
 outC_ADL500=simulate(L,n,beta,"C",method="ADL",seed=2015)
@@ -95,7 +97,7 @@ outD2_LTS500=simulate(L,n,beta,"D2",method="LTS",seed=2015)
 
 outD2_500_test2=simulate(L,n,beta,"D2",method="PWLQ",initial="LTS",seed=2015,updateInitial=TRUE)
 SaveResult(outD2_500$vs,"outD2_500.txt")
-outA_500_test=simulate(L,n,beta,"A",method="PWLQ",initial="plain",seed=2015,updateInitial=TRUE,updateInitialTimes=100)
+outA_500_test=simulate(L,n,beta,"A",method="PWLQ",initial="uniform",seed=2015,updateInitial=TRUE,updateInitialTimes=100)
 SaveResult(outA_500_test$vs,"outA_500_test.txt")
 #-------------------------------example 2---------------------#
 
@@ -155,9 +157,9 @@ airData$S02Pot=log(airData$S02Pot)
 tempData=t(airData)-apply(airData,2,median)
 data=t(tempData/apply(abs(tempData),1,median))
 y=data[,5]
-x=data[,-c(5)]
+x=data[,-c(5,16)]
 out=list(y=y,x=x)
-colnames=names(airData[,-c(5)])
+colnames=names(airData[,-c(5,16)])
 
 #OLS
 lm1=lm(y~x)
@@ -165,17 +167,13 @@ lm0=lm(as.vector(airData[,5])~as.matrix(airData[,-c(5)]))
 
 # pwls-vs
 res_air=srcdreg(out$x,out$y,initial="LTS")
-#res2_air=srcdreg(out$x,out$y,initial="LTS",search="all")
+res2_air=srcdreg(out$x,out$y,initial="LTS",search="all")
 colnames[res_air$beta[-1]!=0]
 studres=studres(lm1)
 plot(studres)
 abline(2.5,0)
 identify(studres)
 
-#MMNNG
-source("mmnngreg.R")
-res_MM=mmnngreg(as.matrix(out$x),out$y)
-res_MM$betac[-1]=colnames
 
 #ADL
 res_air_ADL=srcdreg(out$x,out$y,nlambda1=2,initial="LAD",search="fixw")
@@ -205,29 +203,43 @@ nci_pro=read.delim("nci60_Protein__Lysate_Array_log2.txt")
 nci_gene0=read.delim("RNA__Affy_HG_U133(A_B)_GCRMA.txt")
 nci_temp=read.delim("GPL96-15653.txt")
 nci_gene=nci_gene0[nci_gene0$Probe.id..b.%in%nci_temp$ID,]
+cnames=nci_gene[,2]
 #obtain X and y
 
 x=t(nci_gene[,-c(1:9,49,70)])
-x=matrix(x,nrow=dim(x)[1])
-y=as.vector(nci_pro[92,-c(1:4,44,65)])
-y=as.vector(matrix(data=y,ncol=1))
-out=list(y=y,x=x)
-
+x=matrix(as.numeric(x),nrow=dim(x)[1])
+colnames(x)<-cnames
+y=as.numeric(nci_pro[92,-c(1:4,44,65)])
+screenNum=500
+out=ScreenData(y,x,screenNum)
+colname=colnames(out$x)
 #
 require(robustHD)
-class(out$x)<-"numeric"
+#class(out$x)<-"numeric"
 res=sparseLTS(out$x,out$y)
+res$coefficients[res$coefficients!=0]
 #compute
 # pwls-vs
-p=dim(out$x)[2]
-n=dim(out$x)[1]
-beta0=rep(1,p+1)
-w0=rep(0.99,n)
-nlambda1=50
-nlambda2=100
-res=srcdreg(out$x,out$y,penalty1="1-w0",nlambda1=nlambda1,nlambda2=nlambda2,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000,
-            intercept=TRUE,standardize=FALSE,updateInitial=FALSE,criterion="BIC")
+res_nci=srcdreg(out$x,out$y,nlambda2=100,updateInitialTimes=4,search="crossDynamic")
+res_nci0=res_nci
+
+res2_nci=srcdreg(out$x,out$y,beta0=res_nci0$beta0,w0=res_nci0$w0,
+                 lambda1=res_nci0$lambda1,lambda2=res_nci0$lambda2s,
+                  updateInitialTimes=4,search="all")
+names(res2_nci$beta)<-c("intercept",colname)
+res2_nci$beta[res2_nci$beta!=0]
+
 colnames[res$beta[-1]!=0]
+
+#seq(0.02013544,0,length.out=100)
+corr=cor(out$x[,1],out$x[,-1])
+View(corr[order(abs(corr),decreasing=TRUE)])
+
+res_nci2=srcdreg(out$x[,-1],out$y-(out$x[,1]*res_nci$beta[2]),updateInitialTimes=4) #1
+
+i=index[res2_nci$beta[-1]!=0]
+res2_nci$beta[res2_nci$beta!=0]
+colname[i]
 #======end of data analysis===========#
 
 #=======temp==========#

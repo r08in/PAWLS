@@ -59,8 +59,7 @@ SEXP CleanupG(double *r, double *betaPre, double *wPre, double * shift,
   return(res);
 }
 
-//InnerReg=function(x, y,penalty1="1-w0",penalty2="ADL",
-                    //lambda1,lambda2,beta0,w0,delta, maxIter,intercept=TRUE)
+
 SEXP INNERREG( SEXP X_, SEXP Y_, SEXP Penalty1_, SEXP Penalty2_, SEXP Lambda1_, SEXP Lambda2_,
                SEXP Beta0_, SEXP W0_, SEXP Delta_, SEXP MaxIter_, SEXP Intercept_)
 {
@@ -185,6 +184,7 @@ SEXP INNERREG( SEXP X_, SEXP Y_, SEXP Penalty1_, SEXP Penalty2_, SEXP Lambda1_, 
       if(intercept==true)
       {
         lam2[0]=0;
+        //lam2[1]=0;//for test
       }
        //printf("enter iteration for all covariates\n");
       //iteration for all covariates
@@ -218,9 +218,13 @@ SEXP INNERREG( SEXP X_, SEXP Y_, SEXP Penalty1_, SEXP Penalty2_, SEXP Lambda1_, 
           zj=zj/n+c[j]*betaPre[j];
           ////fprintf(f,"\n zj: %f \n",zj);
           //(2)update betaj
-          if(strcmp(penalty2,"ADL")==0)
+          if(strcmp(penalty2,"LASSO")==0)
           {
             beta[j*L1*L2+l2*L1+l1]=UpdateBeta(zj,lam2[j],c[j]);
+          }
+          else if(strcmp(penalty2,"RIDGE")==0)
+          {
+            beta[j*L1*L2+l2*L1+l1]=zj/(c[j]+lam2[j]);
           }
           //fprintf(f,"\nbeta(%d,%d,%d)=%f ",l1,l2,j,beta[j*L1*L2+l2*L1+l1]);
           //(3)update r
@@ -300,6 +304,18 @@ SEXP INNERREG( SEXP X_, SEXP Y_, SEXP Penalty1_, SEXP Penalty2_, SEXP Lambda1_, 
         temp+=r[i]*wPre[i]*r[i]*wPre[i];
       }
       wloss[l2*L1+l1]=temp;
+      
+      //update for next lambda
+      /*
+      for(int i=0;i<m;i++)
+      {
+         betaPre[i]=0;
+      }
+      for(int i=0;i<n;i++)
+      {
+         wPre[i]=1;
+         r[i]=y[i];
+      }*/
       
     }//end iteration for each lambda2 fixed lambda1
     

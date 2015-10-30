@@ -1,5 +1,5 @@
 #use CV
-RCDReg4=function(x, y,penalty1=c("log","1-w0"),penalty2=c("MCP", "SCAD", "ADL"),lambda1,lambda2,beta0,w0,delta, 
+RCDReg4=function(x, y,penalty1=c("log","1-w0"),penalty2=c("LASSO", "RIDGE", "MCP"),lambda1,lambda2,beta0,w0,delta, 
                  maxIter,intercept=TRUE,updateInitial=TRUE,K=5)
 {
   
@@ -48,16 +48,6 @@ RCDReg4=function(x, y,penalty1=c("log","1-w0"),penalty2=c("MCP", "SCAD", "ADL"),
     index2=res$index
     if(pre2==index2&pre1==index1) break;
   }
-  
-  if(updateInitial)
-  {
-    beta0=res$beta    
-    w0=res$w
-    beta0=SetBeta0(beta0)
-    w0=ifelse(w0==1,0.99,w0)
-  }  
-  #test##
-  res=InnerReg(x,y,penalty1=penalty1,penalty2=penalty2,lambda1[index1],lambda2[index2],beta0,w0,delta,maxIter,intercept=intercept) #fix lambda2 and lambda2
   #return 
   i=index1
   j=index2

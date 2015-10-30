@@ -17,7 +17,6 @@ SetupParameter = function(x,y,nlambda1,nlambda2,beta0,w0,intercept=TRUE,alpha=0.
     #
     num=round(n*alpha)
     lambda1Max=l1[order(l1,decreasing=TRUE)[num+1]]
-    
     lambda2Max=max(abs(t(x[,-1])%*%(y-mean(y))/n)*abs(beta0[-1])) # max |betaj|*|xj'y/n|
   }
   else

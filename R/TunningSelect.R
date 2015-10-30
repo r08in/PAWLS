@@ -62,7 +62,8 @@ BICPWLQ=function(wloss,beta,w,lambda1,lambda2,inv=1,alpha=1)
   {
     wdf[i,j]=sum(w[i,j,]!=1+0)
     bdf[i,j]=sum(beta[i,j,]!=0+0)
-    bicTemp[i,j]=log(wloss[i,j]/(n)+alpha)+(bdf[i,j]+wdf[i,j])*log(n)/(n)
+    #bicTemp[i,j]=log(wloss[i,j]/(n)+alpha)+(bdf[i,j]+wdf[i,j])*log(n)/(n)
+    bicTemp[i,j]=log(wloss[i,j]/(n)+alpha)+(bdf[i,j]+wdf[i,j])*2/(n)
     if(bicTemp[i,j]<=bicPre)
     {
       index1=i
@@ -113,11 +114,13 @@ BIC=function(loss,df,n,p,type="beta")
   if(type=="beta")
   {
     vl=(log(loss/n+1)+log(n)*df/(n))
+    #vl=(log(loss/n+1)+2*df/(n))
     #vl=loss/n+log(n)*df/(n)
     #vl=loss/n+log(n)*df/(n)+log(choose(p,df))/n
   }
   else 
   {
+    #vl=(log(loss/n+1)+2*df/(n))
     vl=(log(loss/n+1)+log(n)*df/(n))
     #vl=loss/n+log(n)*df/(n)
     #vl=loss/n+log(n)*df/(n)+log(choose(p,df))/n
