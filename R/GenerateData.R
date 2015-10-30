@@ -281,19 +281,19 @@ GenerateDummyModel=function(sizeInfo,groupInfo,validGroupNumInfo,offSet=0,errorS
 }
 
 #Data modification for different model
-GenerateDataByModel=function(n,beta,errorSigma=2,r=0.5,model=c("A","B","C","D"))
+GenerateDataByModel=function(n,beta,errorSigma=2,r=0.5,model=c("A","B","C","D"),dataType=c("Lasso","Ridge"))
 {
   if(model=="A")
   {
-    out=GenerateData(n=n,dataSetNum=1,beta=beta,errorSigma=errorSigma,r=r) #errorSigma=2
+    out=GenerateData(n=n,dataSetNum=1,beta=beta,errorSigma=errorSigma,r=r,dataType=dataType) #errorSigma=2
   }
   else if(model=="B")
   {
-    out=GenerateData(n=n,dataSetNum=1,beta=beta,errorSigma=errorSigma,errorType="t",r=r)#errorSigma is df=2
+    out=GenerateData(n=n,dataSetNum=1,beta=beta,errorSigma=errorSigma,errorType="t",r=r,dataType=dataType)#errorSigma is df=2
   }
   else if(model=="C")
   {
-    out=GenerateData(n=n,dataSetNum=1,beta=beta,errorSigma=errorSigma,r=r)
+    out=GenerateData(n=n,dataSetNum=1,beta=beta,errorSigma=errorSigma,r=r,dataType=dataType)
     oNum=round(n*0.1)
     u1=runif(oNum,0,1)
     u2=runif(oNum,0,1)
@@ -301,7 +301,7 @@ GenerateDataByModel=function(n,beta,errorSigma=2,r=0.5,model=c("A","B","C","D"))
   }
   else if(model=="D")
   {
-    out=GenerateData(n=n,dataSetNum=1,beta=beta,errorSigma=errorSigma,r=r)
+    out=GenerateData(n=n,dataSetNum=1,beta=beta,errorSigma=errorSigma,r=r,dataType=dataType)
     oNum=round(n*0.1)
     u1=runif(oNum,0,1)
     u2=runif(oNum,0,1)
@@ -310,7 +310,7 @@ GenerateDataByModel=function(n,beta,errorSigma=2,r=0.5,model=c("A","B","C","D"))
   }
   else if(model=="D2")
   {
-    out=GenerateData(n=n,dataSetNum=1,beta=beta,errorSigma=errorSigma,r=r)
+    out=GenerateData(n=n,dataSetNum=1,beta=beta,errorSigma=errorSigma,r=r,dataType=dataType)
     oNum=round(n*0.1)
     u1=runif(oNum,0,1)
     u2=runif(oNum,0,1)
@@ -319,7 +319,7 @@ GenerateDataByModel=function(n,beta,errorSigma=2,r=0.5,model=c("A","B","C","D"))
   }
   else if(model=="D3")
   {
-    out=GenerateData(n=n,dataSetNum=1,beta=beta,errorSigma=errorSigma,r=r)
+    out=GenerateData(n=n,dataSetNum=1,beta=beta,errorSigma=errorSigma,r=r,dataType=dataType)
     oNum=round(n*0.1)
     u1=runif(oNum,0,1)
     u2=runif(oNum,0,1)
@@ -330,7 +330,7 @@ GenerateDataByModel=function(n,beta,errorSigma=2,r=0.5,model=c("A","B","C","D"))
   }
   else if(model=="E")
   {
-    out=GenerateData(n=n,dataSetNum=1,beta=beta,errorSigma=errorSigma,r=r)
+    out=GenerateData(n=n,dataSetNum=1,beta=beta,errorSigma=errorSigma,r=r,dataType=dataType)
     oNum=round(n*0.2)
     u1=runif(oNum,0,1)
     u2=runif(oNum,0,1)
@@ -339,7 +339,7 @@ GenerateDataByModel=function(n,beta,errorSigma=2,r=0.5,model=c("A","B","C","D"))
   }
   else if(model=="C2")
   {
-    out=GenerateData(n=n,dataSetNum=1,beta=beta,errorSigma=errorSigma,r=r)
+    out=GenerateData(n=n,dataSetNum=1,beta=beta,errorSigma=errorSigma,r=r,dataType=dataType)
     oNum=round(n*0.1)
     u1=runif(oNum,0,1)
     u2=runif(oNum,0,1)
@@ -355,7 +355,7 @@ GenerateDataByModel=function(n,beta,errorSigma=2,r=0.5,model=c("A","B","C","D"))
   }
   else if(model=="C3")
   {
-    out=GenerateData(n=n,dataSetNum=1,beta=beta,errorSigma=errorSigma,r=r)
+    out=GenerateData(n=n,dataSetNum=1,beta=beta,errorSigma=errorSigma,r=r,dataType=dataType)
     oNum=round(n*0.1)
     u1=runif(oNum,0,1)
     u2=runif(oNum,0,1)

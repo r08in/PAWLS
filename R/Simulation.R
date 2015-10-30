@@ -1,6 +1,6 @@
-simulate=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PWLQ",matlab=NULL,seed=2014,useDataFile=FALSE,
+simulate=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PAWLS",matlab=NULL,seed=2014,useDataFile=FALSE,
                   standardize=FALSE,penalty1="1-w0",updateInitial=FALSE,criterion="BIC",intercept=FALSE,initial="uniform",
-                  range="cross")
+                  range="cross",type=c("Lasso","Ridge"))
 {
   ptm=proc.time()
   if(!is.null(seed))
@@ -35,7 +35,7 @@ simulate=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PWLQ",ma
     }
     else
     {
-      out=GenerateDataByModel(n=n,beta=beta,model=model)
+      out=GenerateDataByModel(n=n,beta=beta,model=model,dataType=type)
     }
     
     #evaluate(matlab,"[X y]=GenerateData()")
@@ -144,7 +144,7 @@ simulate=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PWLQ",ma
                   intercept=intercept,standardize=standardize,updateInitial=updateInitial,criterion=criterion)
       return (list(beta=res$beta,w=res$w,beta1=res1$betac[-1]))
     }
-    else #PWLQ
+    else if(method=="PAWLS")
     {
       if(updateInitial)
         updateInitialTimes=4

@@ -41,7 +41,7 @@ GreedySelect=function(betas,lambdas,inv=0.9)
   list(lambda=lambdas[index],df=sum(betas[index,]!=0),index=index,beta=betas[index,])
 }
 
-BICPWLQ=function(wloss,beta,w,lambda1,lambda2,inv=1,alpha=1)
+BICPWLQ=function(wloss,beta,w,lambda1,lambda2,inv=1,alpha=1,criterion="BIC")
 {
   #declare and initial
   l1=length(lambda1)
@@ -62,8 +62,14 @@ BICPWLQ=function(wloss,beta,w,lambda1,lambda2,inv=1,alpha=1)
   {
     wdf[i,j]=sum(w[i,j,]!=1+0)
     bdf[i,j]=sum(beta[i,j,]!=0+0)
-    #bicTemp[i,j]=log(wloss[i,j]/(n)+alpha)+(bdf[i,j]+wdf[i,j])*log(n)/(n)
-    bicTemp[i,j]=log(wloss[i,j]/(n)+alpha)+(bdf[i,j]+wdf[i,j])*2/(n)
+    if(criterion=="AIC")
+    {
+      bicTemp[i,j]=log(wloss[i,j]/(n)+alpha)+(bdf[i,j]+wdf[i,j])*2/(n)
+    }
+    else
+    {
+      bicTemp[i,j]=log(wloss[i,j]/(n)+alpha)+(bdf[i,j]+wdf[i,j])*log(n)/(n)
+    }
     if(bicTemp[i,j]<=bicPre)
     {
       index1=i
@@ -109,21 +115,32 @@ BICPWLQ2=function(wloss,beta,w,lambda1,lambda2,n,inv=1)
        index1=i,index2=j,res=res)
 }
 
-BIC=function(loss,df,n,p,type="beta")
+BIC=function(loss,dfw,dfb,n,p,type="beta",criterion="BIC",pro=0.8)
 {
+  dfw=ifelse(dfw>n*pro,100000,dfw)# rule out high df in w
+  df=dfb+dfw
   if(type=="beta")
   {
-    vl=(log(loss/n+1)+log(n)*df/(n))
-    #vl=(log(loss/n+1)+2*df/(n))
-    #vl=loss/n+log(n)*df/(n)
-    #vl=loss/n+log(n)*df/(n)+log(choose(p,df))/n
+    if(criterion=="AIC")
+    {
+      vl=(log(loss/n+1)+2*df/(n))
+    }
+    else
+    {
+      vl=(log(loss/n+1)+log(n)*df/(n))
+    }
   }
   else 
   {
-    #vl=(log(loss/n+1)+2*df/(n))
-    vl=(log(loss/n+1)+log(n)*df/(n))
-    #vl=loss/n+log(n)*df/(n)
-    #vl=loss/n+log(n)*df/(n)+log(choose(p,df))/n
+   
+    if(criterion=="AIC")
+    {
+      vl=(log(loss/n+1)+2*df/(n))
+    }
+    else
+    {
+      vl=(log(loss/n+1)+log(n)*df/(n))
+    }
   }
 
  
