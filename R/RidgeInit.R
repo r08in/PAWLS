@@ -1,4 +1,4 @@
-InitLambda1=function(X,y,betaInit,coeff=1,pro=0.1)
+InitLambda1=function(X,y,betaInit,coeff=1,pro=0.5)
 {
   num=round(length(y)*(1-pro))
   p=dim(X)[2]

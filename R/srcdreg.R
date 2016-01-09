@@ -1,9 +1,9 @@
 ## This functionn is to perform group coordinate descent regression
 #penalty1=c("log","1-w0")
 #initial=
-srcdreg=function (x,y,penalty1=c("1-w0","log"),penalty2=c("LASSO", "RIDGE", "MCP"),
+srcdreg=function (x,y,penalty1=c("1-w0","log","null"),penalty2=c("LASSO", "RIDGE", "MCP"),
                   lambda1=NULL,lambda2=NULL,nlambda1=50,nlambda2=100,
-                  beta0=NULL,w0=NULL,initial=c("uniform","LTS","LAD"),
+                  beta0=NULL,w0=NULL,initial=c("uniform","LTS","LASSO","PAWLS"),
                   delta=0.000001,maxIter=1000,
                   intercept=TRUE,standardize=FALSE,
                   updateInitialTimes=0,criterion=c("BIC","AIC","CV"),search=c("cross","all","fixw","crossDynamic"),...)
@@ -23,13 +23,14 @@ srcdreg=function (x,y,penalty1=c("1-w0","log"),penalty2=c("LASSO", "RIDGE", "MCP
   }
   
   penalty1 <- match.arg(penalty1)
+  penalty2 <- match.arg(penalty2)
   initial <- match.arg(initial)
   criterion <- match.arg(criterion)
   search<-match.arg(search)
   
   
-  if (nlambda1 < 2||nlambda2<2) 
-    stop("nlambda must be at least 2")
+#   if (nlambda1 < 2||nlambda2<2) 
+#     stop("nlambda must be at least 2")
   if(!is.null(lambda1)) 
     nlambda1=length(lambda1)
   if(!is.null(lambda2)) 
@@ -50,12 +51,18 @@ srcdreg=function (x,y,penalty1=c("1-w0","log"),penalty2=c("LASSO", "RIDGE", "MCP
     #w0=UpdateWeight(x,y,beta0)
     #w0=ifelse(as.vector(w0)==1,0.99,w0)
   }
-  else if(initial=="LAD")
+  else if(initial=="LASSO")
   {
-    init=InitParam(x,y,method="LAD")
-    beta0=ifelse(init$beta==0,0.01,init$beta)
+    init=srcdreg(x,y,penalty1="null",nlambda1=1,intercept=intercept,standardize=standardize,search="fixw")
+    beta0=SetBeta0(init$beta)
     if(intercept) beta0=c(1,beta0)
     w0=rep(0.99,n)
+  }
+  else if(initial=="PAWLS")
+  {
+    init=srcdreg(x,y,intercept=intercept)
+    beta0=SetBeta0(init$beta)
+    w0=ifelse(init$w==1,0.99,init$w)
   }
   else if(initial=="uniform")
   {
@@ -66,7 +73,10 @@ srcdreg=function (x,y,penalty1=c("1-w0","log"),penalty2=c("LASSO", "RIDGE", "MCP
     }
     if(is.null(w0))
       w0=rep(0.99,n)
+    beta0=SetBeta0(beta0)
+    w0=ifelse(w0==1,0.99,w0)
   }
+
   
   #intercept
   if(intercept)
@@ -111,8 +121,9 @@ srcdreg=function (x,y,penalty1=c("1-w0","log"),penalty2=c("LASSO", "RIDGE", "MCP
     } 
     else if(search=="fixw") # ALasso
     {
-      res=RCDReg2(XX, yy,penalty1=penalty1,penalty2=penalty2,lambda1,lambda2,beta0,w0,delta, maxIter,intercept=intercept,fixW=TRUE)
-      res=BICPWLQ(res$wloss,res$beta,res$w,lambda1,lambda2,alpha=1,criterion=criterion)
+      res=InnerReg(XX, yy,penalty1="null",penalty2=penalty2,lambda1=1,lambda2,beta0,w0,delta, maxIter,intercept=intercept)   
+      #res=RCDReg2(XX, yy,penalty1=penalty1,penalty2="ADL",lambda1,lambda2,beta0,w0,delta, maxIter,intercept=intercept,fixW=TRUE)
+      res=BICPWLQ(res$wloss,res$beta,res$w,lambda1=1,lambda2,alpha=1,criterion=criterion)
     }
     else if(search=="crossDynamic")
     {

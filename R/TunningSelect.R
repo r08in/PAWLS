@@ -41,7 +41,7 @@ GreedySelect=function(betas,lambdas,inv=0.9)
   list(lambda=lambdas[index],df=sum(betas[index,]!=0),index=index,beta=betas[index,])
 }
 
-BICPWLQ=function(wloss,beta,w,lambda1,lambda2,inv=1,alpha=1,criterion="BIC")
+BICPWLQ=function(wloss,beta,w,lambda1,lambda2,inv=1,alpha=1,criterion="BIC",pro=0.8)
 {
   #declare and initial
   l1=length(lambda1)
@@ -62,11 +62,12 @@ BICPWLQ=function(wloss,beta,w,lambda1,lambda2,inv=1,alpha=1,criterion="BIC")
   {
     wdf[i,j]=sum(w[i,j,]!=1+0)
     bdf[i,j]=sum(beta[i,j,]!=0+0)
+    #wdf[i,j]=ifelse(wdf[i,j]>n*pro,100000,wdf[i,j])
     if(criterion=="AIC")
     {
       bicTemp[i,j]=log(wloss[i,j]/(n)+alpha)+(bdf[i,j]+wdf[i,j])*2/(n)
     }
-    else
+    else #(log(loss/n+a)+log(n)*df/(n))
     {
       bicTemp[i,j]=log(wloss[i,j]/(n)+alpha)+(bdf[i,j]+wdf[i,j])*log(n)/(n)
     }
@@ -115,19 +116,34 @@ BICPWLQ2=function(wloss,beta,w,lambda1,lambda2,n,inv=1)
        index1=i,index2=j,res=res)
 }
 
-BIC=function(loss,dfw,dfb,n,p,type="beta",criterion="BIC",pro=0.8)
+BIC=function(loss,dfw,dfb,n,p,type="beta",criterion="BIC",pro=0.8,a=0,x=NULL,ws=NULL,bs=NULL)
 {
-  dfw=ifelse(dfw>n*pro,100000,dfw)# rule out high df in w
-  df=dfb+dfw
+#   l=length(loss)
+#   df=dfw
+#   for(i in 1:l)
+#   {
+#     if(dfb[i]!=0)
+#     {
+#       xx=x[,bs[i,]!=0]
+#      
+#       df[i]=matrix.trace(xx%*%ginv(t(ws[i,]*xx)%*%(ws[i,]*xx))%*%t(xx))
+#          
+#     }
+#     
+#    
+#   }
+   dfw=ifelse(dfw>n*pro,100000,dfw)# rule out high df in w
+   df=dfw+dfb
+   a=(n+p)/n
   if(type=="beta")
   {
     if(criterion=="AIC")
     {
-      vl=(log(loss/n+1)+2*df/(n))
+      vl=(log(loss/n+a)+2*df/(n))
     }
     else
     {
-      vl=(log(loss/n+1)+log(n)*df/(n))
+      vl=(log(loss/n+a)+log(n)*df/n)
     }
   }
   else 
@@ -135,25 +151,19 @@ BIC=function(loss,dfw,dfb,n,p,type="beta",criterion="BIC",pro=0.8)
    
     if(criterion=="AIC")
     {
-      vl=(log(loss/n+1)+2*df/(n))
+      vl=(log(loss/n+a)+2*df/(n))
     }
     else
     {
-      vl=(log(loss/n+1)+log(n)*df/(n))
+      vl=(log(loss/n+a)+log(n)*df/n)
     }
   }
 
  
   l=length(df)
   index=(1:l)[vl==min(vl)]
-  if(length(index)!=1)
-  {
-    index[1]
-  }
-  else
-  {
-    index
-  }
+  #index[length(index)]
+  index[1]
 }
 
 dfs=function(x,beta,w)

@@ -58,22 +58,7 @@ simulate=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PAWLS",m
     }
     else if(method=="ADL")
     {
-#       require("parcor")
-#       res=adalasso(out$x,out$y, k = 10,use.Gram =TRUE,both=TRUE,intercept=FALSE)
-#       b[i,]=res$coefficients.adalasso
-#       init=InitParam(out$x,out$y,method="LAD")
-#       beta0=ifelse(init$beta==0,0.01,init$beta)
-#       w0=rep(0.99,n)
-#       res=rcdreg(out$x,out$y,penalty1=penalty1,nlambda1=2,nlambda2=100,beta0=beta0,w0=w0,delta=0.000001,maxIter=1000,
-#                              intercept=intercept,standardize=standardize,updateInitial=updateInitial,criterion=criterion)
-      #index=BIC(res$wloss[1,],apply(matrix(res$beta[1,,],100,p)!=0+0,1,sum),n,p)
-#       b[i,]=res$beta
-      #res=adalasso(out$x,out$y,intercept=FALSE)
-      #b[i,]=res$coefficients.adalasso
-      
-      #w[i,]=res$w
-      #iter[i]=res$iter
-      res=srcdreg(out$x,out$y,penalty1=penalty1,nlambda1=2,initial="LAD",
+      res=srcdreg(out$x,out$y,penalty1=penalty1,nlambda1=1,initial="LASSO",
                   intercept=intercept,standardize=standardize,updateInitialTimes=updateInitialTimes,criterion=criterion,search="fixw")
       b[i,]=res$beta
     }
@@ -129,6 +114,7 @@ simulate=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PAWLS",m
        
         w0=ifelse(init$wt==1,0.99,0.01)
       }
+      
       else if(initial=="plain")
       {
         beta0=rep(1,p)
@@ -147,7 +133,7 @@ simulate=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PAWLS",m
     else if(method=="PAWLS")
     {
       if(updateInitial)
-        updateInitialTimes=4
+        updateInitialTimes=2
       else
         updateInitialTimes=0
       
@@ -164,16 +150,17 @@ simulate=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PAWLS",m
   se=apply((t(b)-beta)^2,2,sum)
   
   #vs
-  vs=rep(0,3)
+  vs=rep(0,4)
   pNum=sum(beta!=0)
   bb=(abs(b)>=5e-5)
   #bb=(b>=5e-5)
-  n1=apply(bb,1,sum)
+  n1=apply(bb,1,sum) #total # of selected covariate for each case
   bb=matrix(bb[,1:pNum],nrow=L,ncol=pNum)
-  n2=apply(bb,1,sum)
+  n2=apply(bb,1,sum) # num of selected covariate among true 
   vs[1]=sum((n1[n2==pNum]==pNum)+0)/L
   vs[2]=sum((n1[n2==pNum]>pNum)+0)/L
   vs[3]=sum(n1)/L
+  vs[4]=sum((n1[n2==pNum]>pNum & n1[n2==pNum]<pNum+3)+0)/L
   time=(proc.time()-ptm)[1]
   #return
   list(beta=b,se=se,vs=vs,iter=iter,w=w,iw=iw,sum=sumofy,error=error,time=time)

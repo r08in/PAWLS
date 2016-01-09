@@ -16,8 +16,10 @@ SetupParameter = function(x,y,nlambda1,nlambda2,beta0,w0,intercept=TRUE,alpha=0.
     }
     #
     num=round(n*alpha)
-    lambda1Max=l1[order(l1,decreasing=TRUE)[num+1]]
-    lambda2Max=max(abs(t(x[,-1])%*%(y-mean(y))/n)*abs(beta0[-1])) # max |betaj|*|xj'y/n|
+    lambda1Max=l1[order(l1,decreasing=TRUE)[1]]
+#     l2=abs(t(x[,-1])%*%(y-median(y))/n)*abs(beta0[-1])
+#     lambda2Max=quantile(l2,probs=0.8)
+    lambda2Max=max(abs(t(x[,-1])%*%(y-median(y))/n)*abs(beta0[-1])) # max |betaj|*|xj'y/n|
   }
   else
   {
@@ -36,14 +38,14 @@ SetupParameter = function(x,y,nlambda1,nlambda2,beta0,w0,intercept=TRUE,alpha=0.
  
   lambda1=logSeq(lambda1Max,lambda1Max*0.000001,nlambda1)
   lambda2=logSeq(lambda2Max,0,nlambda2)
-  #lambda1=seq(0.1,0.0001,length=50)
+  #lambda1=seq(0.001,0.002,length=50)
   #lambda2=seq(0.2,0,length=100)
   return(list(lambda1=lambda1,lambda2=lambda2))
 }
 
 logSeq=function(smax,smin,n)
 {
-  smin+(smax-smin)/(log(n))*(log(n)-log(1:n))
+  smax-(smax-smin)/(log(n))*(log(n)-log(n:1))
 }
 
 

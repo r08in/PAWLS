@@ -23,16 +23,27 @@ outD2_MM50=simulate(L,n,beta,"D2",method="MMNNG",useDataFile=TRUE)
 outA_LTS50=simulate(L,n,beta,"A",method="LTS",useDataFile=TRUE)
 outB_LTS50=simulate(L,n,beta,"B",method="LTS",useDataFile=TRUE)
 outC_LTS50=simulate(L,n,beta,"C",method="LTS",useDataFile=TRUE)
-outD_LTS50=simulate(L,n,beta,"D",method="LTS",useDataFile=TRUE)
+#outD_LTS50=simulate(L,n,beta,"D",method="LTS",useDataFile=TRUE)
 outD2_LTS50=simulate(L,n,beta,"D2",method="LTS",useDataFile=TRUE)
 
-#PAWLS-low dimension
-confirm=simulate(L,n,beta,"A",method="PAWLS",initial="LTS",seed=NULL,useDataFile=TRUE)
-outA_50=simulate(L,n,beta,"A",method="PAWLS",initial="LTS",seed=NULL,useDataFile=TRUE)
-outB_50=simulate(L,n,beta,"B",method="PAWLS",initial="LTS",seed=NULL,useDataFile=TRUE)
-outC_50=simulate(L,n,beta,"C",method="PAWLS",initial="LTS",seed=NULL,useDataFile=TRUE)
-outD_50=simulate(L,n,beta,"D",method="PAWLS",initial="LTS",seed=NULL,useDataFile=TRUE)
-outD2_50=simulate(L,n,beta,"D2",method="PAWLS",initial="LTS",seed=NULL,useDataFile=TRUE)
+#PAWLS-START BY SLTS
+outA0_50_LTS=simulate(L,n,beta,"A",method="PAWLS",initial="uniform-LTS",seed=NULL,useDataFile=TRUE)
+outB0_50_LTS=simulate(L,n,beta,"B",method="PAWLS",initial="uniform-LTS",seed=NULL,useDataFile=TRUE)
+outC0_50_LTS=simulate(L,n,beta,"C",method="PAWLS",initial="uniform-LTS",seed=NULL,useDataFile=TRUE)
+outD20_50_LTS=simulate(L,n,beta,"D2",method="PAWLS",initial="uniform-LTS",seed=NULL,useDataFile=TRUE)
+
+#PAWLS
+confirm=simulate(L,n,beta,"A",method="PAWLS",initial="uniform",seed=NULL,useDataFile=TRUE)
+outA0_50=simulate(L,n,beta,"A",method="PAWLS",initial="uniform",seed=NULL,useDataFile=TRUE)
+outB0_50=simulate(L,n,beta,"B",method="PAWLS",initial="uniform",seed=NULL,useDataFile=TRUE)
+outC0_50=simulate(L,n,beta,"C",method="PAWLS",initial="uniform",seed=NULL,useDataFile=TRUE)
+outD20_50=simulate(L,n,beta,"D2",method="PAWLS",initial="uniform",seed=NULL,useDataFile=TRUE)
+#APAWLS
+outD2_50_2=simulate(L,n,beta,"D2",method="PAWLS",initial="PAWLS",seed=NULL,useDataFile=TRUE,updateInitial=TRUE)
+outA_50=simulate(L,n,beta,"A",method="PAWLS",initial="PAWLS",seed=NULL,useDataFile=TRUE,updateInitial=TRUE)
+outB_50=simulate(L,n,beta,"B",method="PAWLS",initial="PAWLS",seed=NULL,useDataFile=TRUE,updateInitial=TRUE)
+outC_50=simulate(L,n,beta,"C",method="PAWLS",initial="PAWLS",seed=NULL,useDataFile=TRUE,updateInitial=TRUE)
+outD2_50=simulate(L,n,beta,"D2",method="PAWLS",initial="PAWLS",seed=NULL,useDataFile=TRUE,updateInitial=TRUE)
 #ROSS
 matLabDir="D:\\matlab\\Sim"
 matlab=PrepareMatlab(matLabDir)
@@ -42,11 +53,10 @@ outC_ROSS50=simulate(L,n,beta,"C",method="ROSS",matlab=matlab,useDataFile=TRUE)
 outD_ROSS50=simulate(L,n,beta,"D",method="ROSS",matlab=matlab,useDataFile=TRUE)
 outD2_ROSS50=simulate(L,n,beta,"D2",method="ROSS",matlab=matlab,useDataFile=TRUE)
 #ADL
-confirm_ADL50=simulate(L,n,beta,"A",method="ADL",useDataFile=TRUE)
-outA_ADL50_adl=simulate(L,n,beta,"A",method="ADL",useDataFile=TRUE)
+confirm2_ADL50=simulate(L,n,beta,"A",method="ADL",useDataFile=TRUE)
+outA_ADL50=simulate(L,n,beta,"A",method="ADL",useDataFile=TRUE)
 outB_ADL50=simulate(L,n,beta,"B",method="ADL",useDataFile=TRUE)
 outC_ADL50=simulate(L,n,beta,"C",method="ADL",useDataFile=TRUE)
-outD_ADL50=simulate(L,n,beta,"D",method="ADL",useDataFile=TRUE)
 outD2_ADL50=simulate(L,n,beta,"D2",method="ADL",useDataFile=TRUE)
 #-------------------------------------------------------------------------------------
 
@@ -71,20 +81,30 @@ outA_ROSS500=simulate(L,n,beta,model="C",method="ROSS",matlab=matlab)
 outA_ROSS500=simulate(L,n,beta,model="B",method="ROSS",matlab=matlab)
 outA_ROSS500=simulate(L,n,beta,model="A",method="ROSS",matlab=matlab)
 #PAWLS
-confrim_500=simulate(L,n,beta,"A",method="PAWLS",seed=2015,updateInitial=TRUE)
-outA_500=simulate(L,n,beta,"A",method="PAWLS",initial="uniform",seed=2015,updateInitial=TRUE)
-outC_500=simulate(L,n,beta,"C",method="PAWLS",initial="uniform",seed=2015,updateInitial=TRUE)
-outD_500=simulate(L,n,beta,"D",method="PAWLS",initial="uniform",seed=2015,updateInitial=TRUE)
-outB_500=simulate(L,n,beta,"B",method="PAWLS",initial="uniform",seed=2015,updateInitial=TRUE)
-outD2_500=simulate(L,n,beta,"D2",method="PAWLS",initial="uniform",seed=2015,updateInitial=TRUE)
-outD3_500=simulate(L,n,beta,"D3",method="PAWLS",initial="uniform",seed=2015,updateInitial=TRUE)
-outC_500=simulate(L,n,beta,"C",method="PAWLS",initial="uniform",seed=2015,updateInitial=TRUE)
+outA0_500=simulate(L,n,beta,"A",method="PAWLS",seed=2015)
+outC0_500=simulate(L,n,beta,"C",method="PAWLS",seed=2015)
+outB0_500=simulate(L,n,beta,"B",method="PAWLS",seed=2015)
+outD20_500=simulate(L,n,beta,"D2",method="PAWLS",seed=2015)
+
+
+#PAWLS
+outA0_500=simulate(L,n,beta,"A",method="PAWLS",initial="uniform",seed=2015)
+outC0_500=simulate(L,n,beta,"C",method="PAWLS",initial="uniform",seed=2015)
+outB0_500=simulate(L,n,beta,"B",method="PAWLS",initial="uniform",seed=2015)
+outD20_500=simulate(L,n,beta,"D2",method="PAWLS",initial="uniform",seed=2015)
+
+#APAWLS
+outA0_500=simulate(L,n,beta,"A",method="PAWLS",initial="PAWLS",seed=2015,updateInitial=TRUE)
+outC0_500=simulate(L,n,beta,"C",method="PAWLS",initial="PAWLS",seed=2015,updateInitial=TRUE)
+outB0_500=simulate(L,n,beta,"B",method="PAWLS",initial="PAWLS",seed=2015,updateInitial=TRUE)
+outD20_500=simulate(L,n,beta,"D2",method="PAWLS",initial="PAWLS",seed=2015,updateInitial=TRUE)
+
 #ADL
 outA_ADL500=simulate(L,n,beta,"A",method="ADL",seed=2015)
 outC_ADL500=simulate(L,n,beta,"C",method="ADL",seed=2015)
-outB_ADL500=simulate(L,n,beta,"B",method="ADL",useDataFile=TRUE)
-outD_ADL500=simulate(L,n,beta,"D",method="ADL",useDataFile=TRUE) 
-outD2_ADL500=simulate(L,n,beta,"D",method="ADL",seed=2015)
+outB_ADL500=simulate(L,n,beta,"B",method="ADL",seed=2015)
+#outD_ADL500=simulate(L,n,beta,"D",method="ADL",seed=2015) 
+outD2_ADL500=simulate(L,n,beta,"D2",method="ADL",seed=2015)
 #LTS
 SaveResult=function(res,file,dir="C:\\Users\\Administrator\\Dropbox\\result\\")
 {
@@ -155,19 +175,26 @@ airData=airRaw[-21,-1]
 airData$HCPot=log(airData$HCPot)
 airData$NOxPot=log(airData$NOxPot)
 airData$S02Pot=log(airData$S02Pot)
-tempData=t(airData)-apply(airData,2,median)
-data=t(tempData/apply(abs(tempData),1,median))
-y=data[,5]
-x=data[,-c(5,16)]
-out=list(y=y,x=x)
+# tempData=t(airData)-apply(airData,2,median)
+# data=t(tempData/apply(abs(tempData),1,median))
+# y=data[,5]
+# x=data[,-c(5,16)]
+# out=list(y=y,x=x)
+y=airData[,5]
+x=airData[,-c(5,16)]
+out=DataNormByMAD(x,y)
 colnames=names(airData[,-c(5,16)])
 colnames[7]="NonWhite"
 #OLS
 lm1=lm(y~x)
 lm0=lm(as.vector(airData[,5])~as.matrix(airData[,-c(5)]))
 
-# pwls-vs
-res_air=srcdreg(out$x,out$y,initial="LTS",search="crossDynamic")
+# Apwls
+res_air0=srcdreg(out$x,out$y)
+res_air=srcdreg(out$x,out$y,initial="PAWLS",search="cross",criterion="BIC",updateInitialTimes=2)
+res_air=srcdreg(out$x,out$y,initial="PAWLS",search="crossDynamic",criterion="BIC",updateInitialTimes=2)
+
+res2_air=res_air
 res2_air=srcdreg(out$x,out$y,initial="LTS",search="all")
 colnames[res_air$beta[-1]!=0]
 studres=studres(lm1)
@@ -180,7 +207,7 @@ label_beta=rep(colnames,100)
 paramPlot(res2_air,label2=label_beta)
 
 #ADL
-res_air_ADL=srcdreg(out$x,out$y,nlambda1=2,initial="LAD",search="fixw")
+res_air_ADL=srcdreg(out$x,out$y,nlambda1=1,initial="LASSO",search="fixw")
 colnames[res_air_ADL$beta[-1]!=0]
 
 #sLTS
@@ -216,11 +243,15 @@ colnames(x)<-cnames
 y=as.numeric(nci_pro[92,-c(1:4,44,65)])
 screenNum=500
 out=ScreenData(y,x,screenNum)
+out=DataNormByMAD(out$x,out$y)
 colname=colnames(out$x)
 
 #ADL
-res_nci_ADL=srcdreg(out$x,out$y,nlambda1=2,initial="LAD",search="fixw")
-colnames[res_air_ADL$beta[-1]!=0]
+res_nci_ADL=srcdreg(out$x,out$y,nlambda1=1,initial="LASSO",search="fixw")
+lm_nci=lm(out$y~out$x[,res_nci_ADL$beta[-1]!=0])
+studres_nci=studres(lm_nci)
+studres_nci=out$y-out$x%*%res_nci_ADL$beta[-1]-res_nci_ADL$beta[1]
+colnames[res_nci_ADL$beta[-1]!=0]
 
 #LTS
 require(robustHD)
@@ -228,28 +259,18 @@ require(robustHD)
 res=sparseLTS(out$x,out$y)
 res$coefficients[res$coefficients!=0]
 
-#a-lasso
-res_adl_nci=srcdreg(out$x,out$y,nlambda1=2,initial="LAD",search="fixw")
-names(res_adl_nci$beta)<-c("intercept",colname)
-res_adl_nci$beta[res_adl_nci$beta!=0]
 
+#ols
+lm_nci=lm(out$y~out$x)
+studres_nci=studres(lm_nci)
 # pwls-vs
-res_nci=srcdreg(out$x,out$y,nlambda2=100,updateInitialTimes=4,search="crossDynamic",criterion="BIC") #crossDynamic
-res_nci_AIC=res_nci
-res_nci_BIC=res_nci
-names(res_nci_AIC$beta)<-c("intercept",colname)
-names(res_nci_BIC$beta)<-c("intercept",colname)
-res_nci_AIC$beta[res_nci_AIC$beta!=0]
-res_nci_BIC$beta[res_nci_BIC$beta!=0]
-res2_nci=srcdreg(out$x,out$y,beta0=res_nci$beta0,w0=res_nci$w0,
-                 lambda1=res_nci$lambda1s,lambda2=res_nci$lambda2s,
-                  updateInitialTimes=4,search="all",criterion="AIC")
-paramPlot(res2_nci,param="both",xlimb=c(0,11),xlimw=c(5.5,11))
-paramPlot(res2_nci,param="both",xlimw=c(5.5,11))
-names(res2_nci$beta)<-c("intercept",colname)
-res2_nci$beta[res2_nci$beta!=0]
+#lambda2=c(0.4304376,0.2141318,0)
+res_nci_0=srcdreg(out$x,out$y,initial="uniform",search="cross",criterion="BIC",updateInitialTimes=2)
+res_nci=srcdreg(out$x,out$y,initial="PAWLS",search="cross",criterion="BIC",updateInitialTimes=2)
+res_nci=srcdreg(out$x,out$y,initial="PAWLS",search="crossDynamic",criterion="BIC",updateInitialTimes=2,standardize=TRUE)
+names(res_nci$beta)<-c("intercept",colname)
+res_nci$beta[res_nci$beta!=0]
 
-colnames[res$beta[-1]!=0]
 
 #seq(0.02013544,0,length.out=100)
 corr=cor(out$x[,1],out$x[,-1])
@@ -272,3 +293,25 @@ boxplot(se~group,data=m,main="model D",outline=FALSE)
 
 
 #=======end temp=======#
+
+
+#PAWLS
+outA0_500=simulate(L,n,beta,"A",method="PAWLS",initial="uniform",seed=2015)
+outC0_500=simulate(L,n,beta,"C",method="PAWLS",initial="uniform",seed=2015)
+outB0_500=simulate(L,n,beta,"B",method="PAWLS",initial="uniform",seed=2015)
+outD20_500=simulate(L,n,beta,"D2",method="PAWLS",initial="uniform",seed=2015)
+
+#APAWLS
+confrim=simulate(L,n,beta,"D2",method="PAWLS",initial="PAWLS",seed=2015,updateInitial=TRUE)
+outA_500=simulate(L,n,beta,"A",method="PAWLS",initial="PAWLS",seed=2015,updateInitial=TRUE)
+outC_500=simulate(L,n,beta,"C",method="PAWLS",initial="PAWLS",seed=2015,updateInitial=TRUE)
+outB_500=simulate(L,n,beta,"B",method="PAWLS",initial="PAWLS",seed=2015,updateInitial=TRUE)
+outD2_500=simulate(L,n,beta,"D2",method="PAWLS",initial="PAWLS",seed=2015,updateInitial=TRUE)
+
+#ADL
+outA_ADL500=simulate(L,n,beta,"A",method="ADL",seed=2015)
+outC_ADL500=simulate(L,n,beta,"C",method="ADL",seed=2015)
+outB_ADL500=simulate(L,n,beta,"B",method="ADL",seed=2015)
+#outD_ADL500=simulate(L,n,beta,"D",method="ADL",seed=2015) 
+outD2_ADL500=simulate(L,n,beta,"D2",method="ADL",seed=2015)
+

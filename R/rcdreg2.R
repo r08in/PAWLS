@@ -1,6 +1,7 @@
 #search the whole lambda grid
 #for adptive lasso use
-RCDReg2=function(x, y,penalty1="1-w0",penalty2="ADL",lambda1,lambda2,beta0,w0,delta, maxIter,intercept=TRUE,fixW=FALSE)
+RCDReg2=function(x, y,penalty1="1-w0",penalty2="ADL",lambda1,lambda2,beta0,w0,delta, maxIter,
+                 intercept=TRUE,fixW=FALSE,startBeta=NULL,startW=NULL)
 {  
   ##declaration
   n=length(y)
@@ -20,8 +21,17 @@ RCDReg2=function(x, y,penalty1="1-w0",penalty2="ADL",lambda1,lambda2,beta0,w0,de
   
   betaPre=rep(0,m)
   wPre=rep(1,n)
+  if(!is.null(startBeta))
+  {
+    betaPre=startBeta
+  }
+  if(!is.null(startW))
+  {
+    wPre=startW
+  }
+  starRes=y-x%*%betaPre
+  r=starRes
   z=rep(0,m)
-  r=y
   ##iteration for each lamda1
   for(l1 in lstart1:L1)
   {
@@ -29,7 +39,7 @@ RCDReg2=function(x, y,penalty1="1-w0",penalty2="ADL",lambda1,lambda2,beta0,w0,de
     
     shift=rep(0,m+n)
     c=rep(0,m)
-    loss[l1,1]=t(y)%*%y ##initial loss[l1,1]
+    #loss[l1,1]=t(y)%*%y ##initial loss[l1,1]
     if(penalty1=="log")
     {
       lam1=sqrt((lambda1[l1]/abs(log(w0)))*n) #init sqrt(lambda1/abs(log(w0))n)
@@ -106,6 +116,18 @@ RCDReg2=function(x, y,penalty1="1-w0",penalty2="ADL",lambda1,lambda2,beta0,w0,de
       ##compute square of loss
       loss[l1,l2]=t(r)%*%r
       wloss[l1,l2]=t(r*wPre)%*%(r*wPre)
+      
+      ##reset betaPre and wPre for next lambda
+      if(!is.null(startBeta))
+      {
+        betaPre=startBeta
+        r=starRes
+      }
+      if(!is.null(startW))
+      {
+        wPre=startW
+      }
+      
     }#end iteration for each lambda2 fixed lambda1
     
   }#end iteration for each lambda1

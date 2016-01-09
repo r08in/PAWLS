@@ -311,11 +311,13 @@ GenerateDataByModel=function(n,beta,errorSigma=2,r=0.5,model=c("A","B","C","D"),
   else if(model=="D2")
   {
     out=GenerateData(n=n,dataSetNum=1,beta=beta,errorSigma=errorSigma,r=r,dataType=dataType)
+    pnum=sum(beta!=0)
     oNum=round(n*0.1)
     u1=runif(oNum,0,1)
     u2=runif(oNum,0,1)
     out$y[1:oNum]=out$y[1:oNum]+ifelse(u1<0.5,-1,1)*(20+10*u2)
-    out$x[1:oNum,(beta==0)]=out$x[1:oNum,(beta==0)]+10
+    #out$x[1:oNum,(beta==0)]=out$x[1:oNum,(beta==0)]+10
+    out$x[1:oNum,(pnum+1):(pnum+5)]=out$x[1:oNum,(pnum+1):(pnum+5)]+10
   }
   else if(model=="D3")
   {

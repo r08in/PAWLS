@@ -12,4 +12,4 @@ outA_RRMM50=simulate2(L,n,beta,"A",method="RRMM",matlab=matlab,useDataFile=FALSE
 #PWRR
 outridgeA_50=simulate2(L,n,beta,"A",method="PWRR",matlab=matlab,useDataFile=FALSE,type="Ridge")
 outridgec_50=simulate2(L,n,beta,"C",method="PWRR",matlab=maatlab,useDataFile=FALSE,type="Ridge",
-                       lambda1=0.5,lambda2=seq(5,0.01,length.out=100))
+                       lambda1=3.2,lambda2=seq(5,0.01,length.out=100))

@@ -27,6 +27,10 @@ InitBeta=function(x,y,method="LAD",nlambda=300,selector="BIC")
 UpdateWeight=function(x,y,beta,lambda1=NULL)
 {
   n=length(y)
+  if(length(beta)==(dim(x)[2]+1))
+  {
+    x=AddIntercept(x)
+  }
   r=abs(y-x%*%beta)
   if(is.null(lambda1))
   {
@@ -36,7 +40,7 @@ UpdateWeight=function(x,y,beta,lambda1=NULL)
   {
     z=sqrt(lambda1*n)
   }
-  w=ifelse(r>z,z/r,1)
+  w=as.vector(ifelse(r>z,z/r,1))
 }
 
 InitParam=function(x,y,method="LAD",nlambda=300,selector="BIC",lambda1=NULL)
@@ -44,4 +48,22 @@ InitParam=function(x,y,method="LAD",nlambda=300,selector="BIC",lambda1=NULL)
   beta=InitBeta(x,y,method=method,nlambda=nlambda,selector=selector)
   weight=UpdateWeight(x,y,beta=beta,lambda1=lambda1)
   return(list(beta=beta,weight=weight))
+}
+
+DataNormByMAD=function(x,y=NULL)
+{
+  temp=t(x)-apply(x,2,mean)
+  x=t(temp/apply(temp,1,sd))
+  
+  if(is.null(y))
+  {
+    return (x)
+  }
+  else 
+  {
+    temp=y-mean(y)
+    y=temp/sd(temp)
+    list(x=x,y=y)
+  }
+  
 }

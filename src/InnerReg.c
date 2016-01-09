@@ -61,7 +61,8 @@ SEXP CleanupG(double *r, double *betaPre, double *wPre, double * shift,
 
 
 SEXP INNERREG( SEXP X_, SEXP Y_, SEXP Penalty1_, SEXP Penalty2_, SEXP Lambda1_, SEXP Lambda2_,
-               SEXP Beta0_, SEXP W0_, SEXP Delta_, SEXP MaxIter_, SEXP Intercept_)
+               SEXP Beta0_, SEXP W0_, SEXP Delta_, SEXP MaxIter_, 
+               SEXP Intercept_, SEXP StarBeta_, SEXP StarW_ )
 {
   ////printf("begin\n");
   //data convert
@@ -73,6 +74,16 @@ SEXP INNERREG( SEXP X_, SEXP Y_, SEXP Penalty1_, SEXP Penalty2_, SEXP Lambda1_, 
   double *lambda2=REAL(Lambda2_);
   double *beta0=REAL(Beta0_);
   double *w0=REAL(W0_);
+  double *starBeta=NULL;
+  if(StarBeta_!=NULL)
+  {
+    starBeta=REAL(StarBeta_);
+  }
+  double *starW=NULL;
+  if(StarW_!=NULL)
+  {
+    starW=REAL(StarW_);
+  }
   double delta=REAL(Delta_)[0];
   double maxIter = REAL(MaxIter_)[0];
   int intercept=REAL(Intercept_)[0];
@@ -104,27 +115,60 @@ SEXP INNERREG( SEXP X_, SEXP Y_, SEXP Penalty1_, SEXP Penalty2_, SEXP Lambda1_, 
   double *r=Calloc(n, double);
   
   //initial
-  for(int i=0;i<L1*L2*m;i++)
+  if(StarBeta_==NULL)
   {
-    beta[i]=0;
+     for(int i=0;i<m;i++)
+   {
+     betaPre[i]=0;
+   }
   }
-  for(int i=0;i<L1*L2*n;i++)
+  else
   {
-    w[i]=1;
+    for(int i=0;i<m;i++)
+   {
+     betaPre[i]=starBeta[i];
+   }
   }
+  if(StarW_==NULL)
+  {
+    for(int i=0;i<n;i++)
+   {
+     wPre[i]=1;
+   }
+  }
+  else
+  {
+    for(int i=0;i<n;i++)
+   {
+     wPre[i]=starW[i];
+   }
+  }
+  
   for(int i=0;i<L1*L2;i++)
   {
     loss[i]=wloss[i]=iter[i]=0;
   }
-  for(int i=0;i<m;i++)
+  
+  if(StarBeta_==NULL)
   {
-    betaPre[i]=0;
+    for(int i=0;i<n;i++)
+    {
+      r[i]=y[i];
+    }
   }
-  for(int i=0;i<n;i++)
+  else
   {
-    wPre[i]=1;
-    r[i]=y[i];
+    for(int i=0;i<n;i++)
+   {
+     double temp=0;
+     for(int j=0;j<m;j++)
+     {
+       temp+=x[j*n+i]*betaPre[j];
+     }
+     r[i]=y[i]-temp;
+   }     
   }
+  
   
   //temp
   double *shift=Calloc(n+m, double);
@@ -160,7 +204,7 @@ SEXP INNERREG( SEXP X_, SEXP Y_, SEXP Penalty1_, SEXP Penalty2_, SEXP Lambda1_, 
         
       }
     }
-    else //1-w0
+    else if(strcmp(penalty1,"1-w0")==0)//1-w0
     {
       //fprintf(f,"lam1\n");
       for(int i=0;i<n;i++)
@@ -252,8 +296,8 @@ SEXP INNERREG( SEXP X_, SEXP Y_, SEXP Penalty1_, SEXP Penalty2_, SEXP Lambda1_, 
               w[i*L1*L2+l2*L1+l1]=1;
             }
           }
-        }
-        else//1-w0
+        }       
+        else if(strcmp(penalty1,"1-w0")==0)//1-w0
         {
           //fprintf(f,"w:\n" );
           double sqr=0;
@@ -272,6 +316,13 @@ SEXP INNERREG( SEXP X_, SEXP Y_, SEXP Penalty1_, SEXP Penalty2_, SEXP Lambda1_, 
             //fprintf(f,"\n");
           }
         }
+        /*
+         else if (strcmp(penalty1,"null")==0)
+        {
+          //make sure all ws are 1
+          printf("it is null\n");
+        }*/
+        
         
         for(int i=0;i<n;i++)
         {
