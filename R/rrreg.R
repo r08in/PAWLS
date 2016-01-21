@@ -1,9 +1,9 @@
 ## This functionn is to perform group coordinate descent regression
 #penalty1=c("log","1-w0")
 #initial=
-rrreg=function (x,y,penalty1=c("1-w0","log"),penalty2=c("LASSO", "RIDGE", "MCP"),
+rrreg=function (x,y,penalty1=c("1-w0","log"),penalty2=c("RIDGE"),
                   lambda1=NULL,lambda2=NULL,nlambda1=1,nlambda2=100,
-                  beta0=NULL,w0=NULL,initial=c("RRMM"),
+                  beta0=rep(1,p),w0=rep(0,n),initial=c("RRMM"),
                   delta=0.000001,maxIter=1000,
                   intercept=TRUE,standardize=FALSE,
                   criterion=c("CV","BIC","AIC"),...)
@@ -64,8 +64,6 @@ rrreg=function (x,y,penalty1=c("1-w0","log"),penalty2=c("LASSO", "RIDGE", "MCP")
     XX=x
     yy=y
   }
-  beta0=rep(1,p)
-  w0=rep(0,n)
   
   ##setup parameter
   if (is.null(lambda1))
@@ -90,8 +88,24 @@ rrreg=function (x,y,penalty1=c("1-w0","log"),penalty2=c("LASSO", "RIDGE", "MCP")
   else if(criterion=="CV")
   {
     res=cvreg(XX, yy,penalty1=penalty1,penalty2=penalty2,lambda1,lambda2,beta0,w0,delta, maxIter,intercept=intercept)
+    #plot
+    nlambda1=length(lambda1)
+    nlambda2=length(lambda2)
+    pe=matrix(0,nrow=(nlambda1*nlambda2),ncol=3)
+    for(l1 in 1:nlambda1)
+    {
+      for(l2 in 1:nlambda2)
+      {
+        pe[(l2-1)*nlambda1+l1,1]=lambda1[l1]
+        pe[(l2-1)*nlambda1+l1,2]=lambda2[l2]
+        pe[(l2-1)*nlambda1+l1,3]=res$pe[l1,l2]
+      }
+    }
+    #scatter3d(pe[,1],pe[,3],pe[,2])
+    plot3d(pe[,1],pe[,2],pe[,3])
   }
   ##unstandardize 
+  
   if(standardize)
   {
     scale=ifelse(scale==0,0,1/scale)

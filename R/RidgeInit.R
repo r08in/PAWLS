@@ -16,7 +16,7 @@ GetRobustPe=function(X,y,betaHat,pro=0.1)
   num=round(length(y)*(1-pro))
   p=dim(X)[2]
   resid=y-X%*%betaHat
-  resid2=resid[order(resid,decreasing=FALSE)[num]]
+  resid2=resid[order(resid,decreasing=FALSE)[1:num]]
   sum(resid2^2)/num
 }
 

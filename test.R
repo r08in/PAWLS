@@ -267,6 +267,7 @@ studres_nci=studres(lm_nci)
 #lambda2=c(0.4304376,0.2141318,0)
 res_nci_0=srcdreg(out$x,out$y,initial="uniform",search="cross",criterion="BIC",updateInitialTimes=2)
 res_nci=srcdreg(out$x,out$y,initial="PAWLS",search="cross",criterion="BIC",updateInitialTimes=2)
+res_nci_PAWLS=srcdreg(out$x,out$y,initial="uniform",search="cross",criterion="BIC",updateInitialTimes=0)
 res_nci=srcdreg(out$x,out$y,initial="PAWLS",search="crossDynamic",criterion="BIC",updateInitialTimes=2,standardize=TRUE)
 names(res_nci$beta)<-c("intercept",colname)
 res_nci$beta[res_nci$beta!=0]

@@ -1,13 +1,14 @@
 cvreg=function(x, y,penalty1=c("1-w0","log"),penalty2=c("LASSO", "RIDGE", "MCP"),
-               lambda1,lambda2,beta0,w0,delta, maxIter,K=10,intercept=TRUE)
+               lambda1,lambda2,beta0,w0,delta, maxIter,K=5,intercept=TRUE)
 
 {
   n=length(y)
   m=dim(x)[2]
-  if(K>n) stop("inside cvreg: K cannot be larger than n")
-  size=round(n/K)
-  L=length(lambda1)*length(lambda2)
-  pe=matrix(nrow=L,ncol=K,0) #robust
+  if(K>n) stop("inside cvreg: k cannot be larger than n")
+  size=floor(n/K)
+  L1=length(lambda1)
+  L2=length(lambda2)
+  pe=matrix(0,nrow=L1,ncol=L2)
   rseq=sample(1:n,n)
   
   #interation for each fold
@@ -21,30 +22,28 @@ cvreg=function(x, y,penalty1=c("1-w0","log"),penalty2=c("LASSO", "RIDGE", "MCP")
     testy=y[range]
     
     #fit
-    res=InnerReg(trainx,trainy,penalty1=penalty1,penalty2=penalty2,lambda1,lambda2,
-             beta0=rep(1,m),w0=rep(1,n)[-range],delta,maxIter,intercept=intercept)
-    beta=matrix(res$beta,L,m)
+    res=InnerReg(x=trainx,y=trainy,penalty1=penalty1,penalty2=penalty2,
+                 lambda1=lambda1,lambda2=lambda2,
+                 beta0=beta0,w0=w0[-range],delta=delta,maxIter=maxIter,intercept=intercept)
     
     #computer pe
-    for(i in 1:L)
+    for(l1 in 1:L1)
     {
-      pe[i,k]=GetRobustPe(X=testx,y=testy,betaHat=beta[i,])
+      for(l2 in 1:L2)
+      {
+        pe[l1,l2]=pe[l1,l2]+GetRobustPe(X=testx,y=testy,betaHat=res$beta[l1,l2,])
+      }
     }
+
     
   }
+  pe=pe/K
   #find best lambda that have testPE smallset
-  pe=apply(pe,1,sum)/K
-  index=which.min(pe)
-  if(length(lambda1)==1)
-  {
-    lambda2=lambda2[index]
-  }
-  else 
-  {
-    lambda1=lambda1[index]
-  }
-  res=InnerReg(x,y,penalty1=penalty1,penalty2=penalty2,lambda1,lambda2,
-           beta0,w0,delta,maxIter,intercept=intercept)
+  index1=which.min(pe)%%L1
+  index1=ifelse(index1==0,L1,index1)
+  index2=ceiling(which.min(pe)/L1)
+  res=InnerReg(x=x,y=y,penalty1=penalty1,penalty2=penalty2,lambda1=lambda1[index1],lambda2=lambda2[index2],
+               beta0=beta0,w0=w0,delta=delta,maxIter=maxIter,intercept=intercept)
   #return data
-  list(beta=res$beta,w=res$w,wloss=res$wloss,index=index,pe=pe)
+  list(beta=as.vector(res$beta),w=res$w,wloss=res$wloss,index1=index1,index2=index2,pe=pe)
 }
