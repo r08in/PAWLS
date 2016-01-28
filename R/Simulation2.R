@@ -18,6 +18,8 @@ simulate2=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PAWLS",
   pe=rep(0,L)
   w=matrix(0,nrow=L,ncol=n)
   b=matrix(0,nrow=L,ncol=p+1)
+  index1=rep(0,L)
+  index2=rep(0,L)
   #out=GenerateDataByModel(n=n,beta=beta,model=model)
   #evaluate(matlab,"rng(2015);")
   for(i in 1:L)
@@ -49,6 +51,8 @@ simulate2=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PAWLS",
       res=rrreg(x=out$x,y=out$y,lambda1=lambda1,lambda2=lambda2,intercept=intercept)
       b[i,]=res$beta
       w[i,]=as.vector(res$w)
+      index1[i]=res$index1
+      index2[i]=res$index2
     }
     
     #pe
@@ -58,6 +62,17 @@ simulate2=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PAWLS",
 
   
   time=(proc.time()-ptm)[1]
+  #summarize
+  ape=sum(pe)/L
+  if(model=="A"||model=="B")
+  {
+    pro=0
+  }
+  else 
+  {
+    pro=0.1
+  }
+  s=OutlierSummary(w,pro)
   #return
-  list(pe=pe,time=time,w=w,beta=b)
+  list(pe=pe,time=time,w=w,beta=b,index1=index1,index2=index2,ape=ape,s=s)
 }

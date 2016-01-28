@@ -38,7 +38,8 @@ rrreg=function (x,y,penalty1=c("1-w0","log"),penalty2=c("RIDGE"),
   if (any(is.na(y)) | any(is.na(x))) 
     stop("Missing data (NA's) detected.Take actions to eliminate missing data before passing X and y to gcdreg.")
   
- 
+  # initial
+  if(initial=="PW")
   #intercept
   if(intercept)
   {

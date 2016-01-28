@@ -15,9 +15,9 @@ GetRobustPe=function(x,y,betaHat,pro=0.1)
 {
   num=round(length(y)*(1-pro))
   p=dim(x)[2]
-  resid=y-x%*%betaHat
+  resid=(y-x%*%betaHat)^2
   resid2=resid[order(resid,decreasing=FALSE)[1:num]]
-  sum(resid2^2)/num
+  sum(resid2)/num
 }
 
 GetBetaInit=function(X,y,type=c("RRMM"))
