@@ -11,11 +11,11 @@ InitLambda1=function(X,y,betaInit,coeff=1,pro=0.5)
   coeff*sigmaHat
 }
 
-GetRobustPe=function(X,y,betaHat,pro=0.1)
+GetRobustPe=function(x,y,betaHat,pro=0.1)
 {
   num=round(length(y)*(1-pro))
-  p=dim(X)[2]
-  resid=y-X%*%betaHat
+  p=dim(x)[2]
+  resid=y-x%*%betaHat
   resid2=resid[order(resid,decreasing=FALSE)[1:num]]
   sum(resid2^2)/num
 }

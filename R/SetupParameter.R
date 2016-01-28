@@ -17,9 +17,11 @@ SetupParameter = function(x,y,nlambda1,nlambda2,beta0,w0,intercept=TRUE,alpha=0.
     #
     num=round(n*alpha)
     lambda1Max=l1[order(l1,decreasing=TRUE)[1]]
-#     l2=abs(t(x[,-1])%*%(y-median(y))/n)*abs(beta0[-1])
-#     lambda2Max=quantile(l2,probs=0.8)
-    lambda2Max=max(abs(t(x[,-1])%*%(y-median(y))/n)*abs(beta0[-1])) # max |betaj|*|xj'y/n|
+    #lambda1Max=1
+    l2=abs(t(x[,-1])%*%(y-median(y))/n)*abs(beta0[-1])
+    lambda2Max=quantile(l2,probs=0.8)
+    #lambda2Max=1
+    #lambda2Max=max(abs(t(x[,-1])%*%(y-median(y))/n)*abs(beta0[-1])) # max |betaj|*|xj'y/n|
   }
   else
   {
@@ -45,7 +47,8 @@ SetupParameter = function(x,y,nlambda1,nlambda2,beta0,w0,intercept=TRUE,alpha=0.
 
 logSeq=function(smax,smin,n)
 {
-  smax-(smax-smin)/(log(n))*(log(n)-log(n:1))
+  smin+(smax-smin)/(log(n))*(log(n)-log(1:n))
+  #seq(smax,smin,length.out=n)
 }
 
 

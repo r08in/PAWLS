@@ -3,7 +3,7 @@
 #initial=
 srcdreg=function (x,y,penalty1=c("1-w0","log","null"),penalty2=c("LASSO", "RIDGE", "MCP"),
                   lambda1=NULL,lambda2=NULL,nlambda1=50,nlambda2=100,
-                  beta0=NULL,w0=NULL,initial=c("uniform","LTS","LASSO","PAWLS"),
+                  beta0=NULL,w0=NULL,startBeta=NULL,startW=NULL,initial=c("uniform","LTS","LASSO","PAWLS","uniform-LTS"),
                   delta=0.000001,maxIter=1000,
                   intercept=TRUE,standardize=FALSE,
                   updateInitialTimes=0,criterion=c("BIC","AIC","CV"),search=c("cross","all","fixw","crossDynamic"),...)
@@ -53,9 +53,9 @@ srcdreg=function (x,y,penalty1=c("1-w0","log","null"),penalty2=c("LASSO", "RIDGE
   }
   else if(initial=="LASSO")
   {
-    init=srcdreg(x,y,penalty1="null",nlambda1=1,intercept=intercept,standardize=standardize,search="fixw")
+    init=srcdreg(x,y,penalty1="null",nlambda1=1,intercept=intercept,search="fixw")
     beta0=SetBeta0(init$beta)
-    if(intercept) beta0=c(1,beta0)
+    #if(intercept) beta0=c(1,beta0)
     w0=rep(0.99,n)
   }
   else if(initial=="PAWLS")
@@ -63,6 +63,13 @@ srcdreg=function (x,y,penalty1=c("1-w0","log","null"),penalty2=c("LASSO", "RIDGE
     init=srcdreg(x,y,intercept=intercept)
     beta0=SetBeta0(init$beta)
     w0=ifelse(init$w==1,0.99,init$w)
+    
+    #seting starting beta and w0
+    require(robustHD)
+    #init_LTS=sparseLTS(x,y,intercept=intercept)
+    load("data\\init_LTS.rda")
+    startBeta=init_LTS$coefficients
+    startW=UpdateWeight(x,y,init_LTS$coefficients)
   }
   else if(initial=="uniform")
   {
@@ -75,7 +82,33 @@ srcdreg=function (x,y,penalty1=c("1-w0","log","null"),penalty2=c("LASSO", "RIDGE
       w0=rep(0.99,n)
     beta0=SetBeta0(beta0)
     w0=ifelse(w0==1,0.99,w0)
+    
+    #seting starting beta and w0
+    require(robustHD)
+    #init_LTS=sparseLTS(x,y,intercept=intercept)
+    load("data\\init_LTS.rda")
+    startBeta=init_LTS$coefficients
+    startW=UpdateWeight(x,y,init_LTS$coefficients)
   }
+else if(initial=="uniform-LTS")
+{
+  if(is.null(beta0))
+  {
+    beta0=rep(1,p)
+    if(intercept) beta0=c(1,beta0)
+  }
+  if(is.null(w0))
+    w0=rep(0.99,n)
+  beta0=SetBeta0(beta0)
+  w0=ifelse(w0==1,0.99,w0)
+  
+  #seting starting beta and w0
+  require(robustHD)
+  #init=sparseLTS(x,y,intercept=intercept)
+  load("data\\init_LTS.rda")
+  startBeta=init_LTS$coefficients
+  startW=UpdateWeight(x,y,init_LTS$coefficients)
+}
 
   
   #intercept
@@ -122,7 +155,7 @@ srcdreg=function (x,y,penalty1=c("1-w0","log","null"),penalty2=c("LASSO", "RIDGE
     else if(search=="fixw") # ALasso
     {
       res=InnerReg(XX, yy,penalty1="null",penalty2=penalty2,lambda1=1,lambda2,beta0,w0,delta, maxIter,intercept=intercept)   
-      #res=RCDReg2(XX, yy,penalty1=penalty1,penalty2="ADL",lambda1,lambda2,beta0,w0,delta, maxIter,intercept=intercept,fixW=TRUE)
+      #res=RCDReg2(XX, yy,penalty1=penalty1,penalty2="ADL",lambda1=1,lambda2,beta0,w0,delta, maxIter,intercept=intercept,fixW=TRUE)
       res=BICPWLQ(res$wloss,res$beta,res$w,lambda1=1,lambda2,alpha=1,criterion=criterion)
     }
     else if(search=="crossDynamic")
@@ -131,22 +164,30 @@ srcdreg=function (x,y,penalty1=c("1-w0","log","null"),penalty2=c("LASSO", "RIDGE
       {
         res=RCDReg3(XX, yy,penalty1=penalty1,penalty2=penalty2,lambda1,lambda2,beta0,w0,delta, 
                     maxIter,intercept=intercept,updateInitialTimes=updateInitialTimes,criterion=criterion)
+        if((res$index1<nlambda1-1)&& (res$index2<nlambda2-1))        break
         #lambda2 for beta
-        if(res$index2==nlambda2-1)
+        if(res$index1>=nlambda1-1)
+        {
+          lambda1=c(lambda1[1:(nlambda1-2)],logSeq(lambda1[nlambda1-1],lambda1[nlambda1],nlambda1))
+          nlambda1=length(lambda1)
+        }
+        #lambda2 for beta
+        if(res$index2>=nlambda2-10)
         {
           lambda2=c(lambda2[1:(nlambda2-2)],logSeq(lambda2[nlambda2-1],lambda2[nlambda2],nlambda2))
-          beta0=res$beta0
-          w0=res$w0
+          nlambda2=length(lambda2)
         }
-        else 
-          break;
+        beta0=res$beta0
+        w0=res$w0
+        
       }
       
     }
     else #(search=="cross")
     {
       res=RCDReg3(XX, yy,penalty1=penalty1,penalty2=penalty2,lambda1,lambda2,beta0,w0,delta,
-                  maxIter,intercept=intercept,updateInitialTimes=updateInitialTimes,criterion=criterion)
+                  maxIter,intercept=intercept,updateInitialTimes=updateInitialTimes,criterion=criterion,
+                  startBeta=startBeta,startW=startW)
     }
 
   }

@@ -6,10 +6,14 @@
 # offSet indicate the offset of position of non-zero beta
 GenerateData = function (n,p=NULL,pNum=NULL,dataSetNum=1,beta=NULL,
                          r=0.9,errorSigma=1,errorType="n",offSet=0,outlier.op="NONE",outlier.pro=0.1,outlier.r=10,
-                         dataType=c("Lasso","Ridge"))
+                         dataType=c("Lasso","Ridge"),seed=NULL)
 {
   #for test
-  #set.seed(120)
+  if(!is.null(seed))
+  {
+    set.seed(seed)
+  }
+  #
   
   require("MASS")
   if(!missing(beta))

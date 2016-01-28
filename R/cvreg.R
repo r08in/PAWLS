@@ -2,6 +2,9 @@ cvreg=function(x, y,penalty1=c("1-w0","log"),penalty2=c("LASSO", "RIDGE", "MCP")
                lambda1,lambda2,beta0,w0,delta, maxIter,K=5,intercept=TRUE)
 
 {
+  #test
+  #set.seed(2016)
+  
   n=length(y)
   m=dim(x)[2]
   if(K>n) stop("inside cvreg: k cannot be larger than n")
@@ -31,7 +34,7 @@ cvreg=function(x, y,penalty1=c("1-w0","log"),penalty2=c("LASSO", "RIDGE", "MCP")
     {
       for(l2 in 1:L2)
       {
-        pe[l1,l2]=pe[l1,l2]+GetRobustPe(X=testx,y=testy,betaHat=res$beta[l1,l2,])
+        pe[l1,l2]=pe[l1,l2]+GetRobustPe(x=testx,y=testy,betaHat=res$beta[l1,l2,])
       }
     }
 
