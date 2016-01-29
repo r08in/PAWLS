@@ -1,6 +1,6 @@
 simulate2=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PAWLS",matlab=NULL,seed=2014,useDataFile=FALSE,
                   standardize=FALSE,penalty1="1-w0",penalty2="RIDGE",updateInitial=FALSE,criterion="BIC",intercept=TRUE,initial="uniform",
-                  range="cross",type=c("Lasso","Ridge"),lambda1=NULL,lambda2=NULL)
+                  range="cross",type=c("Lasso","Ridge"),lambda1=NULL,lambda2=NULL,r=0.9,errorSigma=1)
 {
   ptm=proc.time()
   if(!is.null(seed))
@@ -34,7 +34,7 @@ simulate2=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PAWLS",
     }
     else
     {
-      out=GenerateDataByModel(n=n,beta=beta,model=model,dataType=type)
+      out=GenerateDataByModel(n=n,beta=beta,model=model,r=r,errorSigma=errorSigma,dataType=type)
     }
     
     ####### for Ridge#######
@@ -54,7 +54,15 @@ simulate2=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PAWLS",
       index1[i]=res$index1
       index2[i]=res$index2
     }
-    
+    else if(method=="ARRREG")
+    {
+      init=rrreg(x=out$x,y=out$y,lambda1=seq(from=1,to=2,length.out=100),
+                lambda2=seq(from=0.005,to=0.5,length.out=100),intercept=intercept)
+      b[i,]=res$beta
+      w[i,]=as.vector(res$w)
+      index1[i]=res$index1
+      index2[i]=res$index2
+    }
     #pe
     x=AddIntercept(out$x)
     pe[i]=GetRobustPe(x=x,y=out$y,betaHat=b[i,] )
@@ -64,7 +72,7 @@ simulate2=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PAWLS",
   time=(proc.time()-ptm)[1]
   #summarize
   ape=sum(pe)/L
-  if(model=="A"||model=="B")
+  if(model=="RA"||model=="RB")
   {
     pro=0
   }

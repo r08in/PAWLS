@@ -27,7 +27,6 @@ rrreg=function (x,y,penalty1=c("1-w0","log"),penalty2=c("RIDGE"),
   initial <- match.arg(initial)
   criterion <- match.arg(criterion)
   
-  
   if (nlambda1 < 1||nlambda2<1) 
     stop("nlambda must be at least 1")
   if(!is.null(lambda1)) 
@@ -39,7 +38,6 @@ rrreg=function (x,y,penalty1=c("1-w0","log"),penalty2=c("RIDGE"),
     stop("Missing data (NA's) detected.Take actions to eliminate missing data before passing X and y to gcdreg.")
   
   # initial
-  if(initial=="PW")
   #intercept
   if(intercept)
   {
@@ -103,7 +101,7 @@ rrreg=function (x,y,penalty1=c("1-w0","log"),penalty2=c("RIDGE"),
       }
     }
     #scatter3d(pe[,1],pe[,3],pe[,2])
-    plot3d(pe[,1],pe[,2],pe[,3])
+    #\plot3d(pe[,1],pe[,2],pe[,3])
   }
   ##unstandardize 
   

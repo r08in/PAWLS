@@ -110,7 +110,7 @@ GenerateData = function (n,p=NULL,pNum=NULL,dataSetNum=1,beta=NULL,
     }
     else if(errorType=="t")
     {
-      error=rt(n,errorSigma)# errorSigma is df for t distribution
+      error=rt(n,2)# df=2 for t distribution
     }
     else
     {
@@ -440,6 +440,32 @@ GenerateDataByModel=function(n,beta,errorSigma=2,r=0.5,model=c("A","B","C","D"),
     gama=rep(-1/p,p)
     g=2*(1:oNum)
     out$y[1:oNum]=out$x[1:oNum,]%*%gamma*g
+  }
+  else if(model=="RA")
+  {
+    out=GenerateData(n=n,dataSetNum=1,beta=beta,errorSigma=errorSigma,r=r,dataType=dataType) #errorSigma=2
+  }
+  else if(model=="RB")
+  {
+    out=GenerateData(n=n,dataSetNum=1,beta=beta,errorSigma=errorSigma,errorType="t",r=r,dataType=dataType)# is df=2
+  }
+  else if(model=="RC")
+  {
+    out=GenerateData(n=n,dataSetNum=1,beta=beta,errorSigma=errorSigma,r=r,dataType=dataType)
+    oNum=round(n*0.1)
+    u1=runif(oNum,0,1)
+    u2=runif(oNum,0,1)
+    out$y[1:oNum]=out$y[1:oNum]+ifelse(u1<0.5,-1,1)*(20+10*u2)
+  }
+  else if(model=="RD")
+  {
+    out=GenerateData(n=n,dataSetNum=1,beta=beta,errorSigma=errorSigma,r=r,dataType=dataType)
+    oNum=round(n*0.1)
+    u1=runif(oNum,0,1)
+    u2=runif(oNum,0,1)
+    out$y[1:oNum]=out$y[1:oNum]+ifelse(u1<0.5,-1,1)*(20+10*u2)
+    pIndex=(beta==0.1)
+    out$x[1:oNum,pIndex]=out$x[1:oNum,pIndex]+10
   }
   return(out)
 }
