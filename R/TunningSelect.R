@@ -161,9 +161,10 @@ BIC=function(loss,dfw,dfb,n,p,type="beta",criterion="BIC",pro=0.8,a=0,x=NULL,ws=
 
  
   l=length(df)
-  index=(1:l)[vl==min(vl)]
+  #index=(1:l)[vl==min(vl)]
+  index=which.min(vl)
   #index[length(index)]
-  index[1]
+  index
 }
 
 dfs=function(x,beta,w)
