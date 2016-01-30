@@ -1,4 +1,4 @@
-cvreg=function(x, y,lambda1,lambda2,beta0,w0,K=5)
+cvreg2=function(x, y,lambda1,lambda2,beta0,w0,K=5)
 {
   
   L=2
@@ -18,6 +18,12 @@ cvreg=function(x, y,lambda1,lambda2,beta0,w0,K=5)
     #compute residule
     r=y-x%*%beta0
     sqr=r^2
+    
+    #set up lambda1 for w
+    temp=abs(1-w0)*sqr/n
+    maxLambda1=max(temp)
+    minLambda1=quantile(temp,probs=0.5)
+    lambda1=seq(from=minLambda1,to=maxLambda1,length.out=L1)
     
     #update w for each lambda1
     for(l1 in 1:L1)
@@ -65,10 +71,10 @@ cvreg=function(x, y,lambda1,lambda2,beta0,w0,K=5)
     beta=bs[index2,]
     ##repeat 
     beta0=beta
-    w0=w
+    w0=ifelse(w==1,0.99,w)
     i=i+1
   }
   
-  list(beta=beta,w=w)
+  list(beta=beta,w=w,index1=index1,index2=index2,lambda1=lambda1,lambda2=lambda2)
   
 }

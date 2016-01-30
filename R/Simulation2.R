@@ -8,6 +8,13 @@ simulate2=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PAWLS",
     set.seed(seed)
   }
   p=length(beta)
+  
+  #prepare matlab
+  if(initial=="RRMM"||method=="RRMM")
+  {
+#     matLabDir="D:\\matlab\\RRMM"
+#     matlab=PrepareMatlab(matLabDir)
+  }
   if(useDataFile)
   {
     f=paste("data\\",model,n,"X",p,".rda",sep="")
@@ -48,7 +55,19 @@ simulate2=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PAWLS",
     }
     else if(method=="RRREG")
     {
-      res=rrreg(x=out$x,y=out$y,lambda1=lambda1,lambda2=lambda2,intercept=intercept)
+      if(initial=="RRMM")
+      {
+        setVariable(matlab, X=out$x)
+        setVariable(matlab, y=out$y)
+        evaluate(matlab,"[beta resid edf lamin]=RobRidge(X,y)") #with intercept
+        betaRRMM=getVariable(matlab, "beta")
+        beta0=c(betaRRMM$beta[p+1],betaRRMM$beta[1:p])
+        #beta0=c(-0.0416693,2.5240519,1.7076847,0.9545043,1.1682181,0.9077817,1.3099283,0.6452162,0.2643470)
+        sqr=(out$y-AddIntercept(out$x)%*%beta0)^2
+        lam1=1 #lambda1*n
+        w0=ifelse(sqr>lam1,lam1/sqr,0.99)
+      }
+      res=rrreg(x=out$x,y=out$y,lambda1=lambda1,lambda2=lambda2,beta0=beta0,w0=w0,intercept=intercept)
       b[i,]=res$beta
       w[i,]=as.vector(res$w)
       index1[i]=res$index1

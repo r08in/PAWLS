@@ -37,7 +37,7 @@ rrreg=function (x,y,penalty1=c("1-w0","log"),penalty2=c("RIDGE"),
   if (any(is.na(y)) | any(is.na(x))) 
     stop("Missing data (NA's) detected.Take actions to eliminate missing data before passing X and y to gcdreg.")
   
-  # initial
+
   #intercept
   if(intercept)
   {
@@ -86,20 +86,21 @@ rrreg=function (x,y,penalty1=c("1-w0","log"),penalty2=c("RIDGE"),
   }
   else if(criterion=="CV")
   {
-    res=cvreg(XX, yy,penalty1=penalty1,penalty2=penalty2,lambda1,lambda2,beta0,w0,delta, maxIter,intercept=intercept)
+    #res=cvreg(XX, yy,penalty1=penalty1,penalty2=penalty2,lambda1,lambda2,beta0,w0,delta, maxIter,intercept=intercept)
+    res=cvreg2(x=XX, y=yy,lambda1=lambda1,lambda2=lambda2,beta0=beta0,w0=w0)
     #plot
-    nlambda1=length(lambda1)
-    nlambda2=length(lambda2)
-    pe=matrix(0,nrow=(nlambda1*nlambda2),ncol=3)
-    for(l1 in 1:nlambda1)
-    {
-      for(l2 in 1:nlambda2)
-      {
-        pe[(l2-1)*nlambda1+l1,1]=lambda1[l1]
-        pe[(l2-1)*nlambda1+l1,2]=lambda2[l2]
-        pe[(l2-1)*nlambda1+l1,3]=res$pe[l1,l2]
-      }
-    }
+#     nlambda1=length(lambda1)
+#     nlambda2=length(lambda2)
+#     pe=matrix(0,nrow=(nlambda1*nlambda2),ncol=3)
+#     for(l1 in 1:nlambda1)
+#     {
+#       for(l2 in 1:nlambda2)
+#       {
+#         pe[(l2-1)*nlambda1+l1,1]=lambda1[l1]
+#         pe[(l2-1)*nlambda1+l1,2]=lambda2[l2]
+#         pe[(l2-1)*nlambda1+l1,3]=res$pe[l1,l2]
+#       }
+#     }
     #scatter3d(pe[,1],pe[,3],pe[,2])
     #\plot3d(pe[,1],pe[,2],pe[,3])
   }

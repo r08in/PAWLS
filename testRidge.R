@@ -4,9 +4,9 @@ n=50
 p=8
 #beta=rep(1,p)
 beta=c(3,2,1,1,1,1,0.1,0.1)
+
 matLabDir="D:\\matlab\\RRMM"
 matlab=PrepareMatlab(matLabDir)
-
 
 #RRMM
 rA_RRMM50=simulate2(L,n,beta,"RA",method="RRMM",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2016)
@@ -15,14 +15,14 @@ rC_RRMM50=simulate2(L,n,beta,"RC",method="RRMM",matlab=matlab,useDataFile=FALSE,
 rD_RRMM50=simulate2(L,n,beta,"RD",method="RRMM",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2016)
 
 #RRREG
-outrA_50=simulate2(L,n,beta,"RA",method="RRREG",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2016,
-                   lambda1=seq(from=0.001,to=1,length.out=50),lambda2=seq(from=0.001,to=0.1,length.out=30))
-outrB_50=simulate2(L,n,beta,"RB",method="RRREG",matlab=matlab,useDataFile=FALSE,type="Ridge",,seed=2016,
+outrA_50=simulate2(L,n,beta,"RA",initial="RRMM",method="RRREG",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2016,
+                   lambda1=seq(from=1,to=2,length.out=5),lambda2=seq(from=0.001,to=0.1,length.out=100))
+outrB_50=simulate2(L,n,beta,"RB",initial="RRMM",method="RRREG",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2016,
                    lambda1=seq(from=0.11,to=5,length.out=100),lambda2=seq(from=0.005,to=0.5,length.out=100))
-outrc_50=simulate2(L,n,beta,"RC",method="RRREG",matlab=matlab,useDataFile=FALSE,type="Ridge",,seed=2016,
-                   lambda1=seq(from=1,to=2,length.out=100),lambda2=seq(from=0.005,to=0.5,length.out=100))
-outrD_50=simulate2(L,n,beta,"RD",method="RRREG",matlab=matlab,useDataFile=FALSE,type="Ridge",,seed=2016,
-                   lambda1=seq(from=0.001,to=1,length.out=50),lambda2=seq(from=0.005,to=0.5,length.out=100))
+outrc_50=simulate2(L,n,beta,"RC",initial="RRMM",method="RRREG",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2016,
+                   lambda1=seq(from=1,to=10,length.out=100),lambda2=seq(from=0.0001,to=1,length.out=100))
+outrD_50=simulate2(L,n,beta,"RD",initial="RRMM",method="RRREG",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2016,
+                   lambda1=seq(from=0.05,to=2,length.out=100),lambda2=seq(from=0.005,to=0.5,length.out=30))
 
 #A-RRREG
 
@@ -32,12 +32,12 @@ tA_50=simulate2(L,n,beta,"RA",method="RRREG",matlab=matlab,useDataFile=FALSE,typ
 tB_50=simulate2(L,n,beta,"RB",method="RRREG",matlab=matlab,useDataFile=FALSE,type="Ridge",,seed=2016,
                    lambda1=seq(from=0.11,to=5,length.out=100),lambda2=seq(from=0,to=0,length.out=2))
 tc_50=simulate2(L,n,beta,"RC",method="RRREG",matlab=matlab,useDataFile=FALSE,type="Ridge",,seed=2016,
-                   lambda1=seq(from=1,to=2,length.out=100),lambda2=seq(from=0,to=0,length.out=2))
+                   lambda1=seq(from=0.1,to=1,length.out=100),lambda2=seq(from=0,to=0,length.out=2))
 tD_50=simulate2(L,n,beta,"RD",method="RRREG",matlab=matlab,useDataFile=FALSE,type="Ridge",,seed=2016,
                    lambda1=seq(from=0.001,to=1,length.out=50),lambda2=seq(from=0,to=0,length.out=2))
 set.seed(2016)
-out=GenerateDataByModel(n,beta=beta,model="A",dataType="Ridge")
-res=rrreg(x=out$x,y=out$y,lambda1=seq(from=0.001,to=1,length.out=30),lambda2=seq(from=0.01,to=2,length.out=30),intercept=TRUE)
+out=GenerateDataByModel(n,beta=beta,model="RC",dataType="Ridge")
+res=rrreg(x=out$x,y=out$y,initial="RRMM",lambda1=seq(from=0.0001,to=0.001,length.out=30),lambda2=seq(from=0.01,to=2,length.out=30),intercept=TRUE)
 GetRobustPe(AddIntercept(out$x),y=out$y,betaHat = res$beta)
 res=rrreg(x=out$x,y=out$y,lambda1=seq(from=10,to=20,length.out=100),lambda2=seq(from=0.0001,to=1,length.out=100),intercept="false")
 
