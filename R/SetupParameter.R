@@ -63,3 +63,12 @@ SetupGroupParameter = function(x,y,nlambda1,nlambda2,w0,groupInfo)
   lambda2=logSeq(lambda2Max,0,nlambda2)
   return(list(lambda1=lambda1,lambda2=lambda2))
 }
+
+GetRidgeLambda=function (x,y,matlab=NULL)
+{
+  setVariable(matlab, X=x)
+  setVariable(matlab, y=y)
+  evaluate(matlab,"[lamdas]=GetLambda(X,y)") #with intercept
+  lambdas=getVariable(matlab, "lamdas")
+  lambdas$lamdas
+}

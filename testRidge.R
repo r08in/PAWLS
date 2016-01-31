@@ -16,13 +16,13 @@ rD_RRMM50=simulate2(L,n,beta,"RD",method="RRMM",matlab=matlab,useDataFile=FALSE,
 
 #RRREG
 outrA_50=simulate2(L,n,beta,"RA",initial="RRMM",method="RRREG",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2016,
-                   lambda1=seq(from=1,to=2,length.out=5),lambda2=seq(from=0.001,to=0.1,length.out=100))
+                   lambda1=NULL,lambda2=NULL)
 outrB_50=simulate2(L,n,beta,"RB",initial="RRMM",method="RRREG",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2016,
-                   lambda1=seq(from=0.11,to=5,length.out=100),lambda2=seq(from=0.005,to=0.5,length.out=100))
+                   lambda1=NULL,lambda2=NULL)
 outrc_50=simulate2(L,n,beta,"RC",initial="RRMM",method="RRREG",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2016,
-                   lambda1=seq(from=1,to=10,length.out=100),lambda2=seq(from=0.0001,to=1,length.out=100))
+                   lambda1=NULL,lambda2=NULL)
 outrD_50=simulate2(L,n,beta,"RD",initial="RRMM",method="RRREG",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2016,
-                   lambda1=seq(from=0.05,to=2,length.out=100),lambda2=seq(from=0.005,to=0.5,length.out=30))
+                   lambda1=NULL,lambda2=NULL)
 
 #A-RRREG
 
@@ -45,4 +45,5 @@ outC=GenerateDataByModel(n,beta=beta,model="A",r=0,dataType="Ridge")
 
 res=rrreg(x=outC$x,y=outC$y,lambda1=1,lambda2=0,intercept="false")
 
+GetRidgeLambda(out$x,out$y,matlab=matlab)
 
