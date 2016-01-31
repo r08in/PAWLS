@@ -2,9 +2,9 @@
 #penalty1=c("log","1-w0")
 #initial=
 rrreg=function (x,y,penalty1=c("1-w0","log"),penalty2=c("RIDGE"),
-                  lambda1=NULL,lambda2=NULL,nlambda1=1,nlambda2=100,
+                  lambda1=NULL,lambda2=NULL,nlambda1=30,nlambda2=30,
                   beta0=rep(1,p),w0=rep(0,n),initial=c("RRMM"),
-                  delta=0.000001,maxIter=1000,
+                  delta=0.000001,maxIter=1000,matlab=NULL,
                   intercept=TRUE,standardize=FALSE,
                   criterion=c("CV","BIC","AIC"),...)
 {
@@ -39,10 +39,10 @@ rrreg=function (x,y,penalty1=c("1-w0","log"),penalty2=c("RIDGE"),
   
 
   #intercept
-  if(intercept)
-  {
-    x=AddIntercept(x)
-  }
+#   if(intercept)
+#   {
+#     x=AddIntercept(x)
+#   }
   
   #initial
   n=length(y)
@@ -65,18 +65,18 @@ rrreg=function (x,y,penalty1=c("1-w0","log"),penalty2=c("RIDGE"),
   }
   
   ##setup parameter
-  if (is.null(lambda1))
-  {
-    if(initial=="RRMM")
-    {
-      betaInit=GetBetaInit(XX,yy)
-    }
-    lambda1=InitLambda1(XX,yy,betaInit=betaInit)
-  } 
-  if (is.null(lambda2))
-  {
-    lambda2=seq(1,0.001,length.out=100)
-  } 
+#   if (is.null(lambda1))
+#   {
+#     if(initial=="RRMM")
+#     {
+#       betaInit=GetBetaInit(XX,yy)
+#     }
+#     lambda1=InitLambda1(XX,yy,betaInit=betaInit)
+#   } 
+#   if (is.null(lambda2))
+#   {
+#     lambda2=seq(1,0.001,length.out=100)
+#   } 
   ##Fit  
   
   if(criterion=="BIC"||criterion=="AIC")
@@ -87,7 +87,7 @@ rrreg=function (x,y,penalty1=c("1-w0","log"),penalty2=c("RIDGE"),
   else if(criterion=="CV")
   {
     #res=cvreg(XX, yy,penalty1=penalty1,penalty2=penalty2,lambda1,lambda2,beta0,w0,delta, maxIter,intercept=intercept)
-    res=cvreg2(x=XX, y=yy,lambda1=lambda1,lambda2=lambda2,beta0=beta0,w0=w0)
+    res=cvreg2(x=XX, y=yy,lambda1=lambda1,lambda2=lambda2,beta0=beta0,w0=w0,matlab=matlab)
     #plot
 #     nlambda1=length(lambda1)
 #     nlambda2=length(lambda2)

@@ -1,14 +1,16 @@
-cvreg2=function(x, y,lambda1,lambda2,beta0,w0,K=5)
+cvreg2=function(x, y,lambda1=NULL,nlambda1=30,lambda2=NULL,nlambda2=30,beta0,w0,K=5,matlab=NULL)
 {
   
   L=2
   i=1
-  L1=length(lambda1)
-  L2=length(lambda2)
+  if(!is.null(lambda1))
+  {
+    nlambda1=length(lambda1)
+  }
+  L1=nlambda1
   n=length(y)
   p=dim(x)[2]
   ws=matrix(1,nrow=L1,ncol=n)
-  bs=matrix(0,nrow=L2,ncol=p)
   size=floor(n/K)
   rseq=sample(1:n,n)
   
@@ -16,7 +18,7 @@ cvreg2=function(x, y,lambda1,lambda2,beta0,w0,K=5)
   {
     ##find lambda1 and update w by BIC
     #compute residule
-    r=y-x%*%beta0
+    r=y-x%*%beta0[-1]-beta0[1]
     sqr=r^2
     
     #set up lambda1 for w
@@ -44,6 +46,12 @@ cvreg2=function(x, y,lambda1,lambda2,beta0,w0,K=5)
     
     
     ##find lambda2 and update beta by CV
+    if(is.null(lambda2))
+    {
+      lambda2=GetRidgeLambda(wx,wy,matlab=matlab)
+    }
+    L2=length(lambda2)
+    bs=matrix(0,nrow=L2,ncol=p+1)
     #interation for each fold
     pe=rep(0,L2)
     for(k in 1:K)
@@ -54,13 +62,15 @@ cvreg2=function(x, y,lambda1,lambda2,beta0,w0,K=5)
       trainy=wy[-range]
       testx=wx[range,]
       testy=wy[range]
-      
+      yy=c(trainy, rep(0,p))
       #compute pe
       for(l2 in 1:L2)
       {
-        H=t(trainx)%*%trainx+n*lambda2[l2]*diag(1,p)
-        bs[l2,]=solve(H)%*%t(trainx)%*%trainy
-        r=testy-testx%*%bs[l2,]
+        xx=cbind( c(rep(1,n-size),rep(0,p)), rbind(trainx,diag(sqrt(lambda2[l2]),p)))
+        bs[l2,]=solve(t(xx)%*%xx)%*%t(xx)%*%yy
+#         H=t(trainx)%*%trainx+n*lambda2[l2]*diag(1,p)
+#         bs[l2,]=solve(H)%*%t(trainx)%*%trainy
+        r=testy-testx%*%bs[l2,-1]-bs[l2,1]
         pe[l2]=pe[l2]+sum(r^2)/size
       }
       
