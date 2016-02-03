@@ -10,6 +10,7 @@ cvreg2=function(x, y,lambda1=NULL,nlambda1=30,lambda2=NULL,nlambda2=30,beta0,w0,
   L1=nlambda1
   n=length(y)
   K=n #leave one out
+  
   p=dim(x)[2]
   ws=matrix(1,nrow=L1,ncol=n)
   size=floor(n/K)
