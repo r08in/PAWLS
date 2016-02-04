@@ -42,6 +42,7 @@ cvreg2=function(x, y,lambda1=NULL,nlambda1=30,lambda2=NULL,nlambda2=30,beta0,w0,
     wloss=ws%*%sqr
     dfw=apply(ws!=1,1,sum)
     index1=BIC(loss=wloss,dfw=dfw,dfb=rep(0,L1),n=n,p=p,type="w")
+    #index1=nlambda1-1
     
     ##w
     w=ws[index1,]
