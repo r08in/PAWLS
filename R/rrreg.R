@@ -6,7 +6,7 @@ rrreg=function (x,y,penalty1=c("1-w0","log"),penalty2=c("RIDGE"),
                   beta0=rep(1,p),w0=rep(0,n),initial=c("RRMM"),
                   delta=0.000001,maxIter=1000,matlab=NULL,
                   intercept=TRUE,standardize=FALSE,
-                  criterion=c("CV","BIC","AIC"),...)
+                  criterion=c("CV","BIC","AIC"),dout=FALSE,...)
 {
   ##error checking
   if (class(x) != "matrix") 
@@ -87,7 +87,7 @@ rrreg=function (x,y,penalty1=c("1-w0","log"),penalty2=c("RIDGE"),
   else if(criterion=="CV")
   {
     #res=cvreg(XX, yy,penalty1=penalty1,penalty2=penalty2,lambda1,lambda2,beta0,w0,delta, maxIter,intercept=intercept)
-    res=cvreg2(x=XX, y=yy,lambda1=lambda1,lambda2=lambda2,beta0=beta0,w0=w0,matlab=matlab)
+    res=cvreg2(x=XX, y=yy,lambda1=lambda1,lambda2=lambda2,beta0=beta0,w0=w0,matlab=matlab,dout=dout)
     #plot
 #     nlambda1=length(lambda1)
 #     nlambda2=length(lambda2)

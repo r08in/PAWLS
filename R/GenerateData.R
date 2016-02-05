@@ -285,7 +285,7 @@ GenerateDummyModel=function(sizeInfo,groupInfo,validGroupNumInfo,offSet=0,errorS
 }
 
 #Data modification for different model
-GenerateDataByModel=function(n,beta,errorSigma=2,r=0.5,model=c("A","B","C","D"),dataType=c("Lasso","Ridge"))
+GenerateDataByModel=function(n,beta,errorSigma=2,r=0.5,model=c("A","B","C","D"),dataType=c("Lasso","Ridge"),pro=0.1)
 {
   if(model=="A")
   {
@@ -452,7 +452,7 @@ GenerateDataByModel=function(n,beta,errorSigma=2,r=0.5,model=c("A","B","C","D"),
   else if(model=="RC")
   {
     out=GenerateData(n=n,dataSetNum=1,beta=beta,errorSigma=errorSigma,r=r,dataType=dataType)
-    oNum=round(n*0.1)
+    oNum=round(n*pro)
     u1=runif(oNum,0,1)
     u2=runif(oNum,0,1)
     out$y[1:oNum]=out$y[1:oNum]+ifelse(u1<0.5,-1,1)*(20+10*u2)
@@ -460,7 +460,7 @@ GenerateDataByModel=function(n,beta,errorSigma=2,r=0.5,model=c("A","B","C","D"),
   else if(model=="RD")
   {
     out=GenerateData(n=n,dataSetNum=1,beta=beta,errorSigma=errorSigma,r=r,dataType=dataType)
-    oNum=round(n*0.1)
+    oNum=round(n*pro)
     u1=runif(oNum,0,1)
     u2=runif(oNum,0,1)
     out$y[1:oNum]=out$y[1:oNum]+ifelse(u1<0.5,-1,1)*(20+10*u2)

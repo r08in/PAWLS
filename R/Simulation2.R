@@ -1,6 +1,6 @@
 simulate2=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PAWLS",matlab=NULL,seed=2014,useDataFile=FALSE,
                   standardize=FALSE,penalty1="1-w0",penalty2="RIDGE",updateInitial=FALSE,criterion="BIC",intercept=TRUE,initial="uniform",
-                  range="cross",type=c("Lasso","Ridge"),lambda1=NULL,lambda2=NULL,r=0.9,errorSigma=1)
+                  range="cross",type=c("Lasso","Ridge"),lambda1=NULL,lambda2=NULL,r=0.9,errorSigma=1,pro=0.1,dout=FALSE)
 {
   ptm=proc.time()
   if(!is.null(seed))
@@ -27,6 +27,7 @@ simulate2=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PAWLS",
   b=matrix(0,nrow=L,ncol=p+1)
   index1=rep(0,L)
   index2=rep(0,L)
+  iter=rep(0,L)
   #out=GenerateDataByModel(n=n,beta=beta,model=model)
   #evaluate(matlab,"rng(2015);")
   for(i in 1:L)
@@ -41,7 +42,7 @@ simulate2=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PAWLS",
     }
     else
     {
-      out=GenerateDataByModel(n=n,beta=beta,model=model,r=r,errorSigma=errorSigma,dataType=type)
+      out=GenerateDataByModel(n=n,beta=beta,model=model,r=r,errorSigma=errorSigma,dataType=type,pro=pro)
     }
     
     ####### for Ridge#######
@@ -67,11 +68,12 @@ simulate2=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PAWLS",
         lam1=1 #lambda1*n
         w0=ifelse(sqr>lam1,lam1/sqr,0.99)
       }
-      res=rrreg(x=out$x,y=out$y,lambda1=lambda1,lambda2=lambda2,beta0=beta0,w0=w0,intercept=intercept,matlab=matlab)
+      res=rrreg(x=out$x,y=out$y,lambda1=lambda1,lambda2=lambda2,beta0=beta0,w0=w0,intercept=intercept,matlab=matlab,dout=dout)
       b[i,]=res$beta
       w[i,]=as.vector(res$w)
       index1[i]=res$index1
       index2[i]=res$index2
+      iter[i]=res$iter
     }
     else if(method=="ARRREG")
     {
@@ -81,10 +83,11 @@ simulate2=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PAWLS",
       w[i,]=as.vector(res$w)
       index1[i]=res$index1
       index2[i]=res$index2
+      
     }
     #pe
     x=AddIntercept(out$x)
-    pe[i]=GetRobustPe(x=x,y=out$y,betaHat=b[i,] )
+    pe[i]=GetRobustPe(x=x,y=out$y,betaHat=b[i,],pro=pro)
   }
 
   
@@ -101,5 +104,5 @@ simulate2=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PAWLS",
   }
   s=OutlierSummary(w,pro)
   #return
-  list(pe=pe,time=time,w=w,beta=b,index1=index1,index2=index2,ape=ape,s=s)
+  list(pe=pe,time=time,w=w,beta=b,index1=index1,index2=index2,iter=iter,ape=ape,s=s)
 }
