@@ -4,22 +4,22 @@ n=50
 p=8
 #beta=rep(1,p)
 beta=c(3,2,1,1,1,1,0.1,0.1)
+#beta=rep(0,p)
 
 matLabDir="D:\\matlab\\RRMM"
 matlab=PrepareMatlab(matLabDir)
 
-#RRMM
+#RRMM50
 rA_RRMM50=simulate2(L,n,beta,"RA",method="RRMM",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2017)
 rB_RRMM50=simulate2(L,n,beta,"RB",method="RRMM",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2017)
 rC_RRMM50=simulate2(L,n,beta,"RC",method="RRMM",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2017)
 rD_RRMM50=simulate2(L,n,beta,"RD",method="RRMM",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2017)
 
-#RRMM0.2
-rA_RRMM50.2=simulate2(L,n,beta,"RA",method="RRMM",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2017,pro=0.2)
-rB_RRMM50.2=simulate2(L,n,beta,"RB",method="RRMM",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2017,pro=0.2)
-rC_RRMM50.2=simulate2(L,n,beta,"RC",method="RRMM",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2017,pro=0.2)
-rD_RRMM50.2=simulate2(L,n,beta,"RD",method="RRMM",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2017,pro=0.2)
-
+#RRMM50.3
+rA_RRMM50.3=simulate2(L,n,beta,"RA",method="RRMM",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2017,pro=0.3)
+rB_RRMM50.3_test=simulate2(L,n,beta,"RB",method="RRMM",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2017,pro=0.3)
+rC_RRMM50.3=simulate2(L,n,beta,"RC",method="RRMM",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2017,pro=0.3)
+rD_RRMM50.3=simulate2(L,n,beta,"RD",method="RRMM",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2017,pro=0.3)
 
 #RRMM1000
 rA_RRMM1000=simulate2(L,n,beta,"RA",method="RRMM",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2017)
@@ -27,35 +27,27 @@ rB_RRMM1000=simulate2(L,n,beta,"RB",method="RRMM",matlab=matlab,useDataFile=FALS
 rC_RRMM1000=simulate2(L,n,beta,"RC",method="RRMM",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2017)
 rD_RRMM1000=simulate2(L,n,beta,"RD",method="RRMM",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2017)
 
-#RRREG
-outrA_50=simulate2(L,n,beta,"RA",initial="RRMM",method="RRREG",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2017,
-                   lambda1=NULL,lambda2=NULL)
-outrB_50=simulate2(L,n,beta,"RB",initial="RRMM",method="RRREG",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2017,
-                   lambda1=NULL,lambda2=NULL)
-outrc_50=simulate2(L,n,beta,"RC",initial="RRMM",method="RRREG",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2017,
-                   lambda1=NULL,lambda2=NULL,dout = TRUE)
-outrD_50=simulate2(L,n,beta,"RD",initial="RRMM",method="RRREG",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2017,
-                   lambda1=NULL,lambda2=NULL)
+
+#RRMM1000.3
+rA_RRMM1000.3=simulate2(L,n,beta,"RA",method="RRMM",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2017,pro=0.3)
+rB_RRMM1000.3=simulate2(L,n,beta,"RB",method="RRMM",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2017,pro=0.3)
+rC_RRMM1000.3=simulate2(L,n,beta,"RC",method="RRMM",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2017,pro=0.3)
+rD_RRMM1000.3=simulate2(L,n,beta,"RD",method="RRMM",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2017,pro=0.3)
+
+#RRREG50
+outrA_50=simulate2(L,n,beta,"RA",initial="RRMM",method="RRREG",matlab=matlab,type="Ridge",seed=2017)
+outrB_50=simulate2(L,n,beta,"RB",initial="RRMM",method="RRREG",matlab=matlab,type="Ridge",seed=2017)
+outrc_50=simulate2(L,n,beta,"RC",initial="RRMM",method="RRREG",matlab=matlab,type="Ridge",seed=2017)
+outrD_50=simulate2(L,n,beta,"RD",initial="RRMM",method="RRREG",matlab=matlab,type="Ridge",seed=2017)
 
 #RRREG remove
-outrA_50_re=simulate2(L,n,beta,"RA",initial="RRMM",method="RRREG",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2017,
-                   lambda1=NULL,lambda2=NULL,dout = TRUE)
-outrB_50_re=simulate2(L,n,beta,"RB",initial="RRMM",method="RRREG",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2017,
-                   lambda1=NULL,lambda2=NULL,dout = TRUE)
-outrc_50_re=simulate2(L,n,beta,"RC",initial="RRMM",method="RRREG",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2017,
-                   lambda1=NULL,lambda2=NULL,dout = TRUE)
-outrD_50_re=simulate2(L,n,beta,"RD",initial="RRMM",method="RRREG",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2017,
-                   lambda1=NULL,lambda2=NULL,dout = TRUE)
+ 
 
-#RRREG0.2
-outrA_50.2=simulate2(L,n,beta,"RA",initial="RRMM",method="RRREG",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2017,
-                   lambda1=NULL,lambda2=NULL,pro=0.2)
-outrB_50.2=simulate2(L,n,beta,"RB",initial="RRMM",method="RRREG",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2017,
-                   lambda1=NULL,lambda2=NULL,pro=0.2)
-outrc_50.2=simulate2(L,n,beta,"RC",initial="RRMM",method="RRREG",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2017,
-                   lambda1=NULL,lambda2=NULL,pro=0.2)
-outrD_50.2=simulate2(L,n,beta,"RD",initial="RRMM",method="RRREG",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2017,
-                   lambda1=NULL,lambda2=NULL,pro=0.2)
+#RRREG0.3
+outrA_50.3=simulate2(L,n,beta,"RA",initial="RRMM",method="RRREG",matlab=matlab,type="Ridge",seed=2017,pro=0.3)
+outrB_50.3=simulate2(L,n,beta,"RB",initial="RRMM",method="RRREG",matlab=matlab,type="Ridge",seed=2017,pro=0.3)
+outrc_50.3=simulate2(L,n,beta,"RC",initial="RRMM",method="RRREG",matlab=matlab,type="Ridge",seed=2017,pro=0.3)
+outrD_50.3=simulate2(L,n,beta,"RD",initial="RRMM",method="RRREG",matlab=matlab,type="Ridge",seed=2017,pro=0.3)
 
 #A-RRREG
 

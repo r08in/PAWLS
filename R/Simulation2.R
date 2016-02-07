@@ -85,15 +85,15 @@ simulate2=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PAWLS",
       index2[i]=res$index2
       
     }
-    #pe
-    x=AddIntercept(out$x)
-    pe[i]=GetRobustPe(x=x,y=out$y,betaHat=b[i,],pro=pro)
   }
 
-  
+  #MSE for beta
+  #SE
+  se=apply((t(b)-c(0,beta))^2,2,sum)
+  mse=sum(se)/L
   time=(proc.time()-ptm)[1]
   #summarize
-  ape=sum(pe)/L
+  #ape=sum(pe)/L
   if(model=="RA"||model=="RB")
   {
     pro=0
@@ -104,5 +104,5 @@ simulate2=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PAWLS",
   }
   s=OutlierSummary(w,pro)
   #return
-  list(pe=pe,time=time,w=w,beta=b,index1=index1,index2=index2,iter=iter,ape=ape,s=s)
+  list(pe=pe,time=time,w=w,beta=b,index1=index1,index2=index2,iter=iter,mse=mse,s=s)
 }

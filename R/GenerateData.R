@@ -34,8 +34,8 @@ GenerateData = function (n,p=NULL,pNum=NULL,dataSetNum=1,beta=NULL,
    
   
   #check data
-  if(n<=0||p<=0||pNum<=0)
-    stop("n or p or pNum cannot smaller than 0.")
+#   if(n<=0||p<=0||pNum<=0)
+#     stop("n or p or pNum cannot smaller than 0.")
   if(p<pNum)
     stop("p cannot be smaller than pNum.")  
   if(dataSetNum<=0)
@@ -111,6 +111,8 @@ GenerateData = function (n,p=NULL,pNum=NULL,dataSetNum=1,beta=NULL,
     else if(errorType=="t")
     {
       error=rt(n,2)# df=2 for t distribution
+      if(dataType=="Ridge")
+        error=1/sqrt(3)*rt(n,3)
     }
     else
     {
