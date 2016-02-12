@@ -44,15 +44,10 @@ cvreg2=function(x, y,lambda1=NULL,nlambda1=30,lambda2=NULL,nlambda2=30,beta0,w0,
     wloss=ws%*%sqr
     dfw=GetDfw(ws)
     index1=BIC(loss=wloss,dfw=dfw,dfb=rep(0,L1),n=n,p=p,type="w")
-    #index1=nlambda1-1
-    if(index1==29)
-    {
-      index1=29
-    }
     
     ##w
     w=ws[index1,]
-    if(dout) # disgard outlier
+    if(dout) # discard outlier
     {
       ran=which(w==1)
       wy=w[ran]*y[ran]
@@ -74,7 +69,7 @@ cvreg2=function(x, y,lambda1=NULL,nlambda1=30,lambda2=NULL,nlambda2=30,beta0,w0,
     ##find lambda2 and update beta by CV
     if(is.null(lambda2))
     {
-      lambda2=GetRidgeLambda(wx,wy,matlab=matlab)
+      lambda2=GetRidgeLambda(wx,wy,matlab=matlab)$lambdas
     }
     L2=length(lambda2)
     bs=matrix(0,nrow=L2,ncol=p+1)

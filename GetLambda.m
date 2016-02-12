@@ -1,4 +1,4 @@
-function [lamdas]=GetLambda(X,y)
+function [lamdas,deltas]=GetLambda(X,y)
 % Get range of lambda for ridge penalty
 
 [n p]=size(X); 
@@ -19,3 +19,4 @@ privar=privar*n; %Makes the robust eigenvalues of the same order as those of cla
 pmax=min([p n/2]);   %edf<=n/2 to keep BDP >=0.25
 pp=linspace(1,pmax,nlam);  %"candidate edf's"
 lamdas=findlam(privar,pp); %find lambdas corresponding to the edf's
+deltas=0.5*(1-pp/n);  %for the M-escale used with Peña-Yohai

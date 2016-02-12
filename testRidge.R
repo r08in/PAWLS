@@ -40,6 +40,12 @@ outrB_50=simulate2(L,n,beta,"RB",initial="RRMM",method="RRREG",matlab=matlab,typ
 outrc_50=simulate2(L,n,beta,"RC",initial="RRMM",method="RRREG",matlab=matlab,type="Ridge",seed=2017)
 outrD_50=simulate2(L,n,beta,"RD",initial="RRMM",method="RRREG",matlab=matlab,type="Ridge",seed=2017)
 
+#RRREG50(S initial)
+outrA_50s=simulate2(L,n,beta,"RA",initial="S",method="RRREG",matlab=matlab,type="Ridge",seed=2017)
+outrB_50s=simulate2(L,n,beta,"RB",initial="S",method="RRREG",matlab=matlab,type="Ridge",seed=2017)
+outrc_50s=simulate2(L,n,beta,"RC",initial="S",method="RRREG",matlab=matlab,type="Ridge",seed=2017)
+outrD_50s=simulate2(L,n,beta,"RD",initial="S",method="RRREG",matlab=matlab,type="Ridge",seed=2017)
+
 #RRREG remove
  
 

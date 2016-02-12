@@ -68,6 +68,13 @@ simulate2=function(L,n,beta=NULL,model=c("A","B","C","D"),p=NULL,method="PAWLS",
         lam1=1 #lambda1*n
         w0=ifelse(sqr>lam1,lam1/sqr,0.99)
       }
+      else if(initial=="S")
+      {
+        beta0=GetRidInit(out$x,out$y,matlab)
+        sqr=out$y-out$x%*%beta0[-1]-beta0[1]
+        lam1=1 #lambda1*n
+        w0=ifelse(sqr>lam1,lam1/sqr,0.99)
+      }
       res=rrreg(x=out$x,y=out$y,lambda1=lambda1,lambda2=lambda2,beta0=beta0,w0=w0,intercept=intercept,matlab=matlab,dout=dout)
       b[i,]=res$beta
       w[i,]=as.vector(res$w)
