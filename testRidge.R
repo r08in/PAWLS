@@ -3,7 +3,7 @@ L=100
 n=50
 p=8
 #beta=rep(1,p)
-beta=c(3,2,1,1,1,1,0.1,0.1)
+beta=c(3,2,1,1,1,1,0,0)
 #beta=rep(0,p)
 
 matLabDir="D:\\matlab\\RRMM"
