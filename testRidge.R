@@ -1,3 +1,4 @@
+#----------------------------low dimension-----------------------------------#
 #RRMM
 L=100
 n=50
@@ -49,7 +50,24 @@ outrB_50.3=simulate2(L,n,beta,"RB",initial="RRMM",method="RRREG",matlab=matlab,t
 outrc_50.3=simulate2(L,n,beta,"RC",initial="RRMM",method="RRREG",matlab=matlab,type="Ridge",seed=2017,pro=0.3)
 outrD_50.3=simulate2(L,n,beta,"RD",initial="RRMM",method="RRREG",matlab=matlab,type="Ridge",seed=2017,pro=0.3)
 
-#A-RRREG
+matLabDir="D:\\matlab\\RRMM"
+matlab=PrepareMatlab(matLabDir)
+#------------------------------p=100-------------------------------------#
+set.seed(2016)
+p=100;pNum=30;p1=20;p2=10
+n=50
+L=5
+u1=runif(pNum,0,1)
+u2=runif(pNum,0,1)
+sign=ifelse(u2>0.5,1,-1)
+beta=c(sign[1:p1]*(2.5+u1[1:p1]),sign[(p1+1):pNum]*u1[(p1+1):pNum],rep(0,p-pNum))
+
+
+#RRREG_H50
+outrA_H50=simulate2(L,n,beta,"RA",initial="RRMM",method="RRREG",matlab=matlab,type="Ridge",seed=2017)
+outrB_H50=simulate2(L,n,beta,"RB",initial="RRMM",method="RRREG",matlab=matlab,type="Ridge",seed=2017)
+outrc_H50=simulate2(L,n,beta,"RC",initial="RRMM",method="RRREG",matlab=matlab,type="Ridge",seed=2017)
+outrD_H50=simulate2(L,n,beta,"RD",initial="RRMM",method="RRREG",matlab=matlab,type="Ridge",seed=2017)
 
 #test
 tA_50=simulate2(L,n,beta,"RA",method="RRREG",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2016,
