@@ -68,7 +68,8 @@ GetRidgeLambda=function (x,y,matlab=NULL)
 {
   setVariable(matlab, X=x)
   setVariable(matlab, y=y)
-  evaluate(matlab,"[lamdas]=GetLambda(X,y)") #with intercept
+  evaluate(matlab,"[lamdas,deltas]=GetLambda(X,y)") #with intercept
   lambdas=getVariable(matlab, "lamdas")
-  lambdas$lamdas
+  deltas=getVariable(matlab, "deltas")
+  list(lambdas=lambdas$lamdas,deltas=as.vector(deltas$deltas))
 }

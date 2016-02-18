@@ -113,3 +113,49 @@ rrreg=function (x,y,penalty1=c("1-w0","log"),penalty2=c("RIDGE"),
   }
   res
 }
+
+GetRidInit=function(x,y,matlab,K=5)# x,y assumed to be normalized
+{
+  n=dim(x)[1]
+  p=dim(x)[2]
+  #K=n
+  size=floor(n/K)
+  rseq=sample(1:n,n)
+  #Get lambda
+  rlam=GetRidgeLambda(x,y,matlab=matlab)
+  lambdas=rlam$lambdas
+  deltas=rlam$deltas
+  L=length(lambdas)
+  bs=matrix(0,nrow=L,ncol=p+1)
+  pe=rep(0,L)
+  for(k in 1:K)
+  {
+    #prepare data
+    range=rseq[((k-1)*size+1):(k*size)]
+    trainx=x[-range,]
+    trainy=y[-range]
+    testx=x[range,]
+    testy=y[range]
+
+    #compute pe
+    for(l in 1:L)
+    {
+      setVariable(matlab, X=trainx)
+      setVariable(matlab, y=trainy)
+      setVariable(matlab, deltaesc=deltas[l])
+      setVariable(matlab, lam=lambdas[l])
+      evaluate(matlab,"[betamin resid sigma edf pesos]=PeYoRid(X,y,lam,deltaesc)")
+      beta=getVariable(matlab, "betamin")$betamin
+      bs[l,]=c(beta[p+1],beta[1:p])
+      
+      r=testy-testx%*%bs[l,-1]-bs[l,1]
+      pe[l]=pe[l]+sum(r^2)/size
+    }
+    
+  }
+  pe=pe/K
+  #find best lambda2 that have testPE smallset
+  index=which.min(pe)
+  beta=bs[index,]
+  return(beta)
+}
