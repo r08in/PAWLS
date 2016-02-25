@@ -1,7 +1,7 @@
 cvreg2=function(x, y,lambda1=NULL,nlambda1=30,lambda2=NULL,nlambda2=30,beta0,w0,K=5,matlab=NULL,dout=FALSE)
 {
   
-  L=2
+  L=20
   i=1
   delta=0.0001
   if(!is.null(lambda1))

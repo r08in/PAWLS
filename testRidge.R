@@ -70,11 +70,17 @@ beta=c(sign[1:p1]*(2.5+u1[1:p1]),sign[(p1+1):pNum]*u1[(p1+1):pNum],rep(0,p-pNum)
 
 
 #RRREG_H50
-outrA_H50=simulate2(L,n,beta,"RA",initial="RRMM",method="RRREG",matlab=matlab,type="Ridge",seed=2017)
-outrB_H50=simulate2(L,n,beta,"RB",initial="RRMM",method="RRREG",matlab=matlab,type="Ridge",seed=2017)
-outrc_H50=simulate2(L,n,beta,"RC",initial="RRMM",method="RRREG",matlab=matlab,type="Ridge",seed=2017)
-outrD_H50=simulate2(L,n,beta,"RD",initial="RRMM",method="RRREG",matlab=matlab,type="Ridge",seed=2017)
+outrA_H50s=simulate2(L,n,beta,"RA",initial="S",method="RRREG",matlab=matlab,type="Ridge",standardize=TRUE,seed=2017)
+outrB_H50s=simulate2(L,n,beta,"RB",initial="S",method="RRREG",matlab=matlab,type="Ridge",standardize=TRUE,seed=2017)
+outrc_H50s=simulate2(L,n,beta,"RC",initial="S",method="RRREG",matlab=matlab,type="Ridge",standardize=TRUE,seed=2017)
+outrD_H50s=simulate2(L,n,beta,"RD",initial="S",method="RRREG",matlab=matlab,type="Ridge",standardize=TRUE,seed=2017)
 
+
+#RRMM_H50
+rA_RRMM_H50=simulate2(L,n,beta,"RA",method="RRMM",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2017)
+rB_RRMM_H50=simulate2(L,n,beta,"RB",method="RRMM",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2017)
+rC_RRMM_H50=simulate2(L,n,beta,"RC",method="RRMM",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2017)
+rD_RRMM_H50=simulate2(L,n,beta,"RD",method="RRMM",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2017)
 #test
 tA_50=simulate2(L,n,beta,"RA",method="RRREG",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2016,
                    lambda1=seq(from=0.2,to=2,length.out=50),lambda2=seq(from=0,to=0,length.out=2))

@@ -109,6 +109,8 @@ rrreg=function (x,y,penalty1=c("1-w0","log"),penalty2=c("RIDGE"),
   if(standardize)
   {
     scale=ifelse(scale==0,0,1/scale)
+    if(length(res$beta)==(length(scale)+1))
+      scale=c(1,scale)
     res$beta=res$beta*scale
   }
   res
