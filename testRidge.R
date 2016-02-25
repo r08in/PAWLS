@@ -62,7 +62,7 @@ matlab=PrepareMatlab(matLabDir)
 set.seed(2016)
 p=100;pNum=30;p1=20;p2=10
 n=50
-L=5
+L=10
 u1=runif(pNum,0,1)
 u2=runif(pNum,0,1)
 sign=ifelse(u2>0.5,1,-1)
@@ -75,7 +75,11 @@ outrB_H50s=simulate2(L,n,beta,"RB",initial="S",method="RRREG",matlab=matlab,type
 outrc_H50s=simulate2(L,n,beta,"RC",initial="S",method="RRREG",matlab=matlab,type="Ridge",standardize=TRUE,seed=2017)
 outrD_H50s=simulate2(L,n,beta,"RD",initial="S",method="RRREG",matlab=matlab,type="Ridge",standardize=TRUE,seed=2017)
 
-
+#RRREG_H50
+outrA_H50s2=simulate2(L,n,beta,"RA",initial="S",method="RRREG",matlab=matlab,type="Ridge",standardize=TRUE,seed=2017)
+outrB_H50s2=simulate2(L,n,beta,"RB",initial="S",method="RRREG",matlab=matlab,type="Ridge",standardize=TRUE,seed=2017)
+outrc_H50s2=simulate2(L,n,beta,"RC",initial="S",method="RRREG",matlab=matlab,type="Ridge",standardize=TRUE,seed=2017)
+outrD_H50s2=simulate2(L,n,beta,"RD",initial="S",method="RRREG",matlab=matlab,type="Ridge",standardize=TRUE,seed=2017)
 #RRMM_H50
 rA_RRMM_H50=simulate2(L,n,beta,"RA",method="RRMM",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2017)
 rB_RRMM_H50=simulate2(L,n,beta,"RB",method="RRMM",matlab=matlab,useDataFile=FALSE,type="Ridge",seed=2017)
