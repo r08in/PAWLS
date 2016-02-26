@@ -118,41 +118,38 @@ BICPWLQ2=function(wloss,beta,w,lambda1,lambda2,n,inv=1)
 
 BIC=function(loss,dfw,dfb,n,p,type="beta",criterion="BIC",pro=0.8,a=0,x=NULL,ws=NULL,bs=NULL)
 {
-#    dfw=ifelse(dfw>n*pro,100000,dfw)# rule out high df in w
-#    df=dfw+dfb
-#    a=(n+p)/n
-#   if(type=="beta")
-#   {
-#     if(criterion=="AIC")
-#     {
-#       vl=(log(loss/n+a)+2*df/(n))
-#     }
-#     else
-#     {
-#       vl=(log(loss/n+a)+log(n)*df/n)
-#     }
-#   }
-#   else 
-#   {
-#    
-#     if(criterion=="AIC")
-#     {
-#       vl=(log(loss/n+a)+2*df/(n))
-#     }
-#     else
-#     {
-#       vl=(log(loss/n+a)+log(n)*df/n)
-#     }
-#   }
-# 
-#  
-#   l=length(df)
-#   index=which.min(vl)
-#   index
-  l=length(dfw)
-  m=as.numeric(names(which.max(table(dfw[round(l*0.7):l]))))
-  index=which(dfw==m)
-  index[length(index)]
+   dfw=ifelse(dfw>n*pro,100000,dfw)# rule out high df in w
+   df=dfw+dfb
+   a=(n+p)/n
+   a=0
+  if(type=="beta")
+  {
+    if(criterion=="AIC")
+    {
+      vl=(log(loss/n+a)+2*df/(n))
+    }
+    else
+    {
+      vl=(log(loss/n+a)+log(n)*df/n)
+    }
+  }
+  else 
+  {
+   
+    if(criterion=="AIC")
+    {
+      vl=(log(loss/n+a)+2*df/(n))
+    }
+    else
+    {
+      vl=(log(loss/n+a)+log(n)*df/n)
+    }
+  }
+
+ 
+  l=length(df)
+  index=which.min(vl)
+  index
 }
 
 dfs=function(x,beta,w)
