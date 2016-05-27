@@ -62,7 +62,7 @@ matlab=PrepareMatlab(matLabDir)
 set.seed(2016)
 p=100;pNum=30;p1=20;p2=10
 n=50
-L=10
+L=50
 u1=runif(pNum,0,1)
 u2=runif(pNum,0,1)
 sign=ifelse(u2>0.5,1,-1)

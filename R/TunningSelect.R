@@ -121,7 +121,6 @@ BIC=function(loss,dfw,dfb,n,p,type="beta",criterion="BIC",pro=0.8,a=0,x=NULL,ws=
    dfw=ifelse(dfw>n*pro,100000,dfw)# rule out high df in w
    df=dfw+dfb
    a=(n+p)/n
-   a=0
   if(type=="beta")
   {
     if(criterion=="AIC")
