@@ -1,2 +1,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^Simulation$
+^data$
+^Output$
+^tests$
+^Latex$

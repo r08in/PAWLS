@@ -1,0 +1,166 @@
+\documentclass{article}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+\let\hlipl\hlkwb
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+\usepackage{amssymb}
+\usepackage{enumerate}
+\usepackage{relsize}
+\usepackage{url} % not crucial - just used below for the URL
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{rotating}
+\usepackage{relsize}
+\usepackage{bm}
+%\usepackage{empheq}
+\usepackage{hyperref}
+\usepackage{multicol}
+\usepackage{setspace}
+\usepackage{enumerate}
+\usepackage{footnote}
+\usepackage{authblk}
+\usepackage{float}
+\usepackage{longtable}
+\def\a{\alpha}      \def\b{\beta}     \def\g{\gamma}   \def\d{\delta}
+\def\th{\theta}     \def\lm{\lambda}  \def\sg{\sigma}
+\def\lmone{\lambda_{1n}}
+ \def\lmtwo{\lambda_{2n}}
+\def\bzero{{\mathbf 0}}  \def\bone{{\mathbf 1}} \def\btwo{{\mathbf 2}}
+\def\bW{{\mathbf W}}
+\def\bB{{\mathbf B}}
+\def\bA{{\mathbf A}} \def\bC{{\mathbf C}} \def\bD{{\mathbf D}} \def\bE{{\mathbf E}}
+\def\bF{{\mathbf F}} \def\bS{{\mathbf S}} \def\bT{{\mathbf T}}
+\def\bG{{\mathbf G}} \def\bH{{\mathbf H}} \def\bK{{\mathbf K}} \def\bI{{\mathbf I}}
+\def\bL{{\mathbf L}} \def\bN{{\mathbf N}} \def\bP{{\mathbf P}} \def\bQ{{\mathbf Q}}
+\def\bR{{\mathbf R}} \def\bS{{\mathbf S}} \def\bT{{\mathbf T}} \def\bU{{\mathbf U}}
+\def\bV{{\mathbf V}} \def\bW{{\mathbf W}} \def\bX{{\mathbf X}} \def\bY{{\mathbf Y}}
+\def\bZ{{\mathbf Z}}
+\def\bM{\boldsymbol M}
+\def\bPi{{\mathbf \Pi}}
+
+\def\tbM{\widetilde{\boldsymbol M}}
+\def\tT{\widetilde{T}}
+
+\def\ba{{\mathbf a}} \def\bb{{\mathbf \beta}}
+\def\bd{{\mathbf d}} \def\be{{\mathbf e}}
+\def\bdf{{\mathbf f}} \def\bg{{\mathbf g}} \def\bh{{\mathbf h}}
+
+\def\bell{{\mathbf l}} \def\bp{{\mathbf p}} \def\bq{{\mathbf q}}
+\def\br{{\mathbf r}} \def\bs{{\mathbf s}} \def\bt{{\mathbf t}}
+\def\bu{{\mathbf u}} \def\bv{{\mathbf v}} \def\bw{{\mathbf w}}
+\def\bx{{\mathbf x}} \def\by{{\mathbf y}} \def\bz{{\mathbf z}}
+\def\bSigma{{\mathbf \Sigma}}
+%\newcommand{\bm}{\mathbf}
+\newcommand{\argmin}[2]{\underset{#1}{\arg\min} \{ #2\}}
+\newcommand{\Argmin}[2]{\underset{#1}{\arg\min} \Bigg \{ #2 \Bigg \} }
+\newcommand{\RR}{\mathbb{R}}
+
+%% new
+ \def\bbeta{{\mathbf \beta}}
+ \def \tbbeta{{ \tilde{\mathbf \beta}}}
+ \def \tbw{{\tilde{\bw}}}
+ \def \cR{{\cal {R}}}
+ \def \hbw{{\hat{\bw}}}
+ \def \hbbeta{\mathbf {\hat{\beta}} }
+ \def \hbeta{\hat{\b}}
+ \def \hw{{\hat{w}}}
+ \def \hb{{\hat{\b}}}
+ \def \eps{ \epsilon}
+ \def \btheta{\mathbf \theta}
+ \def \bPsi{\mathbf \Psi }
+ \def \bOmega { \mathbf \omega}
+ \def \veps{\epsilon}
+ \def \bveps{ \mathbf \epsilon}
+ \def \cA{ \mathbb{A}} % dont know what it is \mathbb{text}
+ \def \beps {\mathbf \epsilon }
+\def \tbnu{ \tilde{\mathbf{\nu}}}
+\def \tnu { \tilde{\nu}}
+\def \hbtheta { \hat{\mathbf \theta}}
+\def \bpsi {\mathbf \psi }
+\def \bTheta { \mathbf \Theta}
+\def \rm { }
+\def \tbW { \tilde{\mathbf W}}
+\def \bnu { \mathbf \nu}
+\def \hbSigma {  \hat{ \mathbf \Sigma}}
+\def \diag {diag}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+\section{Numerical Result}
+
+
+\begin{table}[thp]
+	\begin{center}
+	 \caption{Variable Selection Results for Example 1 ($\bbeta=(3,2,1.5,0,0,0,0,0)'$) }\label{table-selection-1}
+	\begin{tabular}{ccccccccc}\\\hline\hline
+	    Method  & CFR (\%) & OFR (\%) & AN  & & & CFR (\%) & OFR (\%) & AN \\ \hline
+	
+	   & \multicolumn{3}{c} {\bf Case A} & && \multicolumn{3}{c} {\bf Case B}  \\
+	    ALasso & 88 & 12 & 3.14   & & & 80 & 6 & 2.95 \\
+	    sLTS & 8 & 91 & 4.75     & &  & 30 & 70 & 4.00 \\
+	    MMNNG& 73 & 24 & 3.27   && & 89 & 11 & 3.18\\
+	    SROS & 24 & 75 & 4.28   & & & 35 & 65 & 4.00 \\
+	    %PAWLS(0) & 58 & 41 & 3.51  &  && 61 & 39 & 3.48 \\
+	    PAWLS & 87 & 12 & 3.13  &  
+	         && 94 & 6 & 3.06 \\
+	\\
+	   & \multicolumn{3}{c} {\bf Case C} & &  & \multicolumn{3}{c} {\bf Case D}\\
+	    ALasso & 2 & 1 & 1.59  &  && 0 & 19 & 2.49 \\
+	    sLTS & 8 & 92 & 5.02   && & 7 & 93 & 4.97\\
+	    MMNNG& 85 & 8 & 3.06   && & 61 & 21 & 3.42\\
+	    SROS & 51 & 41 & 3.52  && & 12 & 75 & 4.88 \\
+	    %PAWLS(0) & 56 & 43 & 3.59 & && 44 & 52 & 4.13 \\
+	    PAWLS & 81 & 15 & 3.13  &  
+	         && 70 & 15 & 3.20 \\
+	        \hline \hline
+	\end{tabular}
+	\end{center}
+	\end{table}
+	
+	
+\end{document}
