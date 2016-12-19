@@ -1,6 +1,11 @@
+source("Simulation/CombineData.R")
+source("Simulation/SetupMatlab.R")
+source("Simulation/GenerateData.R")
+source('Simulation/mmnngreg.R')
+
 simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL, method = "PAWLS", 
     matlab = NULL, seed = 2014, useDataFile = FALSE, standardize = FALSE, penalty1 = "1-w0", updateInitial = FALSE, 
-    criterion = "BIC", intercept = FALSE, initial = "uniform", range = "cross", type = c("Lasso", 
+    criterion = "BIC", intercept = TRUE, initial = "uniform", range = "cross", type = c("Lasso", 
         "Ridge")) {
     mcount <- length(model)
     
@@ -20,7 +25,6 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
     pb <- txtProgressBar(1, mcount * L, style = 3)
     for (j in 1:mcount) {
         # for each model
-        ptm = proc.time()
         
         # initiate
         if (!is.null(seed)) {
@@ -33,7 +37,7 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
             beta = data[[1]]$beta
             n = length(data[[1]]$y)
         }
-        b = array(0, dim = c(L, p))
+        b = array(0, dim = c(L, ifelse(intercept,p+1,p)))
         w = array(0, dim = c(L, n))
         
         # simulation
@@ -41,6 +45,7 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
             # data
             if (useDataFile) {
                 out = data[[i]]
+                beta <- out$beta
             } else {
                 out = GenerateDataByModel(n = n, beta = beta, model = model[j], dataType = type)
             }
@@ -50,60 +55,80 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
                 init = InitParam(out$x, out$y, method = "LAD")
                 b[i, ] = init$beta
             } else if (method == "ROSS") {
-                setVariable(matlab, X = out$x)
-                setVariable(matlab, y = out$y)
-                evaluate(matlab, "[betaRoss]=RossSimulate(X,y)")
-                betaRoss = getVariable(matlab, "betaRoss")
-                b[i, ] = as.vector(betaRoss$betaRoss)
+              if(intercept) out$x <- AddIntercept(out$x)
+              setVariable(matlab, X = out$x)
+              setVariable(matlab, y = out$y)
+              evaluate(matlab, "[betaRoss time]=RossSimulate(X,y)")
+              times[i] <- getVariable(matlab, "time")[[1]]
+              betaRoss = getVariable(matlab, "betaRoss")
+              res <- list(beta=betaRoss$betaRoss)
+              b[i, ] = as.vector(betaRoss$betaRoss)
             } else if (method == "ADL") {
-                res = srcdreg(out$x, out$y, penalty1 = penalty1, nlambda1 = 1, initial = "LASSO", 
-                  intercept = intercept, standardize = standardize, updateInitialTimes = updateInitialTimes, 
-                  criterion = criterion, search = "fixw")
-                b[i, ] = res$beta
+              ptm <- proc.time()
+              fit1<- ncvreg(out$x, out$y, penalty='lasso')
+              beta.init <- coef(fit1)[-1 ,which.min(BIC(fit1))]
+              w <- pmin(1e6, 1/abs(beta.init))
+              fit2 <- ncvreg(out$x, out$y,penalty='lasso', penalty.factor=w)
+              beta.alasso <- coef(fit2)[, which.min(BIC(fit2))]
+              times[i] <- (proc.time() - ptm)[1]
+              res <- list(beta=beta.alasso)
             } else if (method == "LTS") {
                 require(robustHD)
-                res = sparseLTS(out$x, out$y, intercept = FALSE)
+                ptm <- proc.time()
+                res = sparseLTS(out$x, out$y, intercept = TRUE)
+                times[i] <- (proc.time() - ptm)[1]
                 b[i, ] = res$coefficients
                 w[i, ] = res$wt
+                res$beta <- res$coefficients
             } else if (method == "MMNNG") {
-                fbeta = paste("data\\", model[j], n, "X", p, "_beta.rda", sep = "")
-                load(fbeta)
-                b = betaHat
-                break
-                # source('mmnngreg.R') res=mmnngreg(out$x,out$y) b[i,]=res$betac[-1]
+              ptm <- proc.time()
+              try_res <- try(mmnngreg(out$x,out$y))
+              times[i] <- (proc.time() - ptm)[1]
+              if(class(try_res)[1]=="try-error"){
+                browser()
+                res$beta <- rep(0,ifelse(intercept, p+1, p))
+              } else{
+                res$beta <- try_res$betac
+              }
             } else if (method == "MMNNG_DATA") {
-                source("mmnngreg.R")
-                res = mmnngreg(out$x, out$y)
-                f = paste("data\\", model[j], n, "X", p, ".rda", sep = "")
-                fbeta = paste("data\\", model[j], n, "X", p, "_beta.rda", sep = "")
-                lf = try(load(f))
+                # load data file and result file
+                dfile <- paste("data\\", model[j], n, "X", p, ".rda", sep = "")
+                rfile <- paste("data\\", model[j], n, "X", p,"_res", ".rda", sep = "")
+                lf <- try(load(dfile))
                 if (class(lf) == "try-error") {
-                  data = list(out)
-                  betaHat = matrix(nrow = 1, ncol = p, res$betac[-1])
+                  data <- list(out)
+                  res_temp <- list(cfr=rep(0,L), cfr2=rep(0,L),ofr=rep(0,L),pdr=rep(0,L),
+                                   fdr=rep(0,L), msize=rep(0,L),mses=rep(0,L),times=rep(0,L),ind=1, count=rep(0,L))
                 } else {
-                  if (length(data) == L) 
-                    stop("data collect finish!")
+                  if (length(data) == L) break
                   data = c(data, list(out))
-                  load(fbeta)
-                  betaHat = rbind(betaHat, res$betac[-1])
+                  load(rfile)
+                  res_temp$ind <- res_temp$ind+1
                 }
-                save(data, file = f)
-                save(betaHat, file = fbeta)
-            } else if (method == "PAWLS") {
-                if (updateInitial) 
-                  updateInitialTimes = 2 else updateInitialTimes = 0
+                save(data, file = dfile)
+                save(res_temp, file=rfile)
+                
+                # fit mmnngreg
                 ptm <- proc.time()
-                res = srcdreg(out$x, out$y, penalty1 = penalty1, nlambda1 = 50, nlambda2 = 100, delta = 1e-06, 
-                  maxIter = 1000, initial = initial, intercept = intercept, standardize = standardize, 
-                  updateInitialTimes = updateInitialTimes, criterion = criterion, search = range)
+                res = mmnngreg(out$x, out$y)
                 times[i] <- (proc.time() - ptm)[1]
-                b[i, ] = res$beta
-                w[i, ] = res$w
-                iter[i] = res$iter
-                iw[i] = res$index1
+                res$beta <- res$betac
+                
+            } else if (method == "PAWLS") {
+              updateInitialTimes <- ifelse(updateInitial, 2, 0)
+              ptm <- proc.time()
+              res = srcdreg(out$x, out$y, penalty1 = penalty1, nlambda1 = 50, nlambda2 = 100, delta = 1e-06, 
+                maxIter = 1000, initial = initial, intercept = intercept, standardize = standardize, 
+                updateInitialTimes = updateInitialTimes, criterion = criterion, search = range)
+              times[i] <- (proc.time() - ptm)[1]
+              b[i, ] = res$beta
+              w[i, ] = res$w
+              iter[i] = res$iter
+              iw[i] = res$index1
             }
             
             # record result
+            if(intercept) res$beta <- res$beta[-1]
             true_set <- which(beta != 0)
             pnum <- length(true_set)
             active_set <- which(res$beta != 0)
@@ -116,8 +141,32 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
             fdr[i] <- (msize[i] - common_size)/msize[i]  #
             mses[i] <- sum((res$beta - beta)^2)
             setTxtProgressBar(pb, (j - 1) * L + i)
+            if(method == "MMNNG_DATA"){
+              load(rfile)
+              ind <- res_temp$ind
+              res_temp$cfr[ind] <- cfr[i]
+              res_temp$cfr2[ind] <- cfr2[i]
+              res_temp$ofr[ind] <- ofr[i]
+              res_temp$pdr[ind] <- pdr[i]
+              res_temp$fdr[ind] <- fdr[i]
+              res_temp$msize[ind] <- msize[i]
+              res_temp$mses[ind] <- mses[i]
+              res_temp$times[ind] <- times[i]
+              res_temp$count[ind] <- 1
+              save(res_temp, file=rfile)
+            }
         }
-        
+        if(method == "MMNNG_DATA"){
+          load(rfile)
+          cfr <- res_temp$cfr
+          cfr2 <- res_temp$cfr2
+          ofr <- res_temp$ofr
+          pdr <- res_temp$pdr
+          fdr <- res_temp$fdr
+          msize <- res_temp$msize
+          mses <- res_temp$mses
+          times <- res_temp$times
+        }
         # compute measurement MSE
         MSE <- round(mean(mses), 3)
         # CFR, OFR, PDR, FDR, AN
@@ -128,10 +177,36 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
         FDR <- round(mean(fdr), 3) * 100
         AN <- round(mean(msize), 3)
         TIME <- sum(times)
+        # outlier dectection
+        OD <- "not applicable."
+        if(method == "PAWLS" || method == "LTS" ){
+          pro <- 0
+          if(model[j] == "C" || model[j] == "D")
+            pro <- 0.1
+          OD <- OutlierSummary(w, pro)
+        }
         
         nres[[j]] <- list(model = model[j], CFR = CFR, CFR2 = CFR2, OFR = OFR, PDR = PDR, FDR = FDR, 
-            AN = AN, MSE = MSE, TIME = TIME)
+            AN = AN, MSE = MSE, mses=mses, TIME = TIME, OD=OD)
     }
     # return
     nres
+}
+
+OutlierSummary = function(w, pro = 0.1) {
+  n = dim(w)[1]
+  m = dim(w)[2]
+  num = round(m * pro)
+  if (num == 0) {
+    M = 0
+    JD = 1
+  } else {
+    temp = apply(w[, 1:num] == 1, 1, sum)
+    M = mean(temp/num)
+    JD = mean(temp == 0)
+  }
+  S = mean(apply(w[, (num + 1):m] != 1, 1, sum)/(m - num))
+  
+  list(M = M, S = S, JD = JD)
+  
 }

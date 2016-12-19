@@ -1,68 +1,37 @@
-source("Simulation/GenerateData.R")
 source("Simulation/Simulation.R")
-source("Simulation/CombineData.R")
-source("Simulation/SetupMatlab.R")
 # n=50,p=8----------------------------------------------
 L = 100
 n = 50
 p = 8
 beta = c(3, 2, 1.5, 0, 0, 0, 0, 0)
 
-# MMNNG collect data- low dimension
-simulation(L, n, beta, "A", method = "MMNNG_DATA", seed = NULL)
-simulation(L, n, beta, "B", method = "MMNNG_DATA", seed = NULL)
-simulation(L, n, beta, "C", method = "MMNNG_DATA", seed = NULL)
-simulation(L, n, beta, "D", method = "MMNNG_DATA", seed = NULL)
+
+# MMNNG
+Lres_mmnngA = simulation(L, n, beta, "A", method = "MMNNG_DATA", useDataFile = FALSE, seed = NULL)
+Lres_mmnngB = simulation(L, n, beta, "B", method = "MMNNG_DATA", useDataFile = FALSE, seed = NULL)
+Lres_mmnngC = simulation(L, n, beta, "C", method = "MMNNG_DATA", useDataFile = FALSE, seed = NULL)
+Lres_mmnngD = simulation(L, n, beta, "D", method = "MMNNG_DATA", useDataFile = FALSE, seed = NULL)
+Lres_mmnng = simulation(L, n, beta, c("A", "B", "C", "D"), method = "MMNNG_DATA", useDataFile = TRUE, seed = NULL)
 
 
-# MMNNG-low dimension
-outA_MM50 = simulation(L, n, beta, "A", method = "MMNNG", useDataFile = TRUE)
-outB_MM50 = simulation(L, n, beta, "B", method = "MMNNG", useDataFile = TRUE)
-outC_MM50 = simulation(L, n, beta, "C", method = "MMNNG", useDataFile = TRUE)
-outD_MM50 = simulation(L, n, beta, "D", method = "MMNNG", useDataFile = TRUE)
-outD2_MM50 = simulation(L, n, beta, "D2", method = "MMNNG", useDataFile = TRUE)
+# LTS
+Lres_LTS = simulation(L, n, beta, c("A", "B", "C", "D"), method = "LTS", useDataFile = TRUE)
 
-# LTS-low dimension
-outA_LTS50 = simulation(L, n, beta, "A", method = "LTS", useDataFile = TRUE)
-outB_LTS50 = simulation(L, n, beta, "B", method = "LTS", useDataFile = TRUE)
-outC_LTS50 = simulation(L, n, beta, "C", method = "LTS", useDataFile = TRUE)
-# outD_LTS50=simulation(L,n,beta,'D',method='LTS',useDataFile=TRUE)
-outD2_LTS50 = simulation(L, n, beta, "D2", method = "LTS", useDataFile = TRUE)
 
-# PAWLS-START BY SLTS
-outA0_50_LTS = simulation(L, n, beta, "A", method = "PAWLS", initial = "uniform-LTS", seed = NULL, 
-    useDataFile = TRUE)
-outB0_50_LTS = simulation(L, n, beta, "B", method = "PAWLS", initial = "uniform-LTS", seed = NULL, 
-    useDataFile = TRUE)
-outC0_50_LTS = simulation(L, n, beta, "C", method = "PAWLS", initial = "uniform-LTS", seed = NULL, 
-    useDataFile = TRUE)
-outD20_50_LTS = simulation(L, n, beta, "D2", method = "PAWLS", initial = "uniform-LTS", seed = NULL, 
-    useDataFile = TRUE)
-
-# PAWLS
-confirm = simulation(L, n, beta, "A", method = "PAWLS", initial = "uniform", seed = NULL, useDataFile = TRUE)
-outA0_50 = simulation(L, n, beta, "A", method = "PAWLS", initial = "uniform", seed = NULL, useDataFile = TRUE)
-outB0_50 = simulation(L, n, beta, "B", method = "PAWLS", initial = "uniform", seed = NULL, useDataFile = TRUE)
-outC0_50 = simulation(L, n, beta, "C", method = "PAWLS", initial = "uniform", seed = NULL, useDataFile = TRUE)
-outD20_50 = simulation(L, n, beta, "D2", method = "PAWLS", initial = "uniform", seed = NULL, useDataFile = TRUE)
 # APAWLS
-res_APAWLS_low <- simulation(L, n, beta, c("A", "B", "C", "D"), method = "PAWLS", initial = "PAWLS", 
-    seed = NULL, useDataFile = TRUE, updateInitial = TRUE)
-save(res_APAWLS_low, file = "Output/APAWLS_low.rda")
+Lres_APAWLS <- simulation(L, n, beta, c("A", "B", "C", "D"), method = "PAWLS", initial = "PAWLS", 
+                          seed = NULL, useDataFile = TRUE, updateInitial = TRUE, intercept = TRUE)
+save(Lres_APAWLS, file = "Output/Lres_APAWLS.rda")
+
 # ROSS
-matLabDir = "D:\\matlab\\Sim"
+matLabDir = paste(getwd(),"Simulation/ROSS" , sep = "/")
+source("Simulation/SetupMatlab.R")
 matlab = PrepareMatlab(matLabDir)
-outA_ROSS50 = simulation(L, n, beta, "A", method = "ROSS", matlab = matlab, useDataFile = TRUE)
-outB_ROSS50 = simulation(L, n, beta, "B", method = "ROSS", matlab = matlab, useDataFile = TRUE)
-outC_ROSS50 = simulation(L, n, beta, "C", method = "ROSS", matlab = matlab, useDataFile = TRUE)
-outD_ROSS50 = simulation(L, n, beta, "D", method = "ROSS", matlab = matlab, useDataFile = TRUE)
-outD2_ROSS50 = simulation(L, n, beta, "D2", method = "ROSS", matlab = matlab, useDataFile = TRUE)
+Lres_ROSS <- simulation(L, n, beta, c("A", "B", "C", "D"), method = "ROSS",matlab = matlab,
+                        seed = NULL, useDataFile = TRUE, intercept = TRUE)
 # ADL
-confirm2_ADL50 = simulation(L, n, beta, "A", method = "ADL", useDataFile = TRUE)
-outA_ADL50 = simulation(L, n, beta, "A", method = "ADL", useDataFile = TRUE)
-outB_ADL50 = simulation(L, n, beta, "B", method = "ADL", useDataFile = TRUE)
-outC_ADL50 = simulation(L, n, beta, "C", method = "ADL", useDataFile = TRUE)
-outD2_ADL50 = simulation(L, n, beta, "D2", method = "ADL", useDataFile = TRUE)
+Lres_ADL = simulation(L, n, beta, c("A", "B", "C", "D"), method = "ADL", useDataFile = TRUE)
+
 #-------------------------------------------------------------------------------------
 
 # n=100,500
@@ -72,108 +41,8 @@ p = 500
 num = 10
 beta = c(rep(2, num), rep(0, p - num))
 
-# MMNNG collect data- high dimension
-simulation(L, n, beta, "A", method = "MMNNG_DATA", seed = NULL)
-simulation(L, n, beta, "B", method = "MMNNG_DATA", seed = NULL)
-simulation(L, n, beta, "C", method = "MMNNG_DATA", seed = NULL)
-simulation(L, n, beta, "D", method = "MMNNG_DATA", seed = NULL)
-
-# ROSS
-matLabDir = "D:\\matlab\\Sim"
-matlab = PrepareMatlab(matLabDir)
-outA_ROSS500 = simulation(L, n, beta, model = "D", method = "ROSS", matlab = matlab)
-outA_ROSS500 = simulation(L, n, beta, model = "C", method = "ROSS", matlab = matlab)
-outA_ROSS500 = simulation(L, n, beta, model = "B", method = "ROSS", matlab = matlab)
-outA_ROSS500 = simulation(L, n, beta, model = "A", method = "ROSS", matlab = matlab)
-# PAWLS
-outA0_500 = simulation(L, n, beta, "A", method = "PAWLS", seed = 2015)
-outC0_500 = simulation(L, n, beta, "C", method = "PAWLS", seed = 2015)
-outB0_500 = simulation(L, n, beta, "B", method = "PAWLS", seed = 2015)
-outD20_500 = simulation(L, n, beta, "D2", method = "PAWLS", seed = 2015)
 
 
-# PAWLS
-confirm = simulation(L, n, beta, "A", method = "PAWLS", initial = "uniform", seed = 2015)
-outA0_500_2 = simulation(L, n, beta, "A", method = "PAWLS", initial = "uniform", seed = 2015, updateInitial = TRUE)
-outC0_500_2 = simulation(L, n, beta, "C", method = "PAWLS", initial = "uniform", seed = 2015, updateInitial = TRUE)
-outB0_500_2 = simulation(L, n, beta, "B", method = "PAWLS", initial = "uniform", seed = 2015, updateInitial = TRUE)
-outD20_500_2 = simulation(L, n, beta, "D2", method = "PAWLS", initial = "uniform", seed = 2015, updateInitial = TRUE)
-
-# APAWLS
-outA0_500_2 = simulation(L, n, beta, "A", method = "PAWLS", initial = "PAWLS", seed = 2015, updateInitial = TRUE)
-outC0_500_2 = simulation(L, n, beta, "C", method = "PAWLS", initial = "PAWLS", seed = 2015, updateInitial = TRUE)
-outB0_500_2 = simulation(L, n, beta, "B", method = "PAWLS", initial = "PAWLS", seed = 2015, updateInitial = TRUE)
-outD20_500_2 = simulation(L, n, beta, "D2", method = "PAWLS", initial = "PAWLS", seed = 2015, updateInitial = TRUE)
-
-# ADL
-outA_ADL500 = simulation(L, n, beta, "A", method = "ADL", seed = 2015)
-outC_ADL500 = simulation(L, n, beta, "C", method = "ADL", seed = 2015)
-outB_ADL500 = simulation(L, n, beta, "B", method = "ADL", seed = 2015)
-# outD_ADL500=simulation(L,n,beta,'D',method='ADL',seed=2015)
-outD2_ADL500 = simulation(L, n, beta, "D2", method = "ADL", seed = 2015)
-# LTS
-SaveResult = function(res, file, dir = "C:\\Users\\Administrator\\Dropbox\\result\\") {
-    write.table(res, paste(dir, file, sep = ""))
-}
-outA_LTS500 = simulation(L, n, beta, "A", method = "LTS", seed = 2015)
-outB_LTS500 = simulation(L, n, beta, "B", method = "LTS", seed = 2015)
-outC_LTS500 = simulation(L, n, beta, "C", method = "LTS", seed = 2015)
-outD2_LTS500 = simulation(L, n, beta, "D2", method = "LTS", seed = 2015)
-
-
-outD2_500_test2 = simulation(L, n, beta, "D2", method = "PAWLS", initial = "LTS", seed = 2015, updateInitial = TRUE)
-SaveResult(outD2_500$vs, "outD2_500.txt")
-outA_500_test = simulation(L, n, beta, "A", method = "PAWLS", initial = "uniform", seed = 2015, updateInitial = TRUE, 
-    updateInitialTimes = 100)
-SaveResult(outA_500_test$vs, "outA_500_test.txt")
-#-------------------------------example 2---------------------#
-
-# high n=100,p=1000
-n = 100
-p = 1000
-beta = rep(0, p)
-beta[c(1, 7)] = 1.5
-beta[2] = 0.5
-beta[c(4, 11)] = 1
-res = simulation(1, n, beta, "HA", method = "PAWLS", initial = "LTS", seed = 2015)
-
-# low
-n = 150
-p = 50
-k = 6
-L = 100
-beta = c(rep(1, k), rep(0, p - k))
-# MMNNG collect data
-simulation(L, n, beta, "LA", method = "MMNNG_DATA", seed = NULL)
-simulation(L, n, beta, "LB", method = "MMNNG_DATA", seed = NULL)
-simulation(L, n, beta, "LC", method = "MMNNG_DATA", seed = NULL)
-simulation(L, n, beta, "LD", method = "MMNNG_DATA", seed = NULL)
-
-# PAWLS low dimension
-outLA_PAWLS = simulation(L, n, beta = beta, model = "LA", method = "PAWLS", initial = "LTS", useDataFile = TRUE)
-outLB_PAWLS = simulation(L, n, beta = beta, model = "LB", method = "PAWLS", initial = "LTS", useDataFile = TRUE)
-outLc_PAWLS = simulation(L, n, beta = beta, model = "LC", method = "PAWLS", initial = "LTS", seed = 2015)
-
-# Spare LTS low dimension
-outLA_LTS = simulation(L, n, beta = beta, model = "LA", method = "LTS", useDataFile = TRUE)
-outLB_LTS = simulation(L, n, beta = beta, model = "LB", method = "LTS", useDataFile = TRUE)
-outLc_LTS = simulation(L, n, beta = beta, model = "LC", method = "LTS", seed = 2015)
-
-# MMNNG-low dimension
-outLA_MM = simulation(L, n, beta, "LA", method = "MMNNG", useDataFile = TRUE)
-outLB_MM = simulation(L, n, beta, "LB", method = "MMNNG", useDataFile = TRUE)
-# outC_MM50=simulation(L,n,beta,'C',method='MMNNG',useDataFile=TRUE)
-# outD_MM50=simulation(L,n,beta,'D',method='MMNNG',useDataFile=TRUE)
-
-# ADL low dimension
-outLA_ADL = simulation(L, n, beta, "LA", method = "ADL", useDataFile = TRUE)
-outLB_ADL = simulation(L, n, beta, "LB", method = "ADL", useDataFile = TRUE)
-
-out = GenerateDataSep(n = 10, p = 10, k = 2)
-#----load data------#
-load("outB_500.rda")
-load("outB_ADL500.rda")
-load("outB_LTS500.rda")
 
 # ======real data analysis(air pollution)============# airRaw=read.delim('airPollution.txt')
 airData = airRaw[-21, -1]
@@ -294,24 +163,3 @@ boxplot(se ~ group, data = m, main = "model D", outline = FALSE)
 
 
 # =======end temp=======#
-
-
-# PAWLS
-outA0_500 = simulation(L, n, beta, "A", method = "PAWLS", initial = "uniform", seed = 2015)
-outC0_500 = simulation(L, n, beta, "C", method = "PAWLS", initial = "uniform", seed = 2015)
-outB0_500 = simulation(L, n, beta, "B", method = "PAWLS", initial = "uniform", seed = 2015)
-outD20_500 = simulation(L, n, beta, "D2", method = "PAWLS", initial = "uniform", seed = 2015)
-
-# APAWLS
-confrim = simulation(L, n, beta, "D2", method = "PAWLS", initial = "PAWLS", seed = 2015, updateInitial = TRUE)
-outA_500 = simulation(L, n, beta, "A", method = "PAWLS", initial = "PAWLS", seed = 2015, updateInitial = TRUE)
-outC_500 = simulation(L, n, beta, "C", method = "PAWLS", initial = "PAWLS", seed = 2015, updateInitial = TRUE)
-outB_500 = simulation(L, n, beta, "B", method = "PAWLS", initial = "PAWLS", seed = 2015, updateInitial = TRUE)
-outD2_500 = simulation(L, n, beta, "D2", method = "PAWLS", initial = "PAWLS", seed = 2015, updateInitial = TRUE)
-
-# ADL
-outA_ADL500 = simulation(L, n, beta, "A", method = "ADL", seed = 2015)
-outC_ADL500 = simulation(L, n, beta, "C", method = "ADL", seed = 2015)
-outB_ADL500 = simulation(L, n, beta, "B", method = "ADL", seed = 2015)
-# outD_ADL500=simulation(L,n,beta,'D',method='ADL',seed=2015)
-outD2_ADL500 = simulation(L, n, beta, "D2", method = "ADL", seed = 2015)

@@ -1,6 +1,6 @@
 # MM-non negative garrote regression
 mmnngreg = function(x, y) {
-    require(robustbase)
+    #require(robustbase)
     # Compute initial estimate with MM-regression:
     beta_init <- coef(lmrob(y ~ x))
     # beta_init Compute S-nonnegative garrote estimate using the initial estimate beta_init and the
@@ -22,7 +22,7 @@ require(robustbase)
 require(Rcpp)
 require(parallel)
 # search('SNNG.dll')
-dyn.load("D:\\RProject\\RobustCD\\SNNG.dll")
+dyn.load("Simulation/SNNG.dll")
 
 
 # Estimate the coefficients of multiple linear regression model with S-nonnegative garrote method,
@@ -202,7 +202,7 @@ corner <- function(a, b) {
 require(robustbase)
 require(Rcpp)
 require(parallel)
-dyn.load("D:\\RProject\\RobustCD\\SNNG.dll")
+dyn.load("Simulation/SNNG.dll")
 
 
 # Estimate the coefficients of multiple linear regression model with MM-nonnegative garrote

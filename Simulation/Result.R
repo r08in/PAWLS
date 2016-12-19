@@ -26,23 +26,7 @@ MySummary2 = function(beta, weight, pnum, onum) {
     list(b = b, w = w)
 }
 
-OutlierSummary = function(w, pro = 0.1) {
-    n = dim(w)[1]
-    m = dim(w)[2]
-    num = round(m * pro)
-    if (num == 0) {
-        M = 0
-        JD = 1
-    } else {
-        temp = apply(w[, 1:num] == 1, 1, sum)
-        M = sum(temp/num)/n
-        JD = sum(temp == 0)/n
-    }
-    S = sum(apply(w[, (num + 1):m] != 1, 1, sum)/(m - num))/n
-    
-    list(M = M, S = S, JD = JD)
-    
-}
+
 
 ## compare SpareLTS and PAWLS
 ComparePE = function(x, y, trp = 0.9, ret = 1500) {
