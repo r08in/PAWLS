@@ -80,7 +80,14 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
                 b[i, ] = res$coefficients
                 w[i, ] = res$wt
                 res$beta <- res$coefficients
-            } else if (method == "MMNNG") {
+            } else if (method == "IPOD") {
+              ptm <- proc.time()
+              H <- out$x %*% solve(t(out$x)%*%out$x)%*%t(out$x)
+              res <- IPOD(out$x,out$y,H, method = "soft")
+              times[i] <- (proc.time() - ptm)[1]
+              w[i,] <- ifelse(res$gamma == 0, 1, 0)
+              res$beta <- rep(0, p + intercept)
+            }else if (method == "MMNNG") {
               ptm <- proc.time()
               try_res <- try(mmnngreg(out$x,out$y))
               times[i] <- (proc.time() - ptm)[1]

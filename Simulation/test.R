@@ -32,6 +32,9 @@ Lres_ROSS <- simulation(L, n, beta, c("A", "B", "C", "D"), method = "ROSS",matla
 # ADL
 Lres_ADL = simulation(L, n, beta, c("A", "B", "C", "D"), method = "ADL", useDataFile = TRUE)
 
+# IPOD
+Lres_IPOD <- simulation(L, n, beta, c("A"),  method = "LTS", useDataFile = TRUE)
+
 #-------------------------------------------------------------------------------------
 
 # n=100,500
