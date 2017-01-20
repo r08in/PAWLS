@@ -262,12 +262,9 @@ GenerateDataByModel = function(n, beta, errorSigma = 2, r = 0.5, model = c("A", 
         out = GenerateData(n = n, dataSetNum = 1, beta = beta, errorSigma = errorSigma, r = r, dataType = dataType)
         pnum = sum(beta != 0)
         oNum = round(n * 0.1)
-        u1 = runif(oNum, 0, 1)
-        u2 = runif(oNum, 0, 1)
-        out$y[1:oNum] = out$y[1:oNum] + ifelse(u1 < 0.5, -1, 1) * (20 + 10 * u2)
-        eigens <- eigen(t(out$x) %*% out$x)$values
-        ind <- which(order(eigens) <= oNum)
-        out$x[1:oNum, ind] = out$x[1:oNum, ind] + 10
+        svd_out <- svd(out$x)$u
+        u <- svd_out$u
+        v <- svd(out$x)$v
     } else if (model == "C2") {
         out = GenerateData(n = n, dataSetNum = 1, beta = beta, errorSigma = errorSigma, r = r, dataType = dataType)
         oNum = round(n * 0.1)
