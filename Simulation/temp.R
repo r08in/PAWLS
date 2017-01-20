@@ -7,3 +7,6 @@ out <- GenerateDataByModel(n = n, beta = beta, model = "C")
 install.packages("leapp")
 H <- out$x %*% solve(t(out$x)%*%out$x)%*%t(out$x)
 IPOD(out$x,out$y,H, method = "soft")
+
+source("https://bioconductor.org/biocLite.R")
+biocLite("sva")

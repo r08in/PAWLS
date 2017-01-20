@@ -12,11 +12,11 @@ Lres_mmnngB = simulation(L, n, beta, "B", method = "MMNNG_DATA", useDataFile = F
 Lres_mmnngC = simulation(L, n, beta, "C", method = "MMNNG_DATA", useDataFile = FALSE, seed = NULL)
 Lres_mmnngD = simulation(L, n, beta, "D", method = "MMNNG_DATA", useDataFile = FALSE, seed = NULL)
 Lres_mmnng = simulation(L, n, beta, c("A", "B", "C", "D"), method = "MMNNG_DATA", useDataFile = TRUE, seed = NULL)
-
+save(Lres_mmnng, file = "Output/Lres_mmnng.rda")
 
 # LTS
 Lres_LTS = simulation(L, n, beta, c("A", "B", "C", "D"), method = "LTS", useDataFile = TRUE)
-
+save(Lres_LTS, file = "Output/Lres_LTS.rda")
 
 # APAWLS
 Lres_APAWLS <- simulation(L, n, beta, c("A", "B", "C", "D"), method = "PAWLS", initial = "PAWLS", 
@@ -29,11 +29,14 @@ source("Simulation/SetupMatlab.R")
 matlab = PrepareMatlab(matLabDir)
 Lres_ROSS <- simulation(L, n, beta, c("A", "B", "C", "D"), method = "ROSS",matlab = matlab,
                         seed = NULL, useDataFile = TRUE, intercept = TRUE)
+save(Lres_ROSS , file = "Output/Lres_ROSS.rda")
 # ADL
 Lres_ADL = simulation(L, n, beta, c("A", "B", "C", "D"), method = "ADL", useDataFile = TRUE)
+save(Lres_ADL , file = "Output/Lres_ADL.rda")
 
 # IPOD
-Lres_IPOD <- simulation(L, n, beta, c("A"),  method = "LTS", useDataFile = TRUE)
+Lres_IPOD <- simulation(L, n, beta, c("A","B","C","D"),  method = "IPOD", useDataFile = TRUE)
+save(Lres_IPOD  , file = "Output/Lres_IPOD.rda")
 
 #-------------------------------------------------------------------------------------
 

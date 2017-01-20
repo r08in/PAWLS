@@ -186,7 +186,7 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
         TIME <- sum(times)
         # outlier dectection
         OD <- "not applicable."
-        if(method == "PAWLS" || method == "LTS" ){
+        if(method == "PAWLS" || method == "LTS"|| method=="IPOD" ){
           pro <- 0
           if(model[j] == "C" || model[j] == "D")
             pro <- 0.1
