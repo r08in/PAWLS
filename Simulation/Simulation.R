@@ -4,7 +4,7 @@ source("Simulation/GenerateData.R")
 source('Simulation/mmnngreg.R')
 
 simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL, method = "PAWLS", 
-    matlab = NULL, seed = 2014, useDataFile = FALSE, standardize = FALSE, penalty1 = "1-w0", updateInitial = FALSE, 
+    matlab = NULL, seed = 2014, useDataFile = FALSE, standardize = FALSE, penalty1 = "1-w0", updateInitial = TRUE, 
     criterion = "BIC", intercept = TRUE, initial = "uniform", range = "cross", type = c("Lasso", 
         "Ridge")) {
     mcount <- length(model)
@@ -187,12 +187,12 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
         # outlier dectection
         OD <- "not applicable."
         if(method == "PAWLS" || method == "LTS"|| method=="IPOD" ){
-          pro <- 0
-          if(model[j] == "C" || model[j] == "D")
-            pro <- 0.1
+          pro <- 0.1
+          if(model[j] == "A" || model[j] == "B")
+            pro <- 0
           OD <- OutlierSummary(w, pro)
         }
-        
+        browser()
         nres[[j]] <- list(model = model[j], CFR = CFR, CFR2 = CFR2, OFR = OFR, PDR = PDR, FDR = FDR, 
             AN = AN, MSE = MSE, mses=mses, TIME = TIME, OD=OD)
     }
