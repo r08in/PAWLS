@@ -22,7 +22,7 @@ save(Lres_LTS, file = "Output/Lres_LTS.rda")
 Lres_APAWLS <- simulation(L, n, beta, c("A", "B", "C", "D"), method = "PAWLS", initial = "PAWLS", 
                           seed = NULL, useDataFile = TRUE, updateInitial = TRUE, intercept = TRUE)
 save(Lres_APAWLS, file = "Output/Lres_APAWLS.rda")
-test_APAWLS <- simulation(L, n, beta, c("E0105", "E0110","E0120"), method = "PAWLS", initial = "PAWLS", 
+test_APAWLS <- simulation(L, n, beta, c("E0101","E0105", "E0110","E0120","E0205","E0210","E0220"), method = "PAWLS", initial = "PAWLS", 
                           seed = 2017, useDataFile = FALSE)
 c("E0105", "E0110","E0120","E0205","E0210","E0220")
 # ROSS

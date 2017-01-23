@@ -259,7 +259,21 @@ GenerateDataByModel = function(n, beta, errorSigma = 2, r = 0.5, model = c("A", 
         u2 = runif(oNum, 0, 1)
         out$y[1:oNum] = out$y[1:oNum] + ifelse(u1 < 0.5, -1, 1) * (20 + 10 * u2)
         out$x[1:oNum, (pnum + 1):(pnum + oNum)] = out$x[1:oNum, (pnum + 1):(pnum + oNum)] + 10
-    } else if (model == "E0105") {
+    } else if (model == "E0101") {
+      out = GenerateData(n = n, dataSetNum = 1, beta = beta, errorSigma = errorSigma, r = r, dataType = dataType)
+      pnum = sum(beta != 0)
+      pro <- 0.1
+      ratio <- 1
+      oNum = round(n * pro)
+      xx <- out$x[1:oNum,]
+      svd_out <- svd(xx)
+      u <- svd_out$u
+      v <- svd_out$v
+      d <- svd_out$d
+      d[length(d)] <- d[length(d)] * ratio
+      xx <- u %*% diag(d) %*% t(v)
+      out$x[1:oNum,] <- xx
+    }else if (model == "E0105") {
         out = GenerateData(n = n, dataSetNum = 1, beta = beta, errorSigma = errorSigma, r = r, dataType = dataType)
         pnum = sum(beta != 0)
         pro <- 0.1
