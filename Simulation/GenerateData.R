@@ -301,6 +301,20 @@ GenerateDataByModel = function(n, beta, errorSigma = 2, r = 0.5, model = c("A", 
       d[length(d)] <- d[length(d)] * ratio
       xx <- u %*% diag(d) %*% t(v)
       out$x[1:oNum,] <- xx
+    }else if (model == "E01102") {
+      out = GenerateData(n = n, dataSetNum = 1, beta = beta, errorSigma = errorSigma, r = r, dataType = dataType)
+      pnum = sum(beta != 0)
+      pro <- 0.2
+      ratio <- 10
+      oNum = round(n * pro)
+      xx <- out$x
+      svd_out <- svd(xx)
+      u <- svd_out$u
+      v <- svd_out$v
+      d <- svd_out$d
+      u[1:oNum,p] <- u[1:oNum,p] * ratio
+      xx <- u %*% diag(d) %*% t(v)
+      out$x <- xx
     }else if (model == "E0120") {
       out = GenerateData(n = n, dataSetNum = 1, beta = beta, errorSigma = errorSigma, r = r, dataType = dataType)
       pnum = sum(beta != 0)
