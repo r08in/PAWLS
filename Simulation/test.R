@@ -4,6 +4,7 @@ L = 100
 n = 50
 p = 8
 beta = c(3, 2, 1.5, 0, 0, 0, 0, 0)
+#beta = c(0, 0, 0, 0, 0, 0, 0, 0)
 
 
 # MMNNG
@@ -22,7 +23,7 @@ save(Lres_LTS, file = "Output/Lres_LTS.rda")
 Lres_APAWLS <- simulation(L, n, beta, c("A", "B", "C", "D"), method = "PAWLS", initial = "PAWLS", 
                           seed = NULL, useDataFile = TRUE, updateInitial = TRUE, intercept = TRUE)
 save(Lres_APAWLS, file = "Output/Lres_APAWLS.rda")
-test_APAWLS <- simulation(L, n, beta, c( "E0110","E01102"), method = "PAWLS", initial = "PAWLS", 
+test_APAWLS <- simulation(L, n, beta, c( "E02052"), method = "PAWLS", initial = "PAWLS", 
                           seed = 2017, useDataFile = FALSE)
 c("E0105", "E0110","E0120","E0205","E0210","E0220")
 # ROSS
@@ -36,7 +37,7 @@ save(Lres_ROSS , file = "Output/Lres_ROSS.rda")
 Lres_ADL = simulation(L, n, beta, c("A", "B", "C", "D"), method = "ADL", useDataFile = TRUE)
 save(Lres_ADL , file = "Output/Lres_ADL.rda")
 require(ncvreg)
-test_ADL = simulation(L, n, beta, c("E0110","E01102"), method = "ADL", useDataFile = FALSE, seed=2017)
+test_ADL = simulation(L, n, beta, c("E02052"), method = "ADL", useDataFile = FALSE, seed=2017)
 
 # IPOD
 Lres_IPOD <- simulation(L, n, beta, c("A","B","C","D"),  method = "IPOD", useDataFile = TRUE)
