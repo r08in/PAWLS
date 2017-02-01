@@ -39,7 +39,7 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
         }
         b = array(0, dim = c(L, ifelse(intercept,p+1,p)))
         w = array(0, dim = c(L, n))
-        
+        # ROC
         # simulation
         for (i in 1:L) {
             # data
@@ -191,6 +191,9 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
           if(model[j] == "A" || model[j] == "B")
             pro <- 0
           OD <- OutlierSummary(w, pro)
+          roc <- ComputeROC(w,pro=pro)
+          OD$tpr <- roc$tpr
+          OD$fpr <- roc$fpr
         }
         nres[[j]] <- list(model = model[j], CFR = CFR, CFR2 = CFR2, OFR = OFR, PDR = PDR, FDR = FDR, 
             AN = AN, MSE = MSE, mses=mses, TIME = TIME, OD=OD)
@@ -216,3 +219,27 @@ OutlierSummary = function(w, pro = 0.1) {
   list(M = M, S = S, JD = JD)
   
 }
+
+ComputeROC= function(w, cutoff=seq(0,1,by=0.01), pro=0.1)
+{
+  l <- length(cutoff)
+  L <- dim(w)[1]
+  n <- dim(w)[2]
+  onum <- n*pro
+  ps <- 1: onum
+  tpr <- rep(0,l)
+  fpr <- rep(0,l)
+  for(j in 1 : L){
+    for(i in 1 : l){
+      ps_temp <- which(w[j,] <= cutoff[i])
+      onum_temp <- length(ps_temp)
+      m <- length(intersect(ps,ps_temp))
+      tpr[i] <- tpr[i] + m/ onum 
+      fpr[i] <- fpr[i] + (onum_temp - m) / (n - onum)
+    }
+  }
+  tpr <- tpr/L
+  fpr <- fpr/L
+  list(tpr=tpr,fpr=fpr)
+}
+

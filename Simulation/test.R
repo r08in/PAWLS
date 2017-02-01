@@ -16,16 +16,22 @@ Lres_mmnng = simulation(L, n, beta, c("A", "B", "C", "D"), method = "MMNNG_DATA"
 save(Lres_mmnng, file = "Output/Lres_mmnng.rda")
 
 # LTS
+require(robustHD)
 Lres_LTS = simulation(L, n, beta, c("A", "B", "C", "D"), method = "LTS", useDataFile = TRUE)
 save(Lres_LTS, file = "Output/Lres_LTS.rda")
-
+fpr <- Lres_LTS[[3]]$OD$fpr
+tpr <- Lres_LTS[[3]]$OD$tpr
+plot(fpr,tpr,type="l")
 # APAWLS
 Lres_APAWLS <- simulation(L, n, beta, c("A", "B", "C", "D"), method = "PAWLS", initial = "PAWLS", 
                           seed = NULL, useDataFile = TRUE, updateInitial = TRUE, intercept = TRUE)
 save(Lres_APAWLS, file = "Output/Lres_APAWLS.rda")
-test_APAWLS <- simulation(L, n, beta, c( "E02052"), method = "PAWLS", initial = "PAWLS", 
-                          seed = 2017, useDataFile = FALSE)
+test_APAWLS <- simulation(L, n, beta, c( "E02052"), method = "PAWLS", initial = "PAWLS",                         seed = 2017, useDataFile = FALSE)
 c("E0105", "E0110","E0120","E0205","E0210","E0220")
+
+fpr <- Lres_APAWLS[[4]]$OD$fpr
+tpr <- Lres_APAWLS[[4]]$OD$tpr
+plot(fpr,tpr,type="l")
 # ROSS
 matLabDir = paste(getwd(),"Simulation/ROSS" , sep = "/")
 source("Simulation/SetupMatlab.R")
