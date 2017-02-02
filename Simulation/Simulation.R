@@ -220,7 +220,7 @@ OutlierSummary = function(w, pro = 0.1) {
   
 }
 
-ComputeROC= function(w, cutoff=seq(0,1,by=0.01), pro=0.1)
+ComputeROC= function(w, cutoff=seq(0,1.01,by=0.01), pro=0.1)
 {
   l <- length(cutoff)
   L <- dim(w)[1]
@@ -231,7 +231,7 @@ ComputeROC= function(w, cutoff=seq(0,1,by=0.01), pro=0.1)
   fpr <- rep(0,l)
   for(j in 1 : L){
     for(i in 1 : l){
-      ps_temp <- which(w[j,] <= cutoff[i])
+      ps_temp <- which(w[j,] < cutoff[i])
       onum_temp <- length(ps_temp)
       m <- length(intersect(ps,ps_temp))
       tpr[i] <- tpr[i] + m/ onum 
