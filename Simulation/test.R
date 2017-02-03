@@ -19,6 +19,7 @@ save(Lres_mmnng, file = "Output/Lres_mmnng.rda")
 # LTS
 require(robustHD)
 Lres_LTS = simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "LTS", useDataFile = TRUE)
+test_LTS = simulation(L, n, beta, c("E"), method = "LTS", useDataFile = TRUE)
 save(Lres_LTS, file = "Output/Lres_LTS.rda")
 fpr <- Lres_LTS[[3]]$OD$fpr
 tpr <- Lres_LTS[[3]]$OD$tpr
@@ -27,7 +28,7 @@ plot(fpr,tpr,type="p")
 Lres_APAWLS <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS", 
                           seed = NULL, useDataFile = TRUE, updateInitial = TRUE, intercept = TRUE)
 save(Lres_APAWLS, file = "Output/Lres_APAWLS.rda")
-test_APAWLS <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS",seed = 2017, useDataFile = FALSE)
+test_APAWLS <- simulation(L, n, beta, c("E"), method = "PAWLS", initial = "PAWLS",seed = NULL, useDataFile = TRUE)
 
 
 fpr3 <- Lres_APAWLS[[3]]$OD$fpr

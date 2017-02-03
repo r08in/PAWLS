@@ -263,7 +263,7 @@ GenerateDataByModel = function(n, beta, errorSigma = 2, r = 0.5, model = c("A", 
       out = GenerateData(n = n, dataSetNum = 1, beta = beta, errorSigma = errorSigma, r = r, dataType = dataType)
       pnum = sum(beta != 0)
       pro <- 0.1
-      ratio <- 4
+      ratio <- 3
       oNum = round(n * pro)
       xx <- out$x
       svd_out <- svd(xx)
