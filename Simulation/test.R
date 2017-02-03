@@ -12,44 +12,54 @@ Lres_mmnngA = simulation(L, n, beta, "A", method = "MMNNG_DATA", useDataFile = F
 Lres_mmnngB = simulation(L, n, beta, "B", method = "MMNNG_DATA", useDataFile = FALSE, seed = NULL)
 Lres_mmnngC = simulation(L, n, beta, "C", method = "MMNNG_DATA", useDataFile = FALSE, seed = NULL)
 Lres_mmnngD = simulation(L, n, beta, "D", method = "MMNNG_DATA", useDataFile = FALSE, seed = NULL)
-Lres_mmnng = simulation(L, n, beta, c("A", "B", "C", "D"), method = "MMNNG_DATA", useDataFile = TRUE, seed = NULL)
+Lres_mmnngE = simulation(L, n, beta, "E", method = "MMNNG_DATA", useDataFile = FALSE, seed = NULL)
+Lres_mmnng = simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "MMNNG_DATA", useDataFile = TRUE, seed = NULL)
 save(Lres_mmnng, file = "Output/Lres_mmnng.rda")
 
 # LTS
 require(robustHD)
-Lres_LTS = simulation(L, n, beta, c("A", "B", "C", "D"), method = "LTS", useDataFile = TRUE)
+Lres_LTS = simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "LTS", useDataFile = TRUE)
 save(Lres_LTS, file = "Output/Lres_LTS.rda")
 fpr <- Lres_LTS[[3]]$OD$fpr
 tpr <- Lres_LTS[[3]]$OD$tpr
 plot(fpr,tpr,type="p")
 # APAWLS
-Lres_APAWLS <- simulation(L, n, beta, c("A", "B", "C", "D"), method = "PAWLS", initial = "PAWLS", 
+Lres_APAWLS <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS", 
                           seed = NULL, useDataFile = TRUE, updateInitial = TRUE, intercept = TRUE)
 save(Lres_APAWLS, file = "Output/Lres_APAWLS.rda")
-test_APAWLS <- simulation(L, n, beta, c( "E02052"), method = "PAWLS", initial = "PAWLS",                         seed = 2017, useDataFile = FALSE)
-c("E0105", "E0110","E0120","E0205","E0210","E0220")
+test_APAWLS <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS",seed = 2017, useDataFile = FALSE)
 
-fpr <- Lres_APAWLS[[3]]$OD$fpr
-tpr <- Lres_APAWLS[[3]]$OD$tpr
-plot(fpr,tpr,type="p")
+
+fpr3 <- Lres_APAWLS[[3]]$OD$fpr
+tpr3 <- Lres_APAWLS[[3]]$OD$tpr
+fpr4 <- Lres_APAWLS[[4]]$OD$fpr
+tpr4 <- Lres_APAWLS[[4]]$OD$tpr
+fpr5 <- Lres_APAWLS[[5]]$OD$fpr
+tpr5 <- Lres_APAWLS[[5]]$OD$tpr
+plot(fpr3,tpr3,type="l", main="ROC Curve", xlab="Sensitivity", ylab="Specificity",lwd=2, lty=1, col="green")
+lines(fpr4,tpr4,lwd=2, lty=1,col="blue")
+lines(fpr5,tpr5,lwd=2, lty=1,col="red")
+legend(0.6,0.6,legend=c("Case C", "Case D", "Case E"), col=c("green","blue","red"), lwd=3)
 # ROSS
 matLabDir = paste(getwd(),"Simulation/ROSS" , sep = "/")
 source("Simulation/SetupMatlab.R")
 matlab = PrepareMatlab(matLabDir)
 Lres_ROSS <- simulation(L, n, beta, c("A", "B", "C", "D"), method = "ROSS",matlab = matlab,
                         seed = NULL, useDataFile = TRUE, intercept = TRUE)
+Lres_ROSSE <- simulation(L, n, beta, c("E"), method = "ROSS",matlab = matlab,
+                        seed = NULL, useDataFile = TRUE, intercept = TRUE)
 save(Lres_ROSS , file = "Output/Lres_ROSS.rda")
 # ADL
-Lres_ADL = simulation(L, n, beta, c("A", "B", "C", "D"), method = "ADL", useDataFile = TRUE)
+Lres_ADL = simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "ADL", useDataFile = TRUE)
 save(Lres_ADL , file = "Output/Lres_ADL.rda")
 require(ncvreg)
 test_ADL = simulation(L, n, beta, c("E02052"), method = "ADL", useDataFile = FALSE, seed=2017)
 
 # IPOD
-Lres_IPOD <- simulation(L, n, beta, c("A","B","C","D"),  method = "IPOD", useDataFile = TRUE)
+Lres_IPOD <- simulation(L, n, beta, c("A","B","C","D","E"),  method = "IPOD", useDataFile = TRUE)
 save(Lres_IPOD  , file = "Output/Lres_IPOD.rda")
-fpr <- Lres_APAWLS[[3]]$OD$fpr
-tpr <- Lres_APAWLS[[3]]$OD$tpr
+fpr <- Lres_IPOD [[3]]$OD$fpr
+tpr <- Lres_IPOD [[3]]$OD$tpr
 plot(fpr,tpr,type="p")
 #-------------------------------------------------------------------------------------
 

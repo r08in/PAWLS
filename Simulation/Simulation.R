@@ -225,8 +225,9 @@ ComputeROC= function(w, cutoff=seq(0,1.01,by=0.01), pro=0.1)
   l <- length(cutoff)
   L <- dim(w)[1]
   n <- dim(w)[2]
+  ps <- NULL
   onum <- n*pro
-  ps <- 1: onum
+  if(onum!=0) ps <-1:onum 
   tpr <- rep(0,l)
   fpr <- rep(0,l)
   for(j in 1 : L){

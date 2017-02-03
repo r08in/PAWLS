@@ -259,53 +259,11 @@ GenerateDataByModel = function(n, beta, errorSigma = 2, r = 0.5, model = c("A", 
         u2 = runif(oNum, 0, 1)
         out$y[1:oNum] = out$y[1:oNum] + ifelse(u1 < 0.5, -1, 1) * (20 + 10 * u2)
         out$x[1:oNum, (pnum + 1):(pnum + oNum)] = out$x[1:oNum, (pnum + 1):(pnum + oNum)] + 10
-    } else if (model == "E0101") {
+    } else if (model == "E") {
       out = GenerateData(n = n, dataSetNum = 1, beta = beta, errorSigma = errorSigma, r = r, dataType = dataType)
       pnum = sum(beta != 0)
       pro <- 0.1
-      ratio <- 1
-      oNum = round(n * pro)
-      xx <- out$x[1:oNum,]
-      svd_out <- svd(xx)
-      u <- svd_out$u
-      v <- svd_out$v
-      d <- svd_out$d
-      d[length(d)] <- d[length(d)] * ratio
-      xx <- u %*% diag(d) %*% t(v)
-      out$x[1:oNum,] <- xx
-    }else if (model == "E0105") {
-        out = GenerateData(n = n, dataSetNum = 1, beta = beta, errorSigma = errorSigma, r = r, dataType = dataType)
-        pnum = sum(beta != 0)
-        pro <- 0.1
-        ratio <- 5
-        oNum = round(n * pro)
-        xx <- out$x[1:oNum,]
-        svd_out <- svd(xx)
-        u <- svd_out$u
-        v <- svd_out$v
-        d <- svd_out$d
-        d[length(d)] <- d[length(d)] * ratio
-        xx <- u %*% diag(d) %*% t(v)
-        out$x[1:oNum,] <- xx
-    } else if (model == "E0110") {
-      out = GenerateData(n = n, dataSetNum = 1, beta = beta, errorSigma = errorSigma, r = r, dataType = dataType)
-      pnum = sum(beta != 0)
-      pro <- 0.1
-      ratio <- 10
-      oNum = round(n * pro)
-      xx <- out$x[1:oNum,]
-      svd_out <- svd(xx)
-      u <- svd_out$u
-      v <- svd_out$v
-      d <- svd_out$d
-      d[length(d)] <- d[length(d)] * ratio
-      xx <- u %*% diag(d) %*% t(v)
-      out$x[1:oNum,] <- xx
-    }else if (model == "E02052") {
-      out = GenerateData(n = n, dataSetNum = 1, beta = beta, errorSigma = errorSigma, r = r, dataType = dataType)
-      pnum = sum(beta != 0)
-      pro <- 0.1
-      ratio <- 3
+      ratio <- 4
       oNum = round(n * pro)
       xx <- out$x
       svd_out <- svd(xx)
@@ -319,76 +277,6 @@ GenerateDataByModel = function(n, beta, errorSigma = 2, r = 0.5, model = c("A", 
       u1 = runif(oNum, 0, 1)
       u2 = runif(oNum, 0, 1)
       out$y[1:oNum] = out$y[1:oNum] + ifelse(u1 < 0.5, -1, 1) * (20 + 10 * u2)
-    }else if (model == "E0120") {
-      out = GenerateData(n = n, dataSetNum = 1, beta = beta, errorSigma = errorSigma, r = r, dataType = dataType)
-      pnum = sum(beta != 0)
-      pro <- 0.1
-      ratio <- 20
-      oNum = round(n * pro)
-      xx <- out$x[1:oNum,]
-      svd_out <- svd(xx)
-      u <- svd_out$u
-      v <- svd_out$v
-      d <- svd_out$d
-      d[length(d)] <- d[length(d)] * ratio
-      xx <- u %*% diag(d) %*% t(v)
-      out$x[1:oNum,] <- xx
-    }else if (model == "E0205") {
-      out = GenerateData(n = n, dataSetNum = 1, beta = beta, errorSigma = errorSigma, r = r, dataType = dataType)
-      pnum = sum(beta != 0)
-      pro <- 0.2
-      ratio <- 5
-      oNum = round(n * pro)
-      xx <- out$x[1:oNum,]
-      svd_out <- svd(xx)
-      u <- svd_out$u
-      v <- svd_out$v
-      d <- svd_out$d
-      d[length(d)] <- d[length(d)] * ratio
-      xx <- u %*% diag(d) %*% t(v)
-      out$x[1:oNum,] <- xx
-    } else if (model == "E0210") {
-      out = GenerateData(n = n, dataSetNum = 1, beta = beta, errorSigma = errorSigma, r = r, dataType = dataType)
-      pnum = sum(beta != 0)
-      pro <- 0.2
-      ratio <- 10
-      oNum = round(n * pro)
-      xx <- out$x[1:oNum,]
-      svd_out <- svd(xx)
-      u <- svd_out$u
-      v <- svd_out$v
-      d <- svd_out$d
-      d[length(d)] <- d[length(d)] * ratio
-      xx <- u %*% diag(d) %*% t(v)
-      out$x[1:oNum,] <- xx
-    }else if (model == "E0220") {
-      out = GenerateData(n = n, dataSetNum = 1, beta = beta, errorSigma = errorSigma, r = r, dataType = dataType)
-      pnum = sum(beta != 0)
-      pro <- 0.2
-      ratio <- 20
-      oNum = round(n * pro)
-      xx <- out$x[1:oNum,]
-      svd_out <- svd(xx)
-      u <- svd_out$u
-      v <- svd_out$v
-      d <- svd_out$d
-      d[length(d)] <- d[length(d)] * ratio
-      xx <- u %*% diag(d) %*% t(v)
-      out$x[1:oNum,] <- xx
-    }else if (model == "E1020") {
-      out = GenerateData(n = n, dataSetNum = 1, beta = beta, errorSigma = errorSigma, r = r, dataType = dataType)
-      pnum = sum(beta != 0)
-      pro <- 0.9
-      ratio <- 20
-      oNum = round(n * pro)
-      xx <- out$x[1:oNum,]
-      svd_out <- svd(xx)
-      u <- svd_out$u
-      v <- svd_out$v
-      d <- svd_out$d
-      d[length(d)] <- d[length(d)] * ratio
-      xx <- u %*% diag(d) %*% t(v)
-      out$x[1:oNum,] <- xx
     }else if (model == "C2") {
         out = GenerateData(n = n, dataSetNum = 1, beta = beta, errorSigma = errorSigma, r = r, dataType = dataType)
         oNum = round(n * 0.1)
