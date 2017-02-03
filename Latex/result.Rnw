@@ -8,6 +8,7 @@
 \usepackage{rotating}
 \usepackage{relsize}
 \usepackage{bm}
+\usepackage{framed}
 %\usepackage{empheq}
 \usepackage{hyperref}
 \usepackage{multicol}
@@ -90,8 +91,13 @@ load("../Output/Lres_LTS.rda")
 load("../Output/Lres_ROSS.rda")
 load("../Output/Lres_ADL.rda")
 load("../Output/Lres_IPOD.rda")
+
+load("../Output/Hres_ADL.rda")
+load("../Output/Hres_LTS.rda")
+load("../Output/Hres_APAWLS.rda")
 options(digits=2)
 @
+% ----------------------------- Variable Selection for Low dimensional case ------------------------------------%
 \begin{table}[thp]
 	\begin{center}
 	 \caption{Variable Selection Results for Example 1 ($\bbeta=(3,2,1.5,0,0,0,0,0)'$) }\label{table-selection-1}
@@ -125,36 +131,101 @@ options(digits=2)
 	    SROS & \Sexpr{Lres_ROSS[[3]]$CFR} & \Sexpr{Lres_ROSS[[3]]$OFR} & \Sexpr{round(Lres_ROSS[[3]]$AN,digits=2)}  &  \Sexpr{round(Lres_ROSS[[3]]$TIME,digits=2)} & && \Sexpr{Lres_ROSS[[4]]$CFR} & \Sexpr{Lres_ROSS[[4]]$OFR} & \Sexpr{round(Lres_ROSS[[4]]$AN,digits=2)}  &  \Sexpr{round(Lres_ROSS[[4]]$TIME,digits=2)}\\
 	    %PAWLS(0) & 56 & 43 & 3.59 & && 44 & 52 & 4.13 \\
 	    PAWLS & \Sexpr{Lres_APAWLS[[3]]$CFR} & \Sexpr{Lres_APAWLS[[3]]$OFR} & \Sexpr{round(Lres_APAWLS[[3]]$AN,digits=2)}  &  \Sexpr{round(Lres_APAWLS[[3]]$TIME,digits=2)}& && \Sexpr{Lres_APAWLS[[4]]$CFR} & \Sexpr{Lres_APAWLS[[4]]$OFR} & \Sexpr{round(Lres_APAWLS[[4]]$AN,digits=2)} &  \Sexpr{round(Lres_APAWLS[[4]]$TIME,digits=2)}\\
+	    \\
+	    
+	     & \multicolumn{4}{c} {\bf Case E} & &  \\
+	     ALasso & \Sexpr{Lres_ADL[[5]]$CFR} & \Sexpr{Lres_ADL[[5]]$OFR} & \Sexpr{round(Lres_ADL[[5]]$AN,digits=2)} & \Sexpr{round(Lres_ADL[[5]]$TIME,digits=2)} &  &\\
+	    
+	    sLTS & \Sexpr{Lres_LTS[[5]]$CFR} & \Sexpr{Lres_LTS[[5]]$OFR} & \Sexpr{round(Lres_LTS[[5]]$AN,digits=2)}  &  \Sexpr{round(Lres_LTS[[5]]$TIME,digits=2)}& &\\
+	    
+	    MMNNG & \Sexpr{Lres_mmnng[[5]]$CFR} & \Sexpr{Lres_mmnng[[5]]$OFR} & \Sexpr{round(Lres_mmnng[[5]]$AN,digits=2)}  &  \Sexpr{round(Lres_mmnng[[5]]$TIME,digits=2)} &&\\
+	    
+	    % SROS & \Sexpr{Lres_ROSS[[5]]$CFR} & \Sexpr{Lres_ROSS[[5]]$OFR} & \Sexpr{round(Lres_ROSS[[5]]$AN,digits=2)}  &  \Sexpr{round(Lres_ROSS[[5]]$TIME,digits=2)} & && \Sexpr{Lres_ROSS[[5]]$CFR} & \Sexpr{Lres_ROSS[[5]]$OFR} & \Sexpr{round(Lres_ROSS[[5]]$AN,digits=2)}  &  \Sexpr{round(Lres_ROSS[[5]]$TIME,digits=2)}\\
+	    %PAWLS(0) & 56 & 55 & 5.59 & && 55 & 52 & 5.15 \\
+	    PAWLS & \Sexpr{Lres_APAWLS[[5]]$CFR} & \Sexpr{Lres_APAWLS[[5]]$OFR} & \Sexpr{round(Lres_APAWLS[[5]]$AN,digits=2)}  &  \Sexpr{round(Lres_APAWLS[[5]]$TIME,digits=2)}& &\\
+	    
 	        \hline \hline
 	\end{tabular}
 	\end{center}
 	\end{table}
+% ----------------------------- Variable Selection for high dimensional case ------------------------------------%
+\begin{table}[thp]
+	\begin{center}
+	 \caption{Variable Selection Results for Example 2 ($\bbeta=(3,2,1.5,0,0,0,0,0)'$) }\label{table-selection-1}
+	\begin{tabular}{ccccccccccc}\\\hline\hline
+	    Method  & CFR (\%) & OFR (\%) & AN & TIME & & & CFR (\%) & OFR (\%) & AN & TIME\\ \hline
 	
+	   & \multicolumn{4}{c} {\bf Case A} & && \multicolumn{4}{c} {\bf Case B}  \\
+	   
+	    ALasso & \Sexpr{Hres_ADL[[1]]$CFR} & \Sexpr{Hres_ADL[[1]]$OFR} & \Sexpr{round(Hres_ADL[[1]]$AN,digits=2)}  & \Sexpr{round(Hres_ADL[[1]]$TIME,digits=2)}
+	         &&& \Sexpr{Hres_ADL[[2]]$CFR} & \Sexpr{Hres_ADL[[2]]$OFR} & \Sexpr{round(Hres_ADL[[2]]$AN,digits=2)} & \Sexpr{round(Hres_ADL[[2]]$TIME,digits=2)}\\
+	    
+	    sLTS & \Sexpr{Hres_LTS[[1]]$CFR} & \Sexpr{Hres_LTS[[1]]$OFR} & \Sexpr{round(Hres_LTS[[1]]$AN,digits=2)}  &  \Sexpr{round(Hres_LTS[[1]]$TIME,digits=2)}
+	         &&& \Sexpr{Hres_LTS[[2]]$CFR} & \Sexpr{Hres_LTS[[2]]$OFR} & \Sexpr{round(Hres_LTS[[2]]$AN,digits=2)} &  \Sexpr{round(Hres_LTS[[2]]$TIME,digits=2)}\\
+	  
+	    PAWLS & \Sexpr{Hres_APAWLS[[1]]$CFR} & \Sexpr{Hres_APAWLS[[1]]$OFR} & \Sexpr{round(Hres_APAWLS[[1]]$AN,digits=2)} &  \Sexpr{round(Hres_APAWLS[[1]]$TIME,digits=2)} &&& \Sexpr{Hres_APAWLS[[2]]$CFR} & \Sexpr{Hres_APAWLS[[2]]$OFR} & \Sexpr{round(Hres_APAWLS [[2]]$AN,digits=2)} &  \Sexpr{round(Hres_APAWLS[[2]]$TIME,digits=2)}\\
+	\\
+	   & \multicolumn{4}{c} {\bf Case C} & &  & \multicolumn{4}{c} {\bf Case D}\\
+	   
+	    ALasso & \Sexpr{Hres_ADL[[3]]$CFR} & \Sexpr{Hres_ADL[[3]]$OFR} & \Sexpr{round(Hres_ADL[[3]]$AN,digits=2)} & \Sexpr{round(Hres_ADL[[3]]$TIME,digits=2)} &  && \Sexpr{Hres_ADL[[4]]$CFR} & \Sexpr{Hres_ADL[[4]]$OFR} & \Sexpr{round(Hres_ADL[[4]]$AN,digits=2)} & \Sexpr{round(Hres_ADL[[4]]$TIME,digits=2)}\\
+	    
+	    sLTS & \Sexpr{Hres_LTS[[3]]$CFR} & \Sexpr{Hres_LTS[[3]]$OFR} & \Sexpr{round(Hres_LTS[[3]]$AN,digits=2)}  &  \Sexpr{round(Hres_LTS[[3]]$TIME,digits=2)}& && \Sexpr{Hres_LTS[[4]]$CFR} & \Sexpr{Hres_LTS[[4]]$OFR} & \Sexpr{round(Hres_LTS[[4]]$AN,digits=2)} &  \Sexpr{round(Hres_LTS[[4]]$TIME,digits=2)}\\
+	    
+	    PAWLS & \Sexpr{Hres_APAWLS[[3]]$CFR} & \Sexpr{Hres_APAWLS[[3]]$OFR} & \Sexpr{round(Hres_APAWLS[[3]]$AN,digits=2)}  &  \Sexpr{round(Hres_APAWLS[[3]]$TIME,digits=2)}& && \Sexpr{Hres_APAWLS[[4]]$CFR} & \Sexpr{Hres_APAWLS[[4]]$OFR} & \Sexpr{round(Hres_APAWLS[[4]]$AN,digits=2)} &  \Sexpr{round(Hres_APAWLS[[4]]$TIME,digits=2)}\\
+	    \\
+	    
+	     & \multicolumn{4}{c} {\bf Case E} & &  \\
+	     ALasso & \Sexpr{Hres_ADL[[5]]$CFR} & \Sexpr{Hres_ADL[[5]]$OFR} & \Sexpr{round(Hres_ADL[[5]]$AN,digits=2)} & \Sexpr{round(Hres_ADL[[5]]$TIME,digits=2)} &  &\\
+	    
+	    sLTS & \Sexpr{Hres_LTS[[5]]$CFR} & \Sexpr{Hres_LTS[[5]]$OFR} & \Sexpr{round(Hres_LTS[[5]]$AN,digits=2)}  &  \Sexpr{round(Hres_LTS[[5]]$TIME,digits=2)}& &\\
+	    
+	    PAWLS & \Sexpr{Hres_APAWLS[[5]]$CFR} & \Sexpr{Hres_APAWLS[[5]]$OFR} & \Sexpr{round(Hres_APAWLS[[5]]$AN,digits=2)}  &  \Sexpr{round(Hres_APAWLS[[5]]$TIME,digits=2)}& &\\
+	    
+	        \hline \hline
+	\end{tabular}
+	\end{center}
+	\end{table}
+
+% ----------------------------- outliers detection---------------------------------------------------------------%
 	
-	\begin{table}[thp]
+		\begin{table}[thp]
 	\begin{center}
 	 \caption{Outlier Detection Evaluation in Example 1 and 2}\label{table-outlier-1}
 	\begin{tabular}{ccrrrrrrrrrrr}\\\hline\hline
-	  & & \multicolumn{3}{c} {sLTS} && \multicolumn{3}{c} {IPOD} &&  \multicolumn{3}{c} {PAWLS} \\
-	    &Model  & M (\%) & S (\%) & JD(\%) && M (\%) & S (\%) & JD(\%) && M (\%) & S (\%) & JD(\%)\\ \hline
+	  & & \multicolumn{3}{c} {sLTS} &&  \multicolumn{3}{c} {PAWLS} \\
+	    &Model  & M (\%) & S (\%) & JD(\%) && M (\%) & S (\%) & JD(\%)\\ \hline
 	  \multirow{4}{*}{{\bf Example 1}}
 	      &Case A & \Sexpr{Lres_LTS[[1]]$OD$M} & \Sexpr{Lres_LTS[[1]]$OD$S} & \Sexpr{Lres_LTS[[1]]$OD$JD} 
-	      &&  \Sexpr{Lres_IPOD[[1]]$OD$M} & \Sexpr{Lres_IPOD[[1]]$OD$S} & \Sexpr{Lres_IPOD[[1]]$OD$JD}  
 	      && \Sexpr{Lres_APAWLS[[1]]$OD$M} & \Sexpr{Lres_APAWLS[[1]]$OD$S} & \Sexpr{Lres_APAWLS[[1]]$OD$JD}  \\
 	
 	    &Case B & \Sexpr{Lres_LTS[[2]]$OD$M} & \Sexpr{Lres_LTS[[2]]$OD$S} & \Sexpr{Lres_LTS[[2]]$OD$JD} 
-	    && \Sexpr{Lres_IPOD[[2]]$OD$M} & \Sexpr{Lres_IPOD[[2]]$OD$S} & \Sexpr{Lres_IPOD[[2]]$OD$JD}
 	    && \Sexpr{Lres_APAWLS[[2]]$OD$M} & \Sexpr{Lres_APAWLS[[2]]$OD$S} & \Sexpr{Lres_APAWLS[[2]]$OD$JD}\\
 	
 	    &Case C & \Sexpr{Lres_LTS[[3]]$OD$M} & \Sexpr{Lres_LTS[[3]]$OD$S} & \Sexpr{Lres_LTS[[3]]$OD$JD} 
-	    && \Sexpr{Lres_IPOD[[3]]$OD$M} & \Sexpr{Lres_IPOD[[3]]$OD$S} & \Sexpr{Lres_IPOD[[3]]$OD$JD}
 	    && \Sexpr{Lres_APAWLS[[3]]$OD$M} & \Sexpr{Lres_APAWLS[[3]]$OD$S} & \Sexpr{Lres_APAWLS[[3]]$OD$JD}\\
 	
 	    &Case D & \Sexpr{Lres_LTS[[4]]$OD$M} & \Sexpr{Lres_LTS[[4]]$OD$S} & \Sexpr{Lres_LTS[[4]]$OD$JD}  
-	    && \Sexpr{Lres_IPOD[[4]]$OD$M} & \Sexpr{Lres_IPOD[[4]]$OD$S} & \Sexpr{Lres_IPOD[[4]]$OD$JD}
 	    && \Sexpr{Lres_APAWLS[[4]]$OD$M} & \Sexpr{Lres_APAWLS[[4]]$OD$S} & \Sexpr{Lres_APAWLS[[4]]$OD$JD}\\
+	    
+	    &Case E & \Sexpr{Lres_LTS[[5]]$OD$M} & \Sexpr{Lres_LTS[[5]]$OD$S} & \Sexpr{Lres_LTS[[5]]$OD$JD}
+	    && \Sexpr{Lres_APAWLS[[5]]$OD$M} & \Sexpr{Lres_APAWLS[[5]]$OD$S} & \Sexpr{Lres_APAWLS[[5]]$OD$JD}\\
 	  \\
+	\multirow{4}{*}{{\bf Example 2}}
+	      &Case A & \Sexpr{Hres_LTS[[1]]$OD$M} & \Sexpr{Hres_LTS[[1]]$OD$S} & \Sexpr{Hres_LTS[[1]]$OD$JD} 
+	      && \Sexpr{Hres_APAWLS[[1]]$OD$M} & \Sexpr{Hres_APAWLS[[1]]$OD$S} & \Sexpr{Hres_APAWLS[[1]]$OD$JD}  \\
 	
+	    &Case B & \Sexpr{Hres_LTS[[2]]$OD$M} & \Sexpr{Hres_LTS[[2]]$OD$S} & \Sexpr{Hres_LTS[[2]]$OD$JD} 
+	    && \Sexpr{Hres_APAWLS[[2]]$OD$M} & \Sexpr{Hres_APAWLS[[2]]$OD$S} & \Sexpr{Hres_APAWLS[[2]]$OD$JD}\\
+	
+	    &Case C & \Sexpr{Hres_LTS[[3]]$OD$M} & \Sexpr{Hres_LTS[[3]]$OD$S} & \Sexpr{Hres_LTS[[3]]$OD$JD} 
+	    && \Sexpr{Hres_APAWLS[[3]]$OD$M} & \Sexpr{Hres_APAWLS[[3]]$OD$S} & \Sexpr{Hres_APAWLS[[3]]$OD$JD}\\
+	
+	    &Case D & \Sexpr{Hres_LTS[[4]]$OD$M} & \Sexpr{Hres_LTS[[4]]$OD$S} & \Sexpr{Hres_LTS[[4]]$OD$JD}  
+	    && \Sexpr{Hres_APAWLS[[4]]$OD$M} & \Sexpr{Hres_APAWLS[[4]]$OD$S} & \Sexpr{Hres_APAWLS[[4]]$OD$JD}\\
+	    
+	    &Case E & \Sexpr{Hres_LTS[[5]]$OD$M} & \Sexpr{Hres_LTS[[5]]$OD$S} & \Sexpr{Hres_LTS[[5]]$OD$JD}  
+	    && \Sexpr{Hres_APAWLS[[5]]$OD$M} & \Sexpr{Hres_APAWLS[[5]]$OD$S} & \Sexpr{Hres_APAWLS[[5]]$OD$JD}\\
+	  \\
 	   \hline\hline
 	
 	
@@ -162,4 +233,61 @@ options(digits=2)
 	\end{center}
 	\end{table}
 	
+	\begin{table}[thp]
+	\begin{center}
+	 \caption{Outlier Detection Evaluation in Example 1}\label{table-outlier-1}
+	\begin{tabular}{ccrrrrrrrrrrr}\\\hline\hline
+	  && \multicolumn{3}{c} {IPOD} &&  \multicolumn{3}{c} {PAWLS} \\
+	    &Model  & M (\%) & S (\%) & JD(\%) && M (\%) & S (\%) & JD(\%)\\ \hline
+	  \multirow{4}{*}{{\bf Example 1}}
+	      &Case A &  \Sexpr{Lres_IPOD[[1]]$OD$M} & \Sexpr{Lres_IPOD[[1]]$OD$S} & \Sexpr{Lres_IPOD[[1]]$OD$JD}  
+	      && \Sexpr{Lres_APAWLS[[1]]$OD$M} & \Sexpr{Lres_APAWLS[[1]]$OD$S} & \Sexpr{Lres_APAWLS[[1]]$OD$JD}  \\
+	
+	    &Case B &\Sexpr{Lres_IPOD[[2]]$OD$M} & \Sexpr{Lres_IPOD[[2]]$OD$S} & \Sexpr{Lres_IPOD[[2]]$OD$JD}
+	    && \Sexpr{Lres_APAWLS[[2]]$OD$M} & \Sexpr{Lres_APAWLS[[2]]$OD$S} & \Sexpr{Lres_APAWLS[[2]]$OD$JD}\\
+	
+	    &Case C  &\Sexpr{Lres_IPOD[[3]]$OD$M} & \Sexpr{Lres_IPOD[[3]]$OD$S} & \Sexpr{Lres_IPOD[[3]]$OD$JD}
+	    && \Sexpr{Lres_APAWLS[[3]]$OD$M} & \Sexpr{Lres_APAWLS[[3]]$OD$S} & \Sexpr{Lres_APAWLS[[3]]$OD$JD}\\
+	
+	    &Case D  &\Sexpr{Lres_IPOD[[4]]$OD$M} & \Sexpr{Lres_IPOD[[4]]$OD$S} & \Sexpr{Lres_IPOD[[4]]$OD$JD}
+	    && \Sexpr{Lres_APAWLS[[4]]$OD$M} & \Sexpr{Lres_APAWLS[[4]]$OD$S} & \Sexpr{Lres_APAWLS[[4]]$OD$JD}\\
+	    
+	    &Case E  &\Sexpr{Lres_IPOD[[5]]$OD$M} & \Sexpr{Lres_IPOD[[5]]$OD$S} & \Sexpr{Lres_IPOD[[5]]$OD$JD}
+	    && \Sexpr{Lres_APAWLS[[5]]$OD$M} & \Sexpr{Lres_APAWLS[[5]]$OD$S} & \Sexpr{Lres_APAWLS[[5]]$OD$JD}\\
+	  \\
+	   \hline\hline
+	
+	
+	\end{tabular}
+	\end{center}
+	\end{table}
+	
+% ----------------------------- ROC Curve---------------------------------------------------------------%	
+<<eval=TRUE, echo=FALSE>>=
+fpr3 <- Lres_APAWLS[[3]]$OD$fpr
+tpr3 <- Lres_APAWLS[[3]]$OD$tpr
+fpr4 <- Lres_APAWLS[[4]]$OD$fpr
+tpr4 <- Lres_APAWLS[[4]]$OD$tpr
+fpr5 <- Lres_APAWLS[[5]]$OD$fpr
+tpr5 <- Lres_APAWLS[[5]]$OD$tpr
+plot(fpr3,tpr3,type="l", main="ROC Curve for example 1", xlab="Sensitivity", ylab="Specificity",lwd=2, lty=1, col="green")
+lines(fpr4,tpr4,lwd=2, lty=1,col="blue")
+lines(fpr5,tpr5,lwd=2, lty=1,col="red")
+lines(c(0,1),c(0,1),lwd=1, lty=1,col="grey")
+legend(0.6,0.6,legend=c("Case C", "Case D", "Case E"), col=c("green","blue","red"), lwd=3)
+@
+
+<<eval=TRUE, echo=FALSE>>=
+fpr3 <- Hres_APAWLS[[3]]$OD$fpr
+tpr3 <- Hres_APAWLS[[3]]$OD$tpr
+fpr4 <- Hres_APAWLS[[4]]$OD$fpr
+tpr4 <- Hres_APAWLS[[4]]$OD$tpr
+fpr5 <- Hres_APAWLS[[5]]$OD$fpr
+tpr5 <- Hres_APAWLS[[5]]$OD$tpr
+plot(fpr3,tpr3,type="l", main="ROC Curve for example 2", xlab="Sensitivity", ylab="Specificity",lwd=2, lty=1, col="green")
+lines(fpr4,tpr4,lwd=2, lty=1,col="blue")
+lines(fpr5,tpr5,lwd=2, lty=1,col="red")
+lines(c(0,1),c(0,1),lwd=1, lty=1,col="grey")
+legend(0.6,0.6,legend=c("Case C", "Case D", "Case E"), col=c("green","blue","red"), lwd=3)
+@
 \end{document}

@@ -70,6 +70,23 @@ p = 500
 num = 10
 beta = c(rep(2, num), rep(0, p - num))
 
+# LTS
+require(robustHD)
+Hres_LTS = simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "LTS", useDataFile = FALSE, seed=2016)
+save(Hres_LTS, file = "Output/Hres_LTS.rda")
+
+#APAWLS
+Hres_APAWLS <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS", 
+                          seed = 2016, useDataFile = FALSE, updateInitial = TRUE, intercept = FALSE)
+test_APAWLS <- simulation(L, n, beta, c("A"), method = "PAWLS", initial = "PAWLS", 
+                          seed = 2016, useDataFile = FALSE, updateInitial = TRUE, intercept = TRUE)
+save(Hres_APAWLS, file = "Output/Hres_APAWLS.rda")
+
+# ADL
+require(ncvreg)
+Hres_ADL = simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "ADL", useDataFile = FALSE, seed=2016)
+test_ADL = simulation(L, n, beta, c("A"), method = "ADL", useDataFile = FALSE, seed=2016)
+save(Hres_ADL , file = "Output/Hres_ADL.rda")
 
 
 
