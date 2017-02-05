@@ -1,7 +1,7 @@
 
 srcdreg = function(x, y, penalty1 = c("1-w0", "log", "null"), penalty2 = c("LASSO", "RIDGE", "MCP"), lambda1 = NULL, 
     lambda2 = NULL, nlambda1 = 50, nlambda2 = 100, beta0 = NULL, w0 = NULL, startBeta = NULL, startW = NULL, initial = c("uniform", 
-        "LTS", "LASSO", "PAWLS"), delta = 1e-06, maxIter = 1000, intercept = TRUE, standardize = FALSE, updateInitialTimes = 0, 
+        "LTS", "LASSO", "PAWLS"), delta = 1e-06, maxIter = 1000, intercept = TRUE, standardize = TRUE, updateInitialTimes = 0, 
     criterion = c("BIC", "AIC", "CV"), search = c("cross", "all", "fixw", "crossDynamic"), ...) {
     ## error checking
     if (class(x) != "matrix") {
@@ -150,7 +150,7 @@ srcdreg = function(x, y, penalty1 = c("1-w0", "log", "null"), penalty2 = c("LASS
 }
 
 SetBeta0 = function(beta0) {
-    b = 0.001
+    b = 1e-6
     ifelse(abs(beta0) < b, b, beta0)
 }
 

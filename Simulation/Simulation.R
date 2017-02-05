@@ -4,7 +4,7 @@ source("Simulation/GenerateData.R")
 source('Simulation/mmnngreg.R')
 
 simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL, method = "PAWLS", 
-    matlab = NULL, seed = 2014, useDataFile = FALSE, standardize = FALSE, penalty1 = "1-w0", updateInitial = TRUE, 
+    matlab = NULL, seed = 2014, useDataFile = FALSE, standardize = TRUE, penalty1 = "1-w0", updateInitial = TRUE, 
     criterion = "BIC", intercept = TRUE, initial = "uniform", range = "cross", type = c("Lasso", 
         "Ridge")) {
     mcount <- length(model)
@@ -72,7 +72,13 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
               beta.alasso <- coef(fit2)[, which.min(BIC(fit2))]
               times[i] <- (proc.time() - ptm)[1]
               res <- list(beta=beta.alasso)
-            } else if (method == "LTS") {
+            } else if (method == "Lasso") {
+              ptm <- proc.time()
+              fit1<- ncvreg(out$x, out$y, penalty='lasso')
+              beta.alasso <- coef(fit1)[, which.min(BIC(fit1))]
+              times[i] <- (proc.time() - ptm)[1]
+              res <- list(beta=beta.alasso)
+            }else if (method == "LTS") {
                 require(robustHD)
                 ptm <- proc.time()
                 res = sparseLTS(out$x, out$y, intercept = TRUE)

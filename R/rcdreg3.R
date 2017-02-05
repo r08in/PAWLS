@@ -61,7 +61,10 @@ RCDReg3 = function(x, y, penalty1 = c("1-w0", "log"), penalty2 = c("LASSO", "RID
             L2, m) != 0 + 0, 1, sum), n, m, criterion = criterion, x = x, ws = matrix(res$w, L2, n), bs = matrix(res$beta, 
             L2, m))  #find best lambda2
         if (pre2 == index2 && pre1 == index1) 
-            break
+        {
+          break
+        }
+            
     }
     
     list(lambda1 = lambda1[index1], lambda2 = lambda2[index2], beta = as.vector(res$beta[1, index2, ]), w = as.vector(res$w[1, 

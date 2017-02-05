@@ -1,5 +1,6 @@
 library(RobustCD)
-setwd("E:/R/RobustCD")
+#setwd("E:/R/RobustCD")
+setwd("D:/RProject/RobustCD")
 source("Simulation/GenerateData.R")
 source("Simulation/Simulation.R")
 source("Simulation/CombineData.R")

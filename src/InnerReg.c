@@ -307,6 +307,7 @@ SEXP INNERREG( SEXP X_, SEXP Y_, SEXP Penalty1_, SEXP Penalty2_, SEXP Lambda1_, 
             if(sqr>lam1[i])
             {
               w[i*L1*L2+l2*L1+l1]=lam1[i]/sqr;
+              w[i*L1*L2+l2*L1+l1]=1;
             }
             else 
             {

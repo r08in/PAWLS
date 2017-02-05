@@ -54,8 +54,8 @@ save(Lres_ROSS , file = "Output/Lres_ROSS.rda")
 Lres_ADL = simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "ADL", useDataFile = TRUE)
 save(Lres_ADL , file = "Output/Lres_ADL.rda")
 require(ncvreg)
-test_ADL = simulation(L, n, beta, c("E02052"), method = "ADL", useDataFile = FALSE, seed=2017)
-
+test_Lasso = simulation(L, n, beta, c("A"), method = "Lasso", useDataFile = FALSE, seed=2016)
+test_Lasso = simulation(L, n, beta, c("A"), method = "Lasso", useDataFile = FALSE, seed=2016)
 # IPOD
 Lres_IPOD <- simulation(L, n, beta, c("A","B","C","D","E"),  method = "IPOD", useDataFile = TRUE)
 save(Lres_IPOD  , file = "Output/Lres_IPOD.rda")
@@ -77,10 +77,10 @@ Hres_LTS = simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "LTS", use
 save(Hres_LTS, file = "Output/Hres_LTS.rda")
 
 #APAWLS
-Hres_APAWLS <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS", 
-                          seed = 2016, useDataFile = FALSE, updateInitial = TRUE, intercept = FALSE)
-test_APAWLS <- simulation(L, n, beta, c("A"), method = "PAWLS", initial = "PAWLS", 
+Hres_APAWLS <- simulation(L, n, beta, c("A", "B"), method = "PAWLS", initial = "PAWLS", 
                           seed = 2016, useDataFile = FALSE, updateInitial = TRUE, intercept = TRUE)
+test_APAWLS <- simulation(L, n, beta, c("A"), method = "PAWLS", initial = "PAWLS", 
+                          seed = 2016, useDataFile = FALSE, updateInitial = FALSE, intercept = TRUE)
 save(Hres_APAWLS, file = "Output/Hres_APAWLS.rda")
 
 # ADL
@@ -88,6 +88,7 @@ require(ncvreg)
 Hres_ADL = simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "ADL", useDataFile = FALSE, seed=2016)
 test_ADL = simulation(L, n, beta, c("A"), method = "ADL", useDataFile = FALSE, seed=2016)
 save(Hres_ADL , file = "Output/Hres_ADL.rda")
+load("Output/Hres_ADL.rda")
 
 
 

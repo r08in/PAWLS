@@ -105,7 +105,8 @@ BIC4PAWLS = function(loss, dfw, dfb, n, p, type = "beta", criterion = "BIC", pro
     bs = NULL) {
     dfw = ifelse(dfw > n * pro, 1e+05, dfw)  # rule out high df in w
     df = dfw + dfb
-    a = (n + p)/n
+    #a = (n + p)/n
+    a=0
     if (type == "beta") {
         if (criterion == "AIC") {
             vl = (log(loss/n + a) + 2 * df/(n))

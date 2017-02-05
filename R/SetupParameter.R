@@ -1,6 +1,7 @@
 SetupParameter = function(x, y, nlambda1, nlambda2, beta0, w0, intercept = TRUE, alpha = 0.1, penalty1 = "1-w0") {
     n = length(y)
     # set lambda2
+    intercept=FALSE
     if (intercept) {
         # set lambda1
         if (penalty1 == "log") {
@@ -30,7 +31,7 @@ SetupParameter = function(x, y, nlambda1, nlambda2, beta0, w0, intercept = TRUE,
     }
     
     lambda1 = logSeq(lambda1Max, lambda1Max * 1e-06, nlambda1)
-    lambda2 = logSeq(lambda2Max, 0, nlambda2)
+    lambda2 = logSeq(lambda2Max, .05, nlambda2)
     # lambda1=seq(0.001,0.002,length=50) lambda2=seq(0.2,0,length=100)
     return(list(lambda1 = lambda1, lambda2 = lambda2))
 }
