@@ -5,7 +5,7 @@ source('Simulation/mmnngreg.R')
 
 simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL, method = "PAWLS", 
     matlab = NULL, seed = 2014, useDataFile = FALSE, standardize = TRUE, penalty1 = "1-w0", updateInitial = TRUE, 
-    criterion = "BIC", intercept = TRUE, initial = "uniform", range = "cross", type = c("Lasso", 
+    criterion = "BIC", intercept = TRUE, initial = "uniform", lambda1.min=1e-03, lambda2.min=0.05, range = "cross", type = c("Lasso", 
         "Ridge")) {
     mcount <- length(model)
     
@@ -130,7 +130,7 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
             } else if (method == "PAWLS") {
               updateInitialTimes <- ifelse(updateInitial, 2, 0)
               ptm <- proc.time()
-              res = srcdreg(out$x, out$y, penalty1 = penalty1, nlambda1 = 50, nlambda2 = 100, delta = 1e-06, 
+              res = srcdreg(out$x, out$y, penalty1 = penalty1, nlambda1 = 50, nlambda2 = 100, lambda1.min=lambda1.min, lambda2.min=lambda2.min, delta = 1e-06, 
                 maxIter = 1000, initial = initial, intercept = intercept, standardize = standardize, 
                 updateInitialTimes = updateInitialTimes, criterion = criterion, search = range)
               times[i] <- (proc.time() - ptm)[1]
@@ -205,6 +205,18 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
             AN = AN, MSE = MSE, mses=mses, TIME = TIME, OD=OD)
     }
     # return
+    # Compute Score
+    std.score <- c(74,88,72,63,79)
+    overall <- 0
+    beat <- 1
+    se <- 0
+    for(i in 1:length(std.score))
+    {
+      if(nres[[i]]$CFR-std.score[i]<0) beat <- 0
+      overall <- overall+(nres[[i]]$CFR-std.score[i])
+      se <- se+(nres[[i]]$CFR-std.score[i])^2
+    }
+    nres[[mcount+1]] <- list(overall=overall,beat=beat,se=se)
     nres
 }
 

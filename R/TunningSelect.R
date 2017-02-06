@@ -101,9 +101,8 @@ BICPWLQ2 = function(wloss, beta, w, lambda1, lambda2, n, inv = 1) {
         index2, ] != 0 + 0), wdf = sum(w[index1, index2, ] != 1 + 0), index1 = i, index2 = j, res = res)
 }
 
-BIC4PAWLS = function(loss, dfw, dfb, n, p, type = "beta", criterion = "BIC", pro = 0.8, a = 0, x = NULL, ws = NULL, 
+BIC4PAWLS = function(loss, dfw, dfb, n, p, type = "beta", criterion = "BIC", pro = 0.5, a = 0, x = NULL, ws = NULL, 
     bs = NULL) {
-    dfw = ifelse(dfw > n * pro, 1e+05, dfw)  # rule out high df in w
     df = dfw + dfb
     #a = (n + p)/n
     a=0
@@ -121,11 +120,14 @@ BIC4PAWLS = function(loss, dfw, dfb, n, p, type = "beta", criterion = "BIC", pro
             vl = (log(loss/n + a) + log(n) * df/n)
         }
     }
+    BIC.max=max(vl)
+    for(i in 1: length(vl))
+    {
+      if(dfw[i] > n * pro || dfb[i] > n)
+        vl[i]=BIC.max
+    }
     
-    
-    l = length(df)
-    index = which.min(vl)
-    index
+    index=which.min(vl)
 }
 
 dfs = function(x, beta, w) {
