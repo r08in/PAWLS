@@ -77,6 +77,7 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
             } else if (method == "Lasso") {
               ptm <- proc.time()
               fit1<- ncvreg(out$x, out$y, penalty='lasso')
+              
               beta.alasso <- coef(fit1)[, which.min(BIC(fit1))]
               times[i] <- (proc.time() - ptm)[1]
               res <- list(beta=beta.alasso)
