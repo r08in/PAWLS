@@ -12,6 +12,7 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
     # define output
     iter = rep(0, L)
     iw = rep(0, L)
+    ib = rep(0,L)
     cfr <- rep(0, L)
     ofr <- rep(0, L)
     cfr2 <- rep(0, L)
@@ -22,6 +23,7 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
     mses <- rep(0, L)
     times <- rep(0, L)
     nres <- array(list(), mcount)
+    
     pb <- txtProgressBar(1, mcount * L, style = 3)
     for (j in 1:mcount) {
         # for each model
@@ -138,6 +140,7 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
               w[i, ] = res$w
               iter[i] = res$iter
               iw[i] = res$index1
+              ib[i] = res$index2
             }
             
             # record result
@@ -202,7 +205,7 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
           OD$fpr <- roc$fpr
         }
         nres[[j]] <- list(model = model[j], CFR = CFR, CFR2 = CFR2, OFR = OFR, PDR = PDR, FDR = FDR, 
-            AN = AN, MSE = MSE, mses=mses, TIME = TIME, OD=OD)
+            AN = AN, MSE = MSE, mses=mses, TIME = TIME, iw=iw, ib=ib,OD=OD)
     }
     # return
     # Compute Score

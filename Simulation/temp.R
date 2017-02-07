@@ -16,3 +16,18 @@ for(i in 1: length(lambda1s))
     beat[i,j] <- res[[6]]$beat
     se[i,j] <- res[[6]]$se
   }
+
+
+endreq <- function(res,nlambda,m, t=c(1,2),L=100){
+  s=0
+  if(t==1){
+    for(i in 1:m){
+      s <- s+ sum(res[[m]]$iw==nlambda)
+    }
+  } else{
+    for(i in 1:m){
+      s <- s+ sum(res[[m]]$ib==nlambda)
+    }
+  }
+  s/(L * m)
+}

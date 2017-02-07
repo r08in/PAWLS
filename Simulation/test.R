@@ -25,10 +25,13 @@ fpr <- Lres_LTS[[3]]$OD$fpr
 tpr <- Lres_LTS[[3]]$OD$tpr
 plot(fpr,tpr,type="p")
 # APAWLS
-Lres_APAWLS <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "uniform", 
-                          lambda1.min = 0.05,lambda2.min = 0.005, seed = NULL, useDataFile = TRUE, 
+Lres_APAWLS <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS", 
+                          lambda1.min = 0.01,lambda2.min = 0.001, seed = NULL, useDataFile = TRUE, 
                           updateInitial =FALSE, intercept = TRUE)
+endreq(Lres_APAWLS,100,5,t=2)
+endreq(Lres_APAWLS,50,5,t=1)
 save(Lres_APAWLS, file = "Output/Lres_APAWLS.rda")
+load("Output/Lres_APAWLS.rda")
 test_APAWLS <- simulation(L, n, beta, c("E"), method = "PAWLS", initial = "PAWLS",seed = NULL, useDataFile = TRUE)
 
 
@@ -64,7 +67,7 @@ fpr <- Lres_IPOD [[3]]$OD$fpr
 tpr <- Lres_IPOD [[3]]$OD$tpr
 plot(fpr,tpr,type="p")
 #-------------------------------------------------------------------------------------
-
+source("Simulation/Simulation.R")
 # n=100,500
 L = 100
 n = 100
@@ -79,11 +82,14 @@ save(Hres_LTS, file = "Output/Hres_LTS.rda")
 load("Output/Hres_LTS.rda")
 
 #APAWLS
-Hres_APAWLS <- simulation(L, n, beta, c("A", "B"), method = "PAWLS", initial = "PAWLS", 
+Hres_APAWLS <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS",
+                          lambda1.min=0.01, lambda2.min=0.05,
                           seed = 2016, useDataFile = FALSE, updateInitial = TRUE, intercept = TRUE)
-test_APAWLS <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS", lambda1.min=0.05, lambda2.min=0.01,
+test_APAWLS <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS", 
+                          lambda1.min=0.01, lambda2.min=0.05,
                           seed = 2016, useDataFile = FALSE, updateInitial = FALSE, intercept = TRUE)
 save(Hres_APAWLS, file = "Output/Hres_APAWLS.rda")
+load("Output/Hres_APAWLS.rda")
 
 # ADL
 require(ncvreg)
