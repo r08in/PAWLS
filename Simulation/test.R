@@ -35,7 +35,7 @@ load("Output/Lres_APAWLS.rda")
 
 Lres_APAWLS  <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS", 
                          #lambda1.min = 0.03,lambda2.min = 0.01, 
-                         lambda1.min=0.03, lambda2.min=0,
+                         lambda1.min=0.01, lambda2.min=0,
                          seed = NULL, useDataFile = TRUE,       updateInitial =FALSE, intercept = TRUE, criterion = "BIC")
 
 
