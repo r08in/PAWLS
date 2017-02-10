@@ -75,7 +75,7 @@ plot(fpr,tpr,type="p")
 #-------------------------------------------------------------------------------------
 source("Simulation/Simulation.R")
 # n=100,500
-L = 50
+L = 100
 n = 100
 p = 500
 num = 10
@@ -88,7 +88,7 @@ save(Hres_LTS, file = "Output/Hres_LTS.rda")
 load("Output/Hres_LTS.rda")
 
 #APAWLS
-Hres_APAWLS <- simulation(L, n, beta, c( "C"), method = "PAWLS", initial = "PAWLS",
+Hres_APAWLS <- simulation(L, n, beta, c( "A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS",
                           lambda1.min=0.05, lambda2.min=0.01,
                           seed = 2016, useDataFile = FALSE, updateInitial = FALSE, intercept = TRUE )
 test_APAWLS <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS", 
@@ -195,7 +195,7 @@ res$coefficients[res$coefficients != 0]
 lm_nci = lm(out$y ~ out$x)
 studres_nci = studres(lm_nci)
 # pwls-vs lambda2=c(0.4304376,0.2141318,0)
-res_nci_0 = srcdreg(out$x, out$y, initial = "uniform", search = "cross", criterion = "BIC", updateInitialTimes = 2)
+res_nci_0 = srcdreg(out$x, out$y,standardize = TRUE, initial = "PAWLS", intercept = TRUE)
 res_nci = srcdreg(out$x, out$y, initial = "PAWLS", search = "cross", criterion = "BIC", updateInitialTimes = 2)
 res_nci_PAWLS = srcdreg(out$x, out$y, initial = "uniform", search = "cross", criterion = "BIC", updateInitialTimes = 0)
 res_nci = srcdreg(out$x, out$y, initial = "PAWLS", search = "crossDynamic", criterion = "BIC", updateInitialTimes = 2, 
