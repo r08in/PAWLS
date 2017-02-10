@@ -25,7 +25,7 @@ tpr <- Lres_LTS[[3]]$OD$tpr
 plot(fpr,tpr,type="p")
 # APAWLS
 Lres_APAWLS <- simulation(L, n, beta, c("D","E"), method = "PAWLS", initial = "PAWLS", 
-                          lambda1.min = 0.03,lambda2.min = 0, seed = NULL, useDataFile = TRUE, 
+                          lambda1.min = 0,lambda2.min = 0, seed = NULL, useDataFile = TRUE, 
                           updateInitial =FALSE, intercept = TRUE, criterion = "BIC")
 
 endreq(Lres_APAWLS,100,5,t=2)
@@ -35,8 +35,9 @@ load("Output/Lres_APAWLS.rda")
 
 Lres_APAWLS  <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS", 
                          #lambda1.min = 0.03,lambda2.min = 0.01, 
-                         lambda1.min=0.01, lambda2.min=0,
-                         seed = NULL, useDataFile = TRUE,       updateInitial =FALSE, intercept = TRUE, criterion = "BIC")
+                         lambda1.min=0, lambda2.min=0,
+                         seed = NULL, useDataFile = TRUE,       
+                         updateInitial =FALSE, intercept = TRUE, criterion = "BIC")
 
 
 fpr3 <- Lres_APAWLS[[3]]$OD$fpr

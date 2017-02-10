@@ -62,6 +62,7 @@ RCDReg3 = function(x, y, penalty1 = c("1-w0", "log"), penalty2 = c("LASSO", "RID
             L2, m))  #find best lambda2
         if (pre2 == index2 && pre1 == index1) 
         {
+          browser()
           break
         }
             
