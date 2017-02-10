@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2016.1.9)  9 FEB 2017 10:25
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2016.1.9)  10 FEB 2017 14:54
 entering extended mode
 **./result.tex
 (result.tex
@@ -430,12 +430,12 @@ Overfull \hbox (95.88963pt too wide) in paragraph at lines 193--224
  []
 
 
-Overfull \hbox (12.81966pt too wide) in paragraph at lines 232--271
+Overfull \hbox (38.55574pt too wide) in paragraph at lines 232--271
  [] 
  []
 
 
-Overfull \hbox (12.81966pt too wide) in paragraph at lines 277--300
+Overfull \hbox (38.55574pt too wide) in paragraph at lines 277--300
  [] 
  []
 
@@ -510,7 +510,7 @@ Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 315.
 Here is how much of TeX's memory you used:
  6124 strings out of 493634
  89857 string characters out of 3141291
- 192109 words of memory out of 3000000
+ 193109 words of memory out of 3000000
  9416 multiletter control sequences out of 15000+200000
  8701 words of font info for 33 fonts, out of 3000000 for 9000
  1025 hyphenation exceptions out of 8191
@@ -521,10 +521,12 @@ amsfonts/cm/cmbx10.pfb><C:/Users/Administrator/AppData/Local/Programs/MiKTeX 2.
 al/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/Admi
 nistrator/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr1
 0.pfb><C:/Users/Administrator/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/pub
-lic/amsfonts/cm/cmsy7.pfb>
-Output written on result.pdf (4 pages, 75488 bytes).
+lic/amsfonts/cm/cmr7.pfb><C:/Users/Administrator/AppData/Local/Programs/MiKTeX 
+2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/Administrator/AppData/L
+ocal/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
+Output written on result.pdf (4 pages, 90087 bytes).
 PDF statistics:
- 68 PDF objects out of 1000 (max. 8388607)
+ 76 PDF objects out of 1000 (max. 8388607)
  10 named destinations out of 1000 (max. 500000)
  19 words of extra memory for PDF output out of 10000 (max. 10000000)
 

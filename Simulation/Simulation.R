@@ -214,7 +214,7 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
     overall <- 0
     beat <- 1
     se <- 0
-    for(i in 1:length(std.score))
+    for(i in 1:mcount)
     {
       if(nres[[i]]$CFR-std.score[i]<0) beat <- 0
       overall <- overall+(nres[[i]]$CFR-std.score[i])

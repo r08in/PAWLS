@@ -24,18 +24,19 @@ fpr <- Lres_LTS[[3]]$OD$fpr
 tpr <- Lres_LTS[[3]]$OD$tpr
 plot(fpr,tpr,type="p")
 # APAWLS
-Lres_APAWLS <- simulation(L, n, beta, c("D","E"), method = "PAWLS", initial = "PAWLS", 
-                          lambda1.min = 0,lambda2.min = 0, seed = NULL, useDataFile = TRUE, 
-                          updateInitial =FALSE, intercept = TRUE, criterion = "BIC")
-
-endreq(Lres_APAWLS,100,5,t=2)
-endreq(Lres_APAWLS,50,5,t=1)
-save(Lres_APAWLS, file = "Output/Lres_APAWLS.rda")
-load("Output/Lres_APAWLS.rda")
 
 Lres_APAWLS  <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS", 
-                         #lambda1.min = 0.03,lambda2.min = 0.01, 
-                         lambda1.min=0, lambda2.min=0,
+                         lambda1.min=0.05, lambda2.min=0.01,
+                         seed = NULL, useDataFile = TRUE,       
+                         updateInitial =FALSE, intercept = TRUE, criterion = "BIC")
+
+endreq(Hres_APAWLS,100,5,t=2)
+endreq(Hres_APAWLS,50,5,t=1)
+save(Lres_APAWLS, file = "Output/Lres_APAWLS.rda")
+#load("Output/Lres_APAWLS.rda")
+
+Lres_APAWLS  <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS", 
+                         lambda1.min=0.05, lambda2.min=0,
                          seed = NULL, useDataFile = TRUE,       
                          updateInitial =FALSE, intercept = TRUE, criterion = "BIC")
 
@@ -74,7 +75,7 @@ plot(fpr,tpr,type="p")
 #-------------------------------------------------------------------------------------
 source("Simulation/Simulation.R")
 # n=100,500
-L = 100
+L = 50
 n = 100
 p = 500
 num = 10
@@ -87,12 +88,12 @@ save(Hres_LTS, file = "Output/Hres_LTS.rda")
 load("Output/Hres_LTS.rda")
 
 #APAWLS
-Hres_APAWLS <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS",
-                          lambda1.min=0.01, lambda2.min=0.05,
-                          seed = 2016, useDataFile = FALSE, updateInitial = TRUE, intercept = TRUE)
+Hres_APAWLS <- simulation(L, n, beta, c( "C"), method = "PAWLS", initial = "PAWLS",
+                          lambda1.min=0.05, lambda2.min=0.01,
+                          seed = 2016, useDataFile = FALSE, updateInitial = FALSE, intercept = TRUE )
 test_APAWLS <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS", 
                           lambda1.min=0.01, lambda2.min=0.05,
-                          seed = 2016, useDataFile = FALSE, updateInitial = FALSE, intercept = TRUE)
+                          seed = 2016, useDataFile = FALSE, updateInitial = FALSE, intercept = FALSE)
 save(Hres_APAWLS, file = "Output/Hres_APAWLS.rda")
 load("Output/Hres_APAWLS.rda")
 
