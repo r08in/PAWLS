@@ -8,18 +8,22 @@ beta = c(3, 2, 1.5, 0, 0, 0, 0, 0)
 
 
 # MMNNG
-pro=0.2
+pro=0.3
 Lres_mmnngA = simulation(L, n, beta, "A", method = "MMNNG_DATA", useDataFile = FALSE, seed = NULL, pro=pro)
 Lres_mmnngB = simulation(L, n, beta, "B", method = "MMNNG_DATA", useDataFile = FALSE, seed = NULL, pro=pro)
 Lres_mmnngC = simulation(L, n, beta, "C", method = "MMNNG_DATA", useDataFile = FALSE, seed = NULL, pro=pro)
 Lres_mmnngD = simulation(L, n, beta, "D", method = "MMNNG_DATA", useDataFile = FALSE, seed = NULL, pro=pro)
 Lres_mmnngE = simulation(L, n, beta, "E", method = "MMNNG_DATA", useDataFile = FALSE, seed = NULL, pro=pro)
 Lres_mmnng = simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "MMNNG_DATA", useDataFile = TRUE, seed = NULL)
+Lres_mmnng02 = simulation(L, n, beta, c("C", "D","E"), method = "MMNNG_DATA", useDataFile = TRUE, seed = NULL,pro=0.2)
+Lres_mmnng03 = simulation(L, n, beta, c("C", "D","E"), method = "MMNNG_DATA", useDataFile = TRUE, seed = NULL,pro=0.3)
 save(Lres_mmnng, file = "Output/Lres_mmnng.rda")
 
 # LTS
 require(robustHD)
 Lres_LTS = simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "LTS", useDataFile = TRUE)
+Lres_LTS02 = simulation(L, n, beta, c("C", "D","E"), method = "LTS", useDataFile = TRUE, pro=0.2)
+Lres_LTS03 = simulation(L, n, beta, c("C", "D","E"), method = "LTS", useDataFile = TRUE, pro=0.3)
 save(Lres_LTS, file = "Output/Lres_LTS.rda")
 fpr <- Lres_LTS[[3]]$OD$fpr
 tpr <- Lres_LTS[[3]]$OD$tpr
@@ -30,6 +34,16 @@ Lres_APAWLS  <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWL
                          lambda1.min=0.05, lambda2.min=0.01,
                          seed = NULL, useDataFile = TRUE,       
                          updateInitial =FALSE, intercept = TRUE, criterion = "BIC")
+
+Lres_APAWLS02  <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS", 
+                           lambda1.min=0.05, lambda2.min=0.01,
+                           seed = NULL, useDataFile = TRUE,       
+                           updateInitial =FALSE, intercept = TRUE, criterion = "BIC",pro=0.2)
+
+Lres_APAWLS03  <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS", 
+                           lambda1.min=0.05, lambda2.min=0.01,
+                           seed = NULL, useDataFile = TRUE,       
+                           updateInitial =FALSE, intercept = TRUE, criterion = "BIC",pro=0.2)
 
 endreq(Hres_APAWLS,100,5,t=2)
 endreq(Hres_APAWLS,50,5,t=1)
