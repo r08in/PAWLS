@@ -8,11 +8,12 @@ beta = c(3, 2, 1.5, 0, 0, 0, 0, 0)
 
 
 # MMNNG
-Lres_mmnngA = simulation(L, n, beta, "A", method = "MMNNG_DATA", useDataFile = FALSE, seed = NULL)
-Lres_mmnngB = simulation(L, n, beta, "B", method = "MMNNG_DATA", useDataFile = FALSE, seed = NULL)
-Lres_mmnngC = simulation(L, n, beta, "C", method = "MMNNG_DATA", useDataFile = FALSE, seed = NULL)
-Lres_mmnngD = simulation(L, n, beta, "D", method = "MMNNG_DATA", useDataFile = FALSE, seed = NULL)
-Lres_mmnngE = simulation(L, n, beta, "E", method = "MMNNG_DATA", useDataFile = FALSE, seed = NULL)
+pro=0.2
+Lres_mmnngA = simulation(L, n, beta, "A", method = "MMNNG_DATA", useDataFile = FALSE, seed = NULL, pro=pro)
+Lres_mmnngB = simulation(L, n, beta, "B", method = "MMNNG_DATA", useDataFile = FALSE, seed = NULL, pro=pro)
+Lres_mmnngC = simulation(L, n, beta, "C", method = "MMNNG_DATA", useDataFile = FALSE, seed = NULL, pro=pro)
+Lres_mmnngD = simulation(L, n, beta, "D", method = "MMNNG_DATA", useDataFile = FALSE, seed = NULL, pro=pro)
+Lres_mmnngE = simulation(L, n, beta, "E", method = "MMNNG_DATA", useDataFile = FALSE, seed = NULL, pro=pro)
 Lres_mmnng = simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "MMNNG_DATA", useDataFile = TRUE, seed = NULL)
 save(Lres_mmnng, file = "Output/Lres_mmnng.rda")
 

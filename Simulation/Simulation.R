@@ -6,7 +6,7 @@ source('Simulation/mmnngreg.R')
 simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL, method = "PAWLS", 
     matlab = NULL, seed = 2014, useDataFile = FALSE, standardize = TRUE, penalty1 = "1-w0", updateInitial = TRUE, 
     criterion = "BIC", intercept = TRUE, initial = "uniform", lambda1.min=1e-03, lambda2.min=0.05, range = "cross", type = c("Lasso", 
-        "Ridge")) {
+        "Ridge"), pro=0.1) {
     mcount <- length(model)
     
     # define output
@@ -34,7 +34,7 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
         }
         p = length(beta)
         if (useDataFile) {
-            f = paste("data\\", model[j], n, "X", p, ".rda", sep = "")
+            f = paste("data\\", model[j], n, "X", p, "_", pro, ".rda", sep = "")
             load(f)
             beta = data[[1]]$beta
             n = length(data[[1]]$y)
@@ -49,7 +49,7 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
                 out = data[[i]]
                 beta <- out$beta
             } else {
-                out = GenerateDataByModel(n = n, beta = beta, model = model[j], dataType = type)
+                out = GenerateDataByModel(n = n, beta = beta, model = model[j], dataType = type, pro=pro)
             }
             
             # try different methods
@@ -108,8 +108,8 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
               }
             } else if (method == "MMNNG_DATA") {
                 # load data file and result file
-                dfile <- paste("data\\", model[j], n, "X", p, ".rda", sep = "")
-                rfile <- paste("data\\", model[j], n, "X", p,"_res", ".rda", sep = "")
+                dfile <- paste("data\\", model[j], n, "X", p,"_", pro, ".rda", sep = "")
+                rfile <- paste("data\\", model[j], n, "X", p,"_", pro, "_res", ".rda", sep = "")
                 lf <- try(load(dfile))
                 if (class(lf) == "try-error") {
                   data <- list(out)
@@ -197,7 +197,6 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
         # outlier dectection
         OD <- "not applicable."
         if(method == "PAWLS" || method == "LTS"|| method=="IPOD" ){
-          pro <- 0.1
           if(model[j] == "A" || model[j] == "B")
             pro <- 0
           OD <- OutlierSummary(w, pro)

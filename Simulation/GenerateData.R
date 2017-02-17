@@ -237,8 +237,7 @@ GenerateDummyModel = function(sizeInfo, groupInfo, validGroupNumInfo, offSet = 0
 
 # Data modification for different model
 GenerateDataByModel = function(n, beta, errorSigma = 2, r = 0.5, model = c("A", "B", "C", "D", "E"), 
-    dataType = c("Lasso", "Ridge")) {
-    pro = 0.1
+    dataType = c("Lasso", "Ridge"), pro = 0.1) {
     p = length(beta)
     if (model == "A") {
         out = GenerateData(n = n, dataSetNum = 1, beta = beta, errorSigma = errorSigma, r = r, dataType = dataType)  #errorSigma=2
@@ -258,11 +257,10 @@ GenerateDataByModel = function(n, beta, errorSigma = 2, r = 0.5, model = c("A", 
         u1 = runif(oNum, 0, 1)
         u2 = runif(oNum, 0, 1)
         out$y[1:oNum] = out$y[1:oNum] + ifelse(u1 < 0.5, -1, 1) * (20 + 10 * u2)
-        out$x[1:oNum, (pnum + 1):(pnum + oNum)] = out$x[1:oNum, (pnum + 1):(pnum + oNum)] + 10
+        out$x[1:oNum, (pnum + 1):(pnum + 5)] = out$x[1:oNum, (pnum + 1):(pnum + 5)] + 10
     } else if (model == "E") {
       out = GenerateData(n = n, dataSetNum = 1, beta = beta, errorSigma = errorSigma, r = r, dataType = dataType)
       pnum = sum(beta != 0)
-      pro <- 0.1
       ratio <- 3
       oNum = round(n * pro)
       xx <- out$x
