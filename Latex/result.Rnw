@@ -157,27 +157,62 @@ options(digits=2)
 	    Method  & CFR (\%) & OFR (\%) & AN & TIME & & & CFR (\%) & OFR (\%) & AN & TIME\\ \hline
 	   & \multicolumn{4}{c} {\bf Case C} & &  & \multicolumn{4}{c} {\bf Case D}\\
 	   
-	    ALasso & \Sexpr{Lres_ADL02[[3]]$CFR} & \Sexpr{Lres_ADL02[[3]]$OFR} & \Sexpr{round(Lres_ADL0202[[3]]$AN,digits=2)} & \Sexpr{round(Lres_ADL0202[[3]]$TIME,digits=2)} &  && \Sexpr{Lres_ADL0202[[4]]$CFR} & \Sexpr{Lres_ADL0202[[4]]$OFR} & \Sexpr{round(Lres_ADL0202[[4]]$AN,digits=2)} & \Sexpr{round(Lres_ADL0202[[4]]$TIME,digits=2)}\\
+	    ALasso & \Sexpr{Lres_ADL03[[3]]$CFR} & \Sexpr{Lres_ADL03[[3]]$OFR} & \Sexpr{round(Lres_ADL0203[[3]]$AN,digits=2)} & \Sexpr{round(Lres_ADL0203[[3]]$TIME,digits=2)} &  && \Sexpr{Lres_ADL0203[[4]]$CFR} & \Sexpr{Lres_ADL0203[[4]]$OFR} & \Sexpr{round(Lres_ADL0203[[4]]$AN,digits=2)} & \Sexpr{round(Lres_ADL0203[[4]]$TIME,digits=2)}\\
 	    
-	    sLTS & \Sexpr{Lres_LTS0202[[3]]$CFR} & \Sexpr{Lres_LTS0202[[3]]$OFR} & \Sexpr{round(Lres_LTS0202[[3]]$AN,digits=2)}  &  \Sexpr{round(Lres_LTS0202[[3]]$TIME,digits=2)}& && \Sexpr{Lres_LTS02[[4]]$CFR} & \Sexpr{Lres_LTS02[[4]]$OFR} & \Sexpr{round(Lres_LTS02[[4]]$AN,digits=2)} &  \Sexpr{round(Lres_LTS02[[4]]$TIME,digits=2)}\\
+	    sLTS & \Sexpr{Lres_LTS0203[[3]]$CFR} & \Sexpr{Lres_LTS0203[[3]]$OFR} & \Sexpr{round(Lres_LTS0203[[3]]$AN,digits=2)}  &  \Sexpr{round(Lres_LTS0203[[3]]$TIME,digits=2)}& && \Sexpr{Lres_LTS03[[4]]$CFR} & \Sexpr{Lres_LTS03[[4]]$OFR} & \Sexpr{round(Lres_LTS03[[4]]$AN,digits=2)} &  \Sexpr{round(Lres_LTS03[[4]]$TIME,digits=2)}\\
 	    
-	    MMNNG & \Sexpr{Lres_mmnng02[[3]]$CFR} & \Sexpr{Lres_mmnng02[[3]]$OFR} & \Sexpr{round(Lres_mmnng02[[3]]$AN,digits=2)}  &  \Sexpr{round(Lres_mmnng02[[3]]$TIME,digits=2)} &&& \Sexpr{Lres_mmnng02[[4]]$CFR} & \Sexpr{Lres_mmnng02[[4]]$OFR} & \Sexpr{round(Lres_mmnng02[[4]]$AN,digits=2)}  &  \Sexpr{round(Lres_mmnng02[[4]]$TIME,digits=2)}\\
+	    MMNNG & \Sexpr{Lres_mmnng03[[3]]$CFR} & \Sexpr{Lres_mmnng03[[3]]$OFR} & \Sexpr{round(Lres_mmnng03[[3]]$AN,digits=2)}  &  \Sexpr{round(Lres_mmnng03[[3]]$TIME,digits=2)} &&& \Sexpr{Lres_mmnng03[[4]]$CFR} & \Sexpr{Lres_mmnng03[[4]]$OFR} & \Sexpr{round(Lres_mmnng03[[4]]$AN,digits=2)}  &  \Sexpr{round(Lres_mmnng03[[4]]$TIME,digits=2)}\\
 	    
-	    SROS & \Sexpr{Lres_ROSS02[[3]]$CFR} & \Sexpr{Lres_ROSS02[[3]]$OFR} & \Sexpr{round(Lres_ROSS02[[3]]$AN,digits=2)}  &  \Sexpr{round(Lres_ROSS02[[3]]$TIME,digits=2)} & && \Sexpr{Lres_ROSS02[[4]]$CFR} & \Sexpr{Lres_ROSS02[[4]]$OFR} & \Sexpr{round(Lres_ROSS02[[4]]$AN,digits=2)}  &  \Sexpr{round(Lres_ROSS02[[4]]$TIME,digits=2)}\\
+	    SROS & \Sexpr{Lres_ROSS03[[3]]$CFR} & \Sexpr{Lres_ROSS03[[3]]$OFR} & \Sexpr{round(Lres_ROSS03[[3]]$AN,digits=2)}  &  \Sexpr{round(Lres_ROSS03[[3]]$TIME,digits=2)} & && \Sexpr{Lres_ROSS03[[4]]$CFR} & \Sexpr{Lres_ROSS03[[4]]$OFR} & \Sexpr{round(Lres_ROSS03[[4]]$AN,digits=2)}  &  \Sexpr{round(Lres_ROSS03[[4]]$TIME,digits=2)}\\
 	    %PAWLS(0) & 56 & 43 & 3.59 & && 44 & 52 & 4.13 \\
-	    PAWLS & \Sexpr{Lres_APAWLS02[[3]]$CFR} & \Sexpr{Lres_APAWLS02[[3]]$OFR} & \Sexpr{round(Lres_APAWLS02[[3]]$AN,digits=2)}  &  \Sexpr{round(Lres_APAWLS02[[3]]$TIME,digits=2)}& && \Sexpr{Lres_APAWLS02[[4]]$CFR} & \Sexpr{Lres_APAWLS02[[4]]$OFR} & \Sexpr{round(Lres_APAWLS02[[4]]$AN,digits=2)} &  \Sexpr{round(Lres_APAWLS02[[4]]$TIME,digits=2)}\\
+	    PAWLS & \Sexpr{Lres_APAWLS03[[3]]$CFR} & \Sexpr{Lres_APAWLS03[[3]]$OFR} & \Sexpr{round(Lres_APAWLS03[[3]]$AN,digits=2)}  &  \Sexpr{round(Lres_APAWLS03[[3]]$TIME,digits=2)}& && \Sexpr{Lres_APAWLS03[[4]]$CFR} & \Sexpr{Lres_APAWLS03[[4]]$OFR} & \Sexpr{round(Lres_APAWLS03[[4]]$AN,digits=2)} &  \Sexpr{round(Lres_APAWLS03[[4]]$TIME,digits=2)}\\
 	    \\
 	    
 	     & \multicolumn{4}{c} {\bf Case E} & &  \\
-	     ALasso & \Sexpr{Lres_ADL02[[5]]$CFR} & \Sexpr{Lres_ADL02[[5]]$OFR} & \Sexpr{round(Lres_ADL02[[5]]$AN,digits=2)} & \Sexpr{round(Lres_ADL02[[5]]$TIME,digits=2)} &  &\\
+	     ALasso & \Sexpr{Lres_ADL03[[5]]$CFR} & \Sexpr{Lres_ADL03[[5]]$OFR} & \Sexpr{round(Lres_ADL03[[5]]$AN,digits=2)} & \Sexpr{round(Lres_ADL03[[5]]$TIME,digits=2)} &  &\\
 	    
-	    sLTS & \Sexpr{Lres_LTS02[[5]]$CFR} & \Sexpr{Lres_LTS02[[5]]$OFR} & \Sexpr{round(Lres_LTS02[[5]]$AN,digits=2)}  &  \Sexpr{round(Lres_LTS02[[5]]$TIME,digits=2)}& &\\
+	    sLTS & \Sexpr{Lres_LTS03[[5]]$CFR} & \Sexpr{Lres_LTS03[[5]]$OFR} & \Sexpr{round(Lres_LTS03[[5]]$AN,digits=2)}  &  \Sexpr{round(Lres_LTS03[[5]]$TIME,digits=2)}& &\\
 	    
-	    MMNNG & \Sexpr{Lres_mmnng02[[5]]$CFR} & \Sexpr{Lres_mmnng02[[5]]$OFR} & \Sexpr{round(Lres_mmnng02[[5]]$AN,digits=2)}  &  \Sexpr{round(Lres_mmnng02[[5]]$TIME,digits=2)} &&\\
+	    MMNNG & \Sexpr{Lres_mmnng03[[5]]$CFR} & \Sexpr{Lres_mmnng03[[5]]$OFR} & \Sexpr{round(Lres_mmnng03[[5]]$AN,digits=2)}  &  \Sexpr{round(Lres_mmnng03[[5]]$TIME,digits=2)} &&\\
 	    
-	    % SROS & \Sexpr{Lres_ROSS02[[5]]$CFR} & \Sexpr{Lres_ROSS02[[5]]$OFR} & \Sexpr{round(Lres_ROSS02[[5]]$AN,digits=2)}  &  \Sexpr{round(Lres_ROSS02[[5]]$TIME,digits=2)} & && \Sexpr{Lres_ROSS02[[5]]$CFR} & \Sexpr{Lres_ROSS02[[5]]$OFR} & \Sexpr{round(Lres_ROSS02[[5]]$AN,digits=2)}  &  \Sexpr{round(Lres_ROSS02[[5]]$TIME,digits=2)}\\
+	    % SROS & \Sexpr{Lres_ROSS03[[5]]$CFR} & \Sexpr{Lres_ROSS03[[5]]$OFR} & \Sexpr{round(Lres_ROSS03[[5]]$AN,digits=2)}  &  \Sexpr{round(Lres_ROSS03[[5]]$TIME,digits=2)} & && \Sexpr{Lres_ROSS03[[5]]$CFR} & \Sexpr{Lres_ROSS03[[5]]$OFR} & \Sexpr{round(Lres_ROSS03[[5]]$AN,digits=2)}  &  \Sexpr{round(Lres_ROSS03[[5]]$TIME,digits=2)}\\
 	    %PAWLS(0) & 56 & 55 & 5.59 & && 55 & 52 & 5.15 \\
-	    PAWLS & \Sexpr{Lres_APAWLS02[[5]]$CFR} & \Sexpr{Lres_APAWLS02[[5]]$OFR} & \Sexpr{round(Lres_APAWLS02[[5]]$AN,digits=2)}  &  \Sexpr{round(Lres_APAWLS02[[5]]$TIME,digits=2)}& &\\
+	    PAWLS & \Sexpr{Lres_APAWLS03[[5]]$CFR} & \Sexpr{Lres_APAWLS03[[5]]$OFR} & \Sexpr{round(Lres_APAWLS03[[5]]$AN,digits=2)}  &  \Sexpr{round(Lres_APAWLS03[[5]]$TIME,digits=2)}& &\\
+	    
+	        \hline \hline
+	\end{tabular}
+	\end{center}
+	\end{table}
+	
+		%----------------------------------- 30% outliers ----------------------------------------------------%
+	\begin{table}[thp]
+	\begin{center}
+	 \caption{Variable Selection Results for Example 1 ($\bbeta=(3,2,1.5,0,0,0,0,0)'$ with 20\% outliers ) }\label{table-selection-low3}
+	\begin{tabular}{ccccccccccc}\\\hline\hline
+	    Method  & CFR (\%) & OFR (\%) & AN & TIME & & & CFR (\%) & OFR (\%) & AN & TIME\\ \hline
+	   & \multicolumn{4}{c} {\bf Case C} & &  & \multicolumn{4}{c} {\bf Case D}\\
+	   
+	    ALasso & \Sexpr{Lres_ADL03[[3]]$CFR} & \Sexpr{Lres_ADL03[[3]]$OFR} & \Sexpr{round(Lres_ADL0203[[3]]$AN,digits=2)} & \Sexpr{round(Lres_ADL0203[[3]]$TIME,digits=2)} &  && \Sexpr{Lres_ADL0203[[4]]$CFR} & \Sexpr{Lres_ADL0203[[4]]$OFR} & \Sexpr{round(Lres_ADL0203[[4]]$AN,digits=2)} & \Sexpr{round(Lres_ADL0203[[4]]$TIME,digits=2)}\\
+	    
+	    sLTS & \Sexpr{Lres_LTS0203[[3]]$CFR} & \Sexpr{Lres_LTS0203[[3]]$OFR} & \Sexpr{round(Lres_LTS0203[[3]]$AN,digits=2)}  &  \Sexpr{round(Lres_LTS0203[[3]]$TIME,digits=2)}& && \Sexpr{Lres_LTS03[[4]]$CFR} & \Sexpr{Lres_LTS03[[4]]$OFR} & \Sexpr{round(Lres_LTS03[[4]]$AN,digits=2)} &  \Sexpr{round(Lres_LTS03[[4]]$TIME,digits=2)}\\
+	    
+	    MMNNG & \Sexpr{Lres_mmnng03[[3]]$CFR} & \Sexpr{Lres_mmnng03[[3]]$OFR} & \Sexpr{round(Lres_mmnng03[[3]]$AN,digits=2)}  &  \Sexpr{round(Lres_mmnng03[[3]]$TIME,digits=2)} &&& \Sexpr{Lres_mmnng03[[4]]$CFR} & \Sexpr{Lres_mmnng03[[4]]$OFR} & \Sexpr{round(Lres_mmnng03[[4]]$AN,digits=2)}  &  \Sexpr{round(Lres_mmnng03[[4]]$TIME,digits=2)}\\
+	    
+	    SROS & \Sexpr{Lres_ROSS03[[3]]$CFR} & \Sexpr{Lres_ROSS03[[3]]$OFR} & \Sexpr{round(Lres_ROSS03[[3]]$AN,digits=2)}  &  \Sexpr{round(Lres_ROSS03[[3]]$TIME,digits=2)} & && \Sexpr{Lres_ROSS03[[4]]$CFR} & \Sexpr{Lres_ROSS03[[4]]$OFR} & \Sexpr{round(Lres_ROSS03[[4]]$AN,digits=2)}  &  \Sexpr{round(Lres_ROSS03[[4]]$TIME,digits=2)}\\
+	    %PAWLS(0) & 56 & 43 & 3.59 & && 44 & 52 & 4.13 \\
+	    PAWLS & \Sexpr{Lres_APAWLS03[[3]]$CFR} & \Sexpr{Lres_APAWLS03[[3]]$OFR} & \Sexpr{round(Lres_APAWLS03[[3]]$AN,digits=2)}  &  \Sexpr{round(Lres_APAWLS03[[3]]$TIME,digits=2)}& && \Sexpr{Lres_APAWLS03[[4]]$CFR} & \Sexpr{Lres_APAWLS03[[4]]$OFR} & \Sexpr{round(Lres_APAWLS03[[4]]$AN,digits=2)} &  \Sexpr{round(Lres_APAWLS03[[4]]$TIME,digits=2)}\\
+	    \\
+	    
+	     & \multicolumn{4}{c} {\bf Case E} & &  \\
+	     ALasso & \Sexpr{Lres_ADL03[[5]]$CFR} & \Sexpr{Lres_ADL03[[5]]$OFR} & \Sexpr{round(Lres_ADL03[[5]]$AN,digits=2)} & \Sexpr{round(Lres_ADL03[[5]]$TIME,digits=2)} &  &\\
+	    
+	    sLTS & \Sexpr{Lres_LTS03[[5]]$CFR} & \Sexpr{Lres_LTS03[[5]]$OFR} & \Sexpr{round(Lres_LTS03[[5]]$AN,digits=2)}  &  \Sexpr{round(Lres_LTS03[[5]]$TIME,digits=2)}& &\\
+	    
+	    MMNNG & \Sexpr{Lres_mmnng03[[5]]$CFR} & \Sexpr{Lres_mmnng03[[5]]$OFR} & \Sexpr{round(Lres_mmnng03[[5]]$AN,digits=2)}  &  \Sexpr{round(Lres_mmnng03[[5]]$TIME,digits=2)} &&\\
+	    
+	    % SROS & \Sexpr{Lres_ROSS03[[5]]$CFR} & \Sexpr{Lres_ROSS03[[5]]$OFR} & \Sexpr{round(Lres_ROSS03[[5]]$AN,digits=2)}  &  \Sexpr{round(Lres_ROSS03[[5]]$TIME,digits=2)} & && \Sexpr{Lres_ROSS03[[5]]$CFR} & \Sexpr{Lres_ROSS03[[5]]$OFR} & \Sexpr{round(Lres_ROSS03[[5]]$AN,digits=2)}  &  \Sexpr{round(Lres_ROSS03[[5]]$TIME,digits=2)}\\
+	    %PAWLS(0) & 56 & 55 & 5.59 & && 55 & 52 & 5.15 \\
+	    PAWLS & \Sexpr{Lres_APAWLS03[[5]]$CFR} & \Sexpr{Lres_APAWLS03[[5]]$OFR} & \Sexpr{round(Lres_APAWLS03[[5]]$AN,digits=2)}  &  \Sexpr{round(Lres_APAWLS03[[5]]$TIME,digits=2)}& &\\
 	    
 	        \hline \hline
 	\end{tabular}
