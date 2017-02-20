@@ -401,7 +401,7 @@ options(digits=2)
 	    
 	    &Case E & \Sexpr{Lres_LTS02[[3]]$OD$M} & \Sexpr{Lres_LTS02[[3]]$OD$S} & \Sexpr{Lres_LTS02[[3]]$OD$JD}
 	    && \Sexpr{Lres_APAWLS02[[3]]$OD$M} & \Sexpr{Lres_APAWLS02[[3]]$OD$S} & \Sexpr{Lres_APAWLS02[[3]]$OD$JD}\\
-	    
+	    \\
 	    	\multirow{4}{*}{{\bf Example 2}}
 	      &Case C & \Sexpr{Hres_LTS02[[1]]$OD$M} & \Sexpr{Hres_LTS02[[1]]$OD$S} & \Sexpr{Hres_LTS02[[1]]$OD$JD} 
 	      && \Sexpr{Hres_APAWLS02[[1]]$OD$M} & \Sexpr{Hres_APAWLS02[[1]]$OD$S} & \Sexpr{Hres_APAWLS02[[1]]$OD$JD}  \\
@@ -522,19 +522,8 @@ lines(fpr5,tpr5,lwd=2, lty=1,col="red")
 lines(c(0,1),c(0,1),lwd=1, lty=1,col="grey")
 legend(0.6,0.6,legend=c("Case C", "Case D", "Case E"), col=c("green","blue","red"), lwd=3)
 @
-<<eval=TRUE, echo=FALSE>>=
-fpr3 <- Lres_APAWLS[[3]]$OD$fpr
-tpr3 <- Lres_APAWLS[[3]]$OD$tpr
-fpr4 <- Lres_APAWLS[[4]]$OD$fpr
-tpr4 <- Lres_APAWLS[[4]]$OD$tpr
-fpr5 <- Lres_APAWLS[[5]]$OD$fpr
-tpr5 <- Lres_APAWLS[[5]]$OD$tpr
-plot(fpr3,tpr3,type="l", main="ROC Curve for example 1 with 10% outliers", xlab="Sensitivity", ylab="Specificity",lwd=2, lty=1, col="green")
-lines(fpr4,tpr4,lwd=2, lty=1,col="blue")
-lines(fpr5,tpr5,lwd=2, lty=1,col="red")
-lines(c(0,1),c(0,1),lwd=1, lty=1,col="grey")
-legend(0.6,0.6,legend=c("Case C", "Case D", "Case E"), col=c("green","blue","red"), lwd=3)
-@
+
+% ----------------------------- ROC Curve for example 2 with 10% outliers-------------------------------%
 <<eval=TRUE, echo=FALSE>>=
 fpr3 <- Hres_APAWLS[[3]]$OD$fpr
 tpr3 <- Hres_APAWLS[[3]]$OD$tpr
@@ -542,7 +531,37 @@ fpr4 <- Hres_APAWLS[[4]]$OD$fpr
 tpr4 <- Hres_APAWLS[[4]]$OD$tpr
 fpr5 <- Hres_APAWLS[[5]]$OD$fpr
 tpr5 <- Hres_APAWLS[[5]]$OD$tpr
-plot(fpr3,tpr3,type="l", main="ROC Curve for example 2", xlab="Sensitivity", ylab="Specificity",lwd=2, lty=1, col="green")
+plot(fpr3,tpr3,type="l", main="ROC Curve for example 2 with 10% outliers", xlab="Sensitivity", ylab="Specificity",lwd=2, lty=1, col="green")
+lines(fpr4,tpr4,lwd=2, lty=1,col="blue")
+lines(fpr5,tpr5,lwd=2, lty=1,col="red")
+lines(c(0,1),c(0,1),lwd=1, lty=1,col="grey")
+legend(0.6,0.6,legend=c("Case C", "Case D", "Case E"), col=c("green","blue","red"), lwd=3)
+@
+
+% ----------------------------- ROC Curve for example 2 with 20% outliers-------------------------------%
+<<eval=TRUE, echo=FALSE>>=
+fpr3 <- Hres_APAWLS02[[1]]$OD$fpr
+tpr3 <- Hres_APAWLS02[[1]]$OD$tpr
+fpr4 <- Hres_APAWLS02[[2]]$OD$fpr
+tpr4 <- Hres_APAWLS02[[2]]$OD$tpr
+fpr5 <- Hres_APAWLS02[[3]]$OD$fpr
+tpr5 <- Hres_APAWLS02[[3]]$OD$tpr
+plot(fpr3,tpr3,type="l", main="ROC Curve for example 2 with 20% outliers", xlab="Sensitivity", ylab="Specificity",lwd=2, lty=1, col="green")
+lines(fpr4,tpr4,lwd=2, lty=1,col="blue")
+lines(fpr5,tpr5,lwd=2, lty=1,col="red")
+lines(c(0,1),c(0,1),lwd=1, lty=1,col="grey")
+legend(0.6,0.6,legend=c("Case C", "Case D", "Case E"), col=c("green","blue","red"), lwd=3)
+@
+
+% ----------------------------- ROC Curve for example 2 with 30% outliers-------------------------------%
+<<eval=TRUE, echo=FALSE>>=
+fpr3 <- Hres_APAWLS03[[1]]$OD$fpr
+tpr3 <- Hres_APAWLS03[[1]]$OD$tpr
+fpr4 <- Hres_APAWLS03[[2]]$OD$fpr
+tpr4 <- Hres_APAWLS03[[2]]$OD$tpr
+fpr5 <- Hres_APAWLS03[[3]]$OD$fpr
+tpr5 <- Hres_APAWLS03[[3]]$OD$tpr
+plot(fpr3,tpr3,type="l", main="ROC Curve for example 2 with 30% outliers", xlab="Sensitivity", ylab="Specificity",lwd=2, lty=1, col="green")
 lines(fpr4,tpr4,lwd=2, lty=1,col="blue")
 lines(fpr5,tpr5,lwd=2, lty=1,col="red")
 lines(c(0,1),c(0,1),lwd=1, lty=1,col="grey")
