@@ -267,9 +267,10 @@
 	\end{center}
 	\end{table}
 % ----------------------------- Variable Selection for high dimensional case ------------------------------------%
+% ----------------------------- 10% outliers --------------------------------------------------------------------%
 \begin{table}[thp]
 	\begin{center}
-	 \caption{Variable Selection Results for Example 2 ($\bbeta=(3,2,1.5,0,0,0,0,0)'$) }\label{table-selection-1}
+	 \caption{Variable Selection Results for Example 2 ($\bbeta=({\bf 2}_{10}',\bzero_{p-10}')'$ with 10\% outliers  }\label{table-selection-high1}
 	\begin{tabular}{ccccccccccc}\\\hline\hline
 	    Method  & CFR (\%) & OFR (\%) & AN & TIME & & & CFR (\%) & OFR (\%) & AN & TIME\\ \hline
 	
@@ -278,8 +279,8 @@
 	    ALasso & 97 & 0 & 9.96  & 3.4
 	         &&& 84 & 1 & 9.75 & 3.41\\
 	    
-	    sLTS & 0 & 73 & 32.66  &  1686.47
-	         &&& 1 & 86 & 24.93 &  1621.8\\
+	    sLTS & 0 & 78 & 31.9  &  1702.93
+	         &&& 1 & 86 & 24.93 &  1630.7\\
 	  
 	    PAWLS & 71 & 19 & 9.52 &  197.74 &&& 76 & 3 & 8.15 &  215.55\\
 	\\
@@ -287,7 +288,7 @@
 	   
 	    ALasso & 0 & 0 & 6.25 & 4.07 &  && 0 & 1 & 6.89 & 4.07\\
 	    
-	    sLTS & 0 & 91 & 32.11  &  1928.42& && 0 & 92 & 31.98 &  1861.67\\
+	    sLTS & 0 & 91 & 32.11  &  1942.99& && 0 & 92 & 31.98 &  1870.57\\
 	    
 	    PAWLS & 62 & 16 & 8.54  &  231.28& && 65 & 14 & 8.67 &  240.65\\
 	    \\
@@ -295,7 +296,7 @@
 	     & \multicolumn{4}{c} {\bf Case E} & &  \\
 	     ALasso & 0 & 0 & 12.18 & 4.06 &  &\\
 	    
-	    sLTS & 0 & 95 & 30.17  &  1865.4& &\\
+	    sLTS & 0 & 92 & 30.96  &  1830.16& &\\
 	    
 	    PAWLS & 23 & 13 & 6.47  &  249.22& &\\
 	    
@@ -304,6 +305,60 @@
 	\end{center}
 	\end{table}
 
+% ----------------------------- 20% outliers --------------------------------------------------------------------%
+\begin{table}[thp]
+	\begin{center}
+	 \caption{Variable Selection Results for Example 2 ($\bbeta=({\bf 2}_{10}',\bzero_{p-10}')'$ with 20\% outliers  }\label{table-selection-high2}
+	\begin{tabular}{ccccccccccc}\\\hline\hline
+	    Method  & CFR (\%) & OFR (\%) & AN & TIME & & & CFR (\%) & OFR (\%) & AN & TIME\\ \hline
+	   & \multicolumn{4}{c} {\bf Case C} & &  & \multicolumn{4}{c} {\bf Case D}\\
+	   
+	    ALasso & 0 & 0 & 5.7 & 6.45 &  && 0 & 0 & 6.15 & 6.89\\
+	    
+	    sLTS & 0 & 98 & 32.24  &  3138.03& && 0 & 98 & 32.21 &  2997.23\\
+	    
+	    PAWLS & 60 & 6 & 7.56  &  257.45& && 53 & 8 & 7.29 &  267.92\\
+	    \\
+	    
+	     & \multicolumn{4}{c} {\bf Case E} & &  \\
+	     ALasso & 0 & 0 & 17.41 & 6.3 &  &\\
+	    
+	    sLTS & 0 & 76 & 34  &  2852.83& &\\
+	    
+	    PAWLS & 3 & 4 & 5.57  &  287.92& &\\
+	    
+	        \hline \hline
+	\end{tabular}
+	\end{center}
+	\end{table}
+	
+
+% ----------------------------- 30% outliers --------------------------------------------------------------------%
+\begin{table}[thp]
+	\begin{center}
+	 \caption{Variable Selection Results for Example 2 ($\bbeta=({\bf 2}_{10}',\bzero_{p-10}')'$ with 30\% outliers  }\label{table-selection-high3}
+	\begin{tabular}{ccccccccccc}\\\hline\hline
+	    Method  & CFR (\%) & OFR (\%) & AN & TIME & & & CFR (\%) & OFR (\%) & AN & TIME\\ \hline
+	   & \multicolumn{4}{c} {\bf Case C} & &  & \multicolumn{4}{c} {\bf Case D}\\
+	   
+	    ALasso & 0 & 0 & 6.26 & 7.26 &  && 0 & 0 & 7.03 & 7.28\\
+	    
+	    sLTS & 0 & 2 & 56.47  &  3177.43& && 0 & 69 & 40.49 &  3135\\
+	    
+	    PAWLS & 23 & 3 & 5.28  &  290.77& && 21 & 14 & 6.65 &  301.11\\
+	    \\
+	    
+	     & \multicolumn{4}{c} {\bf Case E} & &  \\
+	     ALasso & 0 & 0 & 17.89 & 6.67 &  &\\
+	    
+	    sLTS & 0 & 17 & 42.75  &  2960.74& &\\
+	    
+	    PAWLS & 0 & 0 & 3.33  &  291.39& &\\
+	    
+	        \hline \hline
+	\end{tabular}
+	\end{center}
+	\end{table}
 % ----------------------------- outliers detection---------------------------------------------------------------%
 % ----------------------------- outliers detection 10% outliers--------------------------------------------------%
 		\begin{table}[thp]
@@ -341,7 +396,7 @@
 	    &Case D & 0 & 0.14 & 0.99  
 	    && 0.02 & 0.05 & 0.88\\
 	    
-	    &Case E & 0.06 & 0.12 & 0.49  
+	    &Case E & 0.08 & 0.12 & 0.42  
 	    && 0.29 & 0.12 & 0.07\\
 	  \\
 	   \hline\hline
@@ -367,6 +422,19 @@
 	    
 	    &Case E & 0.02 & 0.01 & 0.83
 	    && 0.09 & 0.01 & 0.44\\
+	    
+	    	\multirow{4}{*}{{\bf Example 2}}
+	      &Case C & 0 & 0.05 & 1 
+	      && 0.04 & 0.07 & 0.67  \\
+	
+	    &Case D & 0 & 0.05 & 0.99 
+	    && 0.07 & 0.08 & 0.57\\
+	
+	    &Case E & 0.18 & 0.07 & 0 
+	    && 0.35 & 0.12 & 0\\
+	  \\
+	   \hline\hline
+	   
 	    \end{tabular}
 	\end{center}
 	\end{table}
@@ -388,16 +456,16 @@
 	    &Case E & 0.21 & 0 & 0
 	    && 0.11 & 0.01 & 0.3\\
 	  \\
-	% \multirow{4}{*}{{\bf Example 2}}
-	%     &Case C & Hres_LTS03[[1]]$OD$M & Hres_LTS03[[1]]$OD$S & Hres_LTS03[[1]]$OD$JD 
-	%     && Hres_APAWLS03[[1]]$OD$M & Hres_APAWLS03[[1]]$OD$S & Hres_APAWLS03[[1]]$OD$JD\\
-	% 
-	%     &Case D & Hres_LTS03[[2]]$OD$M & Hres_LTS03[[2]]$OD$S & Hres_LTS03[[2]]$OD$JD  
-	%     && Hres_APAWLS03[[2]]$OD$M & Hres_APAWLS03[[2]]$OD$S & Hres_APAWLS03[[2]]$OD$JD\\
-	%     
-	%     &Case E & Hres_LTS03[[3]]$OD$M & Hres_LTS03[[3]]$OD$S & Hres_LTS03[[3]]$OD$JD  
-	%     && Hres_APAWLS03[[3]]$OD$M & Hres_APAWLS03[[3]]$OD$S & Hres_APAWLS03[[3]]$OD$JD\\
-	%   \\
+	\multirow{4}{*}{{\bf Example 2}}
+	    &Case C & 0.25 & 0.04 & 0 
+	    && 0.09 & 0.1 & 0.36\\
+	
+	    &Case D & 0.32 & 0.06 & 0  
+	    && 0.15 & 0.08 & 0.33\\
+	    
+	    &Case E & 0.35 & 0.06 & 0  
+	    && 0.32 & 0.14 & 0\\
+	  \\
 	   \hline\hline
 	
 	\end{tabular}
