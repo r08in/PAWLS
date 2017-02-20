@@ -197,10 +197,14 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
         # outlier dectection
         OD <- "not applicable."
         if(method == "PAWLS" || method == "LTS"|| method=="IPOD" ){
-          if(model[j] == "A" || model[j] == "B")
-            pro <- 0
-          OD <- OutlierSummary(w, pro)
-          roc <- ComputeROC(w,pro=pro)
+          if(model[j] == "A" || model[j] == "B"){
+            curPro <- 0
+          }
+          else{
+            curPro <- pro
+          }
+          OD <- OutlierSummary(w, curPro)
+          roc <- ComputeROC(w,pro=curPro)
           OD$tpr <- roc$tpr
           OD$fpr <- roc$fpr
         }

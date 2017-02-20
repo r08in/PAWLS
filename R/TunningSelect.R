@@ -103,27 +103,31 @@ BICPWLQ2 = function(wloss, beta, w, lambda1, lambda2, n, inv = 1) {
 
 BIC4PAWLS = function(loss, dfw, dfb, n, p, type = "beta", criterion = "BIC", pro = 0.5, a = 0, x = NULL, ws = NULL, 
     bs = NULL) {
-    df = dfw + dfb
-    a=0
-    #a = (n + p)/n
+    if(n >= p){
+      df <- dfb
+      n2 <- n - dfw 
+    }else{
+      df <- dfb
+      n2 <- n - dfw 
+    }
     if (type == "beta") {
         if (criterion == "AIC") {
-            vl = (log(loss/n + a) + 2 * df/(n))
+            vl = (log(loss/n) + 2 * df/(n))
         } else {
-            vl = (log(loss/n + a) + log(n) * df/n)
+            vl = (log(loss/n2) + log(n2) * df/n2)
         }
     } else {
         
         if (criterion == "AIC") {
-            vl = (log(loss/n + a) + 2 * df/(n))
+            vl = (log(loss/n) + 2 * df/(n))
         } else {
-            vl = (log(loss/n + a) + log(n) * df/n)
+          vl = (log(loss/n2) + log(n2) * df/n2)
         }
     }
     BIC.max=max(vl)
     for(i in 1: length(vl))
     {
-      if(dfw[i] > n * pro || dfb[i] + dfw[i] > n)
+      if(dfw[i] >= n * pro || dfb[i] + dfw[i] >= n)
         vl[i]=BIC.max
     }
     

@@ -18,6 +18,8 @@ Lres_mmnng = simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "MMNNG_D
 Lres_mmnng02 = simulation(L, n, beta, c("C", "D","E"), method = "MMNNG_DATA", useDataFile = TRUE, seed = NULL,pro=0.2)
 Lres_mmnng03 = simulation(L, n, beta, c("C", "D","E"), method = "MMNNG_DATA", useDataFile = TRUE, seed = NULL,pro=0.3)
 save(Lres_mmnng, file = "Output/Lres_mmnng.rda")
+save(Lres_mmnng02, file = "Output/Lres_mmnng02.rda")
+save(Lres_mmnng03, file = "Output/Lres_mmnng03.rda")
 
 # LTS
 require(robustHD)
@@ -25,35 +27,41 @@ Lres_LTS = simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "LTS", use
 Lres_LTS02 = simulation(L, n, beta, c("C", "D","E"), method = "LTS", useDataFile = TRUE, pro=0.2)
 Lres_LTS03 = simulation(L, n, beta, c("C", "D","E"), method = "LTS", useDataFile = TRUE, pro=0.3)
 save(Lres_LTS, file = "Output/Lres_LTS.rda")
+save(Lres_LTS02, file = "Output/Lres_LTS02.rda")
+save(Lres_LTS03, file = "Output/Lres_LTS03.rda")
 fpr <- Lres_LTS[[3]]$OD$fpr
 tpr <- Lres_LTS[[3]]$OD$tpr
 plot(fpr,tpr,type="p")
+
+
 # APAWLS
 
 Lres_APAWLS  <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS", 
+                         #lambda1.min=0.05, lambda2.min=0.01,
                          lambda1.min=0.05, lambda2.min=0.01,
                          seed = NULL, useDataFile = TRUE,       
                          updateInitial =FALSE, intercept = TRUE, criterion = "BIC")
+test_APAWLS  <- simulation(L, n, beta, c("C", "D","E"), method = "PAWLS", initial = "PAWLS", 
+                           lambda1.min=0.05, lambda2.min=0.01,
+                           seed = 2017, useDataFile = FALSE,       
+                           updateInitial =FALSE, intercept = TRUE, criterion = "BIC", pro=0.49)
 
-Lres_APAWLS02  <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS", 
+Lres_APAWLS02  <- simulation(L, n, beta, c( "C", "D","E"), method = "PAWLS", initial = "PAWLS", 
                            lambda1.min=0.05, lambda2.min=0.01,
                            seed = NULL, useDataFile = TRUE,       
                            updateInitial =FALSE, intercept = TRUE, criterion = "BIC",pro=0.2)
 
-Lres_APAWLS03  <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS", 
+Lres_APAWLS03  <- simulation(L, n, beta, c( "C", "D","E"), method = "PAWLS", initial = "PAWLS", 
                            lambda1.min=0.05, lambda2.min=0.01,
                            seed = NULL, useDataFile = TRUE,       
-                           updateInitial =FALSE, intercept = TRUE, criterion = "BIC",pro=0.2)
+                           updateInitial =FALSE, intercept = TRUE, criterion = "BIC",pro=0.3)
 
 endreq(Hres_APAWLS,100,5,t=2)
 endreq(Hres_APAWLS,50,5,t=1)
 save(Lres_APAWLS, file = "Output/Lres_APAWLS.rda")
+save(Lres_APAWLS02, file = "Output/Lres_APAWLS02.rda")
+save(Lres_APAWLS03, file = "Output/Lres_APAWLS03.rda")
 #load("Output/Lres_APAWLS.rda")
-
-Lres_APAWLS  <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS", 
-                         lambda1.min=0.05, lambda2.min=0,
-                         seed = NULL, useDataFile = TRUE,       
-                         updateInitial =FALSE, intercept = TRUE, criterion = "BIC")
 
 
 fpr3 <- Lres_APAWLS[[3]]$OD$fpr
@@ -66,6 +74,38 @@ plot(fpr3,tpr3,type="l", main="ROC Curve", xlab="Sensitivity", ylab="Specificity
 lines(fpr4,tpr4,lwd=2, lty=1,col="blue")
 lines(fpr5,tpr5,lwd=2, lty=1,col="red")
 legend(0.6,0.6,legend=c("Case C", "Case D", "Case E"), col=c("green","blue","red"), lwd=3)
+
+
+
+# PAWLS
+
+Lres_PAWLS  <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "uniform", 
+                           #lambda1.min=0.05, lambda2.min=0.01,
+                           lambda1.min=0.05, lambda2.min=0.01,
+                           seed = NULL, useDataFile = TRUE,       
+                           updateInitial =FALSE, intercept = TRUE, criterion = "BIC")
+test_PAWLS  <- simulation(L, n, beta, c("C", "D","E"), method = "PAWLS", initial = "uniform", 
+                           lambda1.min=0.05, lambda2.min=0.01,
+                           seed = 2017, useDataFile = FALSE,       
+                           updateInitial =FALSE, intercept = TRUE, criterion = "BIC", pro=0.49)
+
+Lres_PAWLS02  <- simulation(L, n, beta, c( "C", "D","E"), method = "PAWLS", initial = "uniform", 
+                             lambda1.min=0.05, lambda2.min=0.01,
+                             seed = NULL, useDataFile = TRUE,       
+                             updateInitial =FALSE, intercept = TRUE, criterion = "BIC",pro=0.2)
+
+Lres_PAWLS03  <- simulation(L, n, beta, c( "C", "D","E"), method = "PAWLS", initial = "uniform", 
+                             lambda1.min=0.05, lambda2.min=0.01,
+                             seed = NULL, useDataFile = TRUE,       
+                             updateInitial =FALSE, intercept = TRUE, criterion = "BIC",pro=0.3)
+
+endreq(Hres_APAWLS,100,5,t=2)
+endreq(Hres_APAWLS,50,5,t=1)
+save(Lres_PAWLS, file = "Output/Lres_PAWLS.rda")
+save(Lres_PAWLS02, file = "Output/Lres_PAWLS02.rda")
+save(Lres_PAWLS03, file = "Output/Lres_PAWLS03.rda")
+
+
 # ROSS
 matLabDir = paste(getwd(),"Simulation/ROSS" , sep = "/")
 source("Simulation/SetupMatlab.R")
@@ -76,8 +116,13 @@ Lres_ROSSE <- simulation(L, n, beta, c("E"), method = "ROSS",matlab = matlab,
                         seed = NULL, useDataFile = TRUE, intercept = TRUE)
 save(Lres_ROSS , file = "Output/Lres_ROSS.rda")
 # ADL
+require(ncvreg)
 Lres_ADL = simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "ADL", useDataFile = TRUE)
+Lres_ADL02 = simulation(L, n, beta, c("C", "D","E"), method = "ADL", useDataFile = TRUE,pro=0.2)
+Lres_ADL03 = simulation(L, n, beta, c("C", "D","E"), method = "ADL", useDataFile = TRUE,pro=0.3)
 save(Lres_ADL , file = "Output/Lres_ADL.rda")
+save(Lres_ADL02 , file = "Output/Lres_ADL02.rda")
+save(Lres_ADL03 , file = "Output/Lres_ADL03.rda")
 require(ncvreg)
 test_Lasso = simulation(L, n, beta, c("A"), method = "Lasso", useDataFile = FALSE, seed=2016)
 test_Lasso = simulation(L, n, beta, c("A"), method = "Lasso", useDataFile = FALSE, seed=2016)
@@ -99,24 +144,38 @@ beta = c(rep(2, num), rep(0, p - num))
 # LTS
 require(robustHD)
 Hres_LTS = simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "LTS", useDataFile = FALSE, seed=2016)
+Hres_LTS02 = simulation(L, n, beta, c("C", "D","E"), method = "LTS", useDataFile = FALSE, seed=2016, pro=0.2)
+Hres_LTS03 = simulation(L, n, beta, c("C", "D","E"), method = "LTS", useDataFile = FALSE, seed=2016, pro=0.3)
 save(Hres_LTS, file = "Output/Hres_LTS.rda")
+save(Hres_LTS02, file = "Output/Hres_LTS02.rda")
+save(Hres_LTS03, file = "Output/Hres_LTS03.rda")
 load("Output/Hres_LTS.rda")
 
 #APAWLS
 Hres_APAWLS <- simulation(L, n, beta, c( "A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS",
                           lambda1.min=0.05, lambda2.min=0.01,
                           seed = 2016, useDataFile = FALSE, updateInitial = FALSE, intercept = TRUE )
-test_APAWLS <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS", 
-                          lambda1.min=0.01, lambda2.min=0.05,
-                          seed = 2016, useDataFile = FALSE, updateInitial = FALSE, intercept = FALSE)
+Hres_APAWLS02 <- simulation(L, n, beta, c("C", "D","E"), method = "PAWLS", initial = "PAWLS",
+                          lambda1.min=0.05, lambda2.min=0.01,
+                          seed = 2016, useDataFile = FALSE, updateInitial = FALSE, intercept = TRUE,pro=0.2 )
+Hres_APAWLS03 <- simulation(L, n, beta, c("C", "D","E"), method = "PAWLS", initial = "PAWLS",
+                          lambda1.min=0.05, lambda2.min=0.01,
+                          seed = 2016, useDataFile = FALSE, updateInitial = FALSE, intercept = TRUE,pro=0.3 )
 save(Hres_APAWLS, file = "Output/Hres_APAWLS.rda")
+save(Hres_APAWLS02, file = "Output/Hres_APAWLS02.rda")
+save(Hres_APAWLS03, file = "Output/Hres_APAWLS03.rda")
 load("Output/Hres_APAWLS.rda")
-
+Hres_APAWLS0 <- Hres_APAWLS
+Hres_APAWLS <- test_APAWLS
 # ADL
 require(ncvreg)
 Hres_ADL = simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "ADL", useDataFile = FALSE, seed=2016)
+Hres_ADL02 = simulation(L, n, beta, c("C", "D","E"), method = "ADL", useDataFile = FALSE, seed=2016,pro=0.2)
+Hres_ADL03 = simulation(L, n, beta, c("C", "D","E"), method = "ADL", useDataFile = FALSE, seed=2016,pro=0.3)
 test_ADL = simulation(L, n, beta, c("A"), method = "ADL", useDataFile = FALSE, seed=2016)
 save(Hres_ADL , file = "Output/Hres_ADL.rda")
+save(Hres_ADL02 , file = "Output/Hres_ADL02.rda")
+save(Hres_ADL03, file = "Output/Hres_ADL03.rda")
 load("Output/Hres_ADL.rda")
 
 
@@ -211,7 +270,7 @@ lm_nci = lm(out$y ~ out$x)
 studres_nci = studres(lm_nci)
 # pwls-vs lambda2=c(0.4304376,0.2141318,0)
 res_nci_0 = srcdreg(out$x, out$y,standardize = TRUE, initial = "PAWLS", intercept = TRUE)
-res_nci = srcdreg(out$x, out$y, initial = "PAWLS", search = "cross", criterion = "BIC", updateInitialTimes = 2)
+res_nci = srcdreg(out$x, out$y, initial = "PAWLS", search = "cross", criterion = "BIC", updateInitialTimes = 0)
 res_nci_PAWLS = srcdreg(out$x, out$y, initial = "uniform", search = "cross", criterion = "BIC", updateInitialTimes = 0)
 res_nci = srcdreg(out$x, out$y, initial = "PAWLS", search = "crossDynamic", criterion = "BIC", updateInitialTimes = 2, 
     standardize = TRUE)
