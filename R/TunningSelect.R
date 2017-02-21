@@ -103,25 +103,27 @@ BICPWLQ2 = function(wloss, beta, w, lambda1, lambda2, n, inv = 1) {
 
 BIC4PAWLS = function(loss, dfw, dfb, n, p, type = "beta", criterion = "BIC", pro = 0.5, a = 0, x = NULL, ws = NULL, 
     bs = NULL) {
-    if(n >= p){
-      df <- dfb
-      n2 <- n - dfw 
-    }else{
-      df <- dfb
-      n2 <- n - dfw 
+    if(n >= p){ # low dimension
+      df <- dfb + dfw
+      n2 <- n
+      fitLoss <- log(loss/n2)
+    }else{ # high dimension
+      df <- dfb + dfw
+      n2 <- n 
+      fitLoss <- loss/n2
     }
     if (type == "beta") {
         if (criterion == "AIC") {
-            vl = (log(loss/n) + 2 * df/(n))
+            vl = (fitLoss + 2 * df/(n))
         } else {
-            vl = (log(loss/n2) + log(n2) * df/n2)
+            vl = (fitLoss + log(n2) * df/n2)
         }
     } else {
         
         if (criterion == "AIC") {
-            vl = (log(loss/n) + 2 * df/(n))
+            vl = (fitLoss + 2 * df/(n))
         } else {
-          vl = (log(loss/n2) + log(n2) * df/n2)
+          vl = (fitLoss + log(n2) * df/n2)
         }
     }
     BIC.max=max(vl)

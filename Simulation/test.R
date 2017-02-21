@@ -115,6 +115,8 @@ Lres_ROSS <- simulation(L, n, beta, c("A", "B", "C", "D"), method = "ROSS",matla
 Lres_ROSSE <- simulation(L, n, beta, c("E"), method = "ROSS",matlab = matlab,
                         seed = NULL, useDataFile = TRUE, intercept = TRUE)
 save(Lres_ROSS , file = "Output/Lres_ROSS.rda")
+save(Lres_ROSS02 , file = "Output/Lres_ROSS02.rda")
+save(Lres_ROSS03 , file = "Output/Lres_ROSS03.rda")
 # ADL
 require(ncvreg)
 Lres_ADL = simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "ADL", useDataFile = TRUE)
@@ -135,7 +137,7 @@ plot(fpr,tpr,type="p")
 #-------------------------------------------------------------------------------------
 source("Simulation/Simulation.R")
 # n=100,500
-L = 100
+L = 50
 n = 100
 p = 500
 num = 10
@@ -143,7 +145,7 @@ beta = c(rep(2, num), rep(0, p - num))
 
 # LTS
 require(robustHD)
-Hres_LTS = simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "LTS", useDataFile = FALSE, seed=2016)
+Hres_LTS = simulation(L, n, beta, c( "C"), method = "LTS", useDataFile = FALSE, seed=2016)
 Hres_LTS02 = simulation(L, n, beta, c("C", "D","E"), method = "LTS", useDataFile = FALSE, seed=2016, pro=0.2)
 Hres_LTS03 = simulation(L, n, beta, c("C", "D","E"), method = "LTS", useDataFile = FALSE, seed=2016, pro=0.3)
 save(Hres_LTS, file = "Output/Hres_LTS.rda")
@@ -152,7 +154,7 @@ save(Hres_LTS03, file = "Output/Hres_LTS03.rda")
 load("Output/Hres_LTS.rda")
 
 #APAWLS
-Hres_APAWLS <- simulation(L, n, beta, c( "A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS",
+Hres_APAWLS <- simulation(L, n, beta, c( "C"), method = "PAWLS", initial = "PAWLS",
                           lambda1.min=0.05, lambda2.min=0.01,
                           seed = 2016, useDataFile = FALSE, updateInitial = FALSE, intercept = TRUE )
 Hres_APAWLS02 <- simulation(L, n, beta, c("C", "D","E"), method = "PAWLS", initial = "PAWLS",

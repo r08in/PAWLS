@@ -84,7 +84,7 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
             }else if (method == "LTS") {
                 require(robustHD)
                 ptm <- proc.time()
-                res = sparseLTS(out$x, out$y, intercept = TRUE)
+                res = sparseLTS(out$x, out$y, intercept = TRUE, alpha = 1 - pro)
                 times[i] <- (proc.time() - ptm)[1]
                 b[i, ] = res$coefficients
                 w[i, ] = res$wt
