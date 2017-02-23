@@ -116,14 +116,14 @@ BIC4PAWLS = function(loss, dfw, dfb, n, p, type = "beta", criterion = "BIC", pro
         if (criterion == "AIC") {
             vl = (fitLoss + 2 * df/(n))
         } else {
-            vl = (fitLoss + log(n2) * df/n2)
+            vl = (fitLoss + log(n2) * df)
         }
     } else {
         
         if (criterion == "AIC") {
             vl = (fitLoss + 2 * df/(n))
         } else {
-          vl = (fitLoss + log(n2) * df/n2)
+          vl = (fitLoss + log(n2) * df)
         }
     }
     BIC.max=max(vl)

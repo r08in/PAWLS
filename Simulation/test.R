@@ -137,7 +137,7 @@ plot(fpr,tpr,type="p")
 #-------------------------------------------------------------------------------------
 source("Simulation/Simulation.R")
 # n=100,500
-L = 50
+L = 10
 n = 100
 p = 500
 num = 10
@@ -154,11 +154,12 @@ save(Hres_LTS03, file = "Output/Hres_LTS03.rda")
 load("Output/Hres_LTS.rda")
 
 #APAWLS
-Hres_APAWLS <- simulation(L, n, beta, c( "A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS",
-                          lambda1.min=0.05,lambda2.min=0.05,
+Hres_APAWLS <- simulation(L, n, beta, c("C"), method = "PAWLS", initial = "PAWLS",
+                          #lambda1.min=0.05,lambda2.min=0.001,
                           #lambda1.min=0.01, lambda2.min=0.05,
                           #lambda1.min=0.005, lambda2.min=0.01,#over select
                           #lambda1.min=0.005, lambda2.min=0.01,
+                          lambda1=logSeq(6e-2,6e-5,50),lambda2=logSeq(1.5,0,100),
                           seed = 2016, useDataFile = FALSE, updateInitial = FALSE, intercept = TRUE )
 
 Hres_APAWLS_1 <- simulation(L, n, beta, c( "A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS",
@@ -188,6 +189,8 @@ save(Hres_APAWLS_2, file = "Output/Hres_APAWLS_2.rda")
 save(Hres_APAWLS02, file = "Output/Hres_APAWLS02.rda")
 save(Hres_APAWLS03, file = "Output/Hres_APAWLS03.rda")
 load("Output/Hres_APAWLS.rda")
+load("Output/Hres_APAWLS_1.rda")
+load("Output/Hres_APAWLS_2.rda")
 Hres_APAWLS0 <- Hres_APAWLS
 Hres_APAWLS <- test_APAWLS
 # ADL
@@ -293,9 +296,7 @@ lm_nci = lm(out$y ~ out$x)
 studres_nci = studres(lm_nci)
 # pwls-vs lambda2=c(0.4304376,0.2141318,0)
 res_nci_0 = srcdreg(out$x, out$y,standardize = TRUE, initial = "PAWLS", intercept = TRUE)
-res_nci = srcdreg(out$x, out$y, initial = "PAWLS", search = "cross", 
-                  lambda1.min=0.005, lambda2.min=0.01,
-                  criterion = "BIC", updateInitialTimes = 0)
+res_nci = srcdreg(out$x, out$y, initial = "PAWLS",lambda1=logSeq(1,0.00001,50),lambda2 = logSeq(5e-8,0,100))
 res_nci_PAWLS = srcdreg(out$x, out$y, initial = "uniform", search = "cross", criterion = "BIC", updateInitialTimes = 0)
 res_nci = srcdreg(out$x, out$y, initial = "PAWLS", search = "crossDynamic", criterion = "BIC", updateInitialTimes = 2, 
     standardize = TRUE)
