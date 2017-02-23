@@ -154,16 +154,37 @@ save(Hres_LTS03, file = "Output/Hres_LTS03.rda")
 load("Output/Hres_LTS.rda")
 
 #APAWLS
-Hres_APAWLS <- simulation(L, n, beta, c( "C"), method = "PAWLS", initial = "PAWLS",
-                          lambda1.min=0.05, lambda2.min=0.01,
+Hres_APAWLS <- simulation(L, n, beta, c( "A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS",
+                          lambda1.min=0.05,lambda2.min=0.05,
+                          #lambda1.min=0.01, lambda2.min=0.05,
+                          #lambda1.min=0.005, lambda2.min=0.01,#over select
+                          #lambda1.min=0.005, lambda2.min=0.01,
                           seed = 2016, useDataFile = FALSE, updateInitial = FALSE, intercept = TRUE )
+
+Hres_APAWLS_1 <- simulation(L, n, beta, c( "A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS",
+                            #lambda1.min=0.05,lambda2.min=0.05,
+                            #lambda1.min=0.01, lambda2.min=0.05,
+                            #lambda1.min=0.005, lambda2.min=0.01,#over select
+                            lambda1.min=0.05, lambda2.min=0.01,
+                            seed = 2016, useDataFile = FALSE, updateInitial = FALSE, intercept = TRUE )
+
+Hres_APAWLS_2 <- simulation(L, n, beta, c( "A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS",
+                          #lambda1.min=0.05,lambda2.min=0.05,
+                          #lambda1.min=0.01, lambda2.min=0.05,
+                          lambda1.min=0.005, lambda2.min=0.01,#over select
+                          #lambda1.min=0, lambda2.min=0,
+                          seed = 2016, useDataFile = FALSE, updateInitial = FALSE, intercept = TRUE )
+
 Hres_APAWLS02 <- simulation(L, n, beta, c("C", "D","E"), method = "PAWLS", initial = "PAWLS",
-                          lambda1.min=0.05, lambda2.min=0.01,
+                          lambda1.min=0.05, lambda2.min=0.02,
                           seed = 2016, useDataFile = FALSE, updateInitial = FALSE, intercept = TRUE,pro=0.2 )
 Hres_APAWLS03 <- simulation(L, n, beta, c("C", "D","E"), method = "PAWLS", initial = "PAWLS",
                           lambda1.min=0.05, lambda2.min=0.01,
                           seed = 2016, useDataFile = FALSE, updateInitial = FALSE, intercept = TRUE,pro=0.3 )
 save(Hres_APAWLS, file = "Output/Hres_APAWLS.rda")
+save(Hres_APAWLS_1, file = "Output/Hres_APAWLS_1.rda")
+save(Hres_APAWLS_2, file = "Output/Hres_APAWLS_2.rda")
+
 save(Hres_APAWLS02, file = "Output/Hres_APAWLS02.rda")
 save(Hres_APAWLS03, file = "Output/Hres_APAWLS03.rda")
 load("Output/Hres_APAWLS.rda")
@@ -272,7 +293,9 @@ lm_nci = lm(out$y ~ out$x)
 studres_nci = studres(lm_nci)
 # pwls-vs lambda2=c(0.4304376,0.2141318,0)
 res_nci_0 = srcdreg(out$x, out$y,standardize = TRUE, initial = "PAWLS", intercept = TRUE)
-res_nci = srcdreg(out$x, out$y, initial = "PAWLS", search = "cross", criterion = "BIC", updateInitialTimes = 0)
+res_nci = srcdreg(out$x, out$y, initial = "PAWLS", search = "cross", 
+                  lambda1.min=0.005, lambda2.min=0.01,
+                  criterion = "BIC", updateInitialTimes = 0)
 res_nci_PAWLS = srcdreg(out$x, out$y, initial = "uniform", search = "cross", criterion = "BIC", updateInitialTimes = 0)
 res_nci = srcdreg(out$x, out$y, initial = "PAWLS", search = "crossDynamic", criterion = "BIC", updateInitialTimes = 2, 
     standardize = TRUE)
