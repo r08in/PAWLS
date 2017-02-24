@@ -31,18 +31,18 @@ SetupParameter = function(x, y, nlambda1, nlambda2,lambda1.min=1e-03, lambda2.mi
         lambda2Max = max(abs(t(x) %*% y/n) * abs(beta0))  # max |betaj|*|xj'y/n|
     }
     if(p<n){ # for low dimension
-      lambda1 = logSeq(lambda1Max, lambda1Max * lambda1.min, nlambda1)
-      lambda2 = logSeq(lambda2Max, lambda2Max * lambda2.min, nlambda2)
+      lambda1 = logSeq2(lambda1Max, lambda1Max * lambda1.min, nlambda1)
+      lambda2 = logSeq2(lambda2Max, lambda2Max * lambda2.min, nlambda2)
     }else{ # for high dimension
-      lambda1 = logSeq(lambda1Max, lambda1Max * lambda1.min, nlambda1)
-      lambda2 = logSeq(lambda2Max, lambda2Max * lambda2.min, nlambda2)
+      lambda1 = logSeq2(lambda1Max, lambda1Max * lambda1.min, nlambda1)
+      lambda2 = logSeq2(lambda2Max, lambda2Max * lambda2.min, nlambda2)
     }
     
     # lambda1=seq(0.001,0.002,length=50) lambda2=seq(0.2,0,length=100)
     return(list(lambda1 = lambda1, lambda2 = lambda2))
 }
 
-logSeq = function(smax, smin, n) {
+logSeq2 = function(smax, smin, n) {
     #smin + (smax - smin)/(log(n)) * (log(n) - log(1:n))
   if(smin==0){
     c(exp(seq(log(smax), log(1e-10), length.out=n-1)),0)

@@ -1,11 +1,11 @@
 
 srcdreg = function(x, y, penalty1 = c("1-w0", "log", "null"), penalty2 = c("LASSO", "RIDGE", "MCP"), lambda1 = NULL, 
     lambda2 = NULL, nlambda1 = 50, nlambda2 = 100, lambda1.min=1e-03, 
-    lambda2.min=0.05, 
-    #lambda2.min=0,
+    #lambda2.min=0.05, 
+    lambda2.min=0.05,
     beta0 = NULL, w0 = NULL, startBeta = NULL, startW = NULL, initial = c("uniform", 
         "LTS", "LASSO", "PAWLS"), delta = 1e-06, maxIter = 1000, intercept = TRUE, standardize = TRUE, updateInitialTimes = 0, 
-    criterion = c("BIC", "AIC", "CV"), search = c("cross", "all", "fixw", "crossDynamic"), ...) {
+    criterion = c("BIC", "AIC", "CV"), initCrit=c("BIC", "AIC", "CV"), search = c("cross", "all", "fixw", "crossDynamic"), ...) {
     ## error checking
     if (class(x) != "matrix") {
         tmp <- try(x <- as.matrix(x), silent = TRUE)
@@ -22,6 +22,7 @@ srcdreg = function(x, y, penalty1 = c("1-w0", "log", "null"), penalty2 = c("LASS
     penalty2 <- match.arg(penalty2)
     initial <- match.arg(initial)
     criterion <- match.arg(criterion)
+    initCrit <- match.arg(initCrit)
     search <- match.arg(search)
     
     
@@ -49,7 +50,7 @@ srcdreg = function(x, y, penalty1 = c("1-w0", "log", "null"), penalty2 = c("LASS
         # if(intercept) beta0=c(1,beta0)
         w0 = rep(0.99, n)
     } else if (initial == "PAWLS") {
-        init = srcdreg(x, y, intercept = intercept)
+        init = srcdreg(x, y, intercept = intercept,criterion = initCrit)
         beta0 = SetBeta0(init$beta)
         w0 = ifelse(init$w == 1, 0.99, init$w)
         

@@ -5,7 +5,7 @@ source('Simulation/mmnngreg.R')
 
 simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL, method = "PAWLS", 
     matlab = NULL, seed = 2014, useDataFile = FALSE, standardize = TRUE, penalty1 = "1-w0", updateInitial = FALSE, 
-    criterion = "BIC", intercept = TRUE, initial = "uniform", lambda1 = NULL, 
+    criterion = "BIC", initCrit="BIC",intercept = TRUE, initial = "uniform", lambda1 = NULL, 
     lambda2 = NULL,lambda1.min=1e-03, lambda2.min=0.05, range = "cross", type = c("Lasso", 
         "Ridge"), pro=0.1) {
     mcount <- length(model)
@@ -24,7 +24,12 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
     mses <- rep(0, L)
     times <- rep(0, L)
     nres <- array(list(), mcount)
-    
+    crit1 <- matrix(0,nrow=L,ncol=ifelse(is.null(lambda1),50,length(lambda1)))
+    crit2 <- matrix(0,nrow=L,ncol=ifelse(is.null(lambda2),100,length(lambda2)))
+    lam1 <- crit1
+    lam2 <- crit2
+    dfw <- rep(0,L)
+    dfb <- rep(0,L)
     pb <- txtProgressBar(1, mcount * L, style = 3)
     for (j in 1:mcount) {
         # for each model
@@ -137,13 +142,19 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
               res = srcdreg(out$x, out$y, penalty1 = penalty1, nlambda1 = 50, nlambda2 = 100, lambda1 = lambda1,
                             lambda2=lambda2, lambda1.min=lambda1.min, lambda2.min=lambda2.min, delta = 1e-06, 
                 maxIter = 1000, initial = initial, intercept = intercept, standardize = standardize, 
-                updateInitialTimes = updateInitialTimes, criterion = criterion, search = range)
+                updateInitialTimes = updateInitialTimes, criterion = criterion, initCrit=initCrit, search = range)
               times[i] <- (proc.time() - ptm)[1]
               b[i, ] = res$beta
               w[i, ] = res$w
               iter[i] = res$iter
               iw[i] = res$index1
               ib[i] = res$index2
+              crit1[i,] = res$crit1
+              crit2[i,] =  res$crit2
+              lam1[i,] =  res$lambda1s
+              lam2[i,] = res$lambda2s
+              dfb[i] = res$bdf
+              dfw[i] = res$wdf
             }
             
             # record result
@@ -210,8 +221,16 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
           OD$tpr <- roc$tpr
           OD$fpr <- roc$fpr
         }
-        nres[[j]] <- list(model = model[j], CFR = CFR, CFR2 = CFR2, OFR = OFR, PDR = PDR, FDR = FDR, 
-            AN = AN, MSE = MSE, mses=mses, TIME = TIME, iw=iw, ib=ib,OD=OD)
+       
+        # BIC curve
+        if(method=="PAWLS"){
+          nres[[j]] <- list(model = model[j], CFR = CFR, CFR2 = CFR2, OFR = OFR, PDR = PDR, FDR = FDR, 
+                            AN = AN, MSE = MSE, mses=mses, TIME = TIME, iw=iw, ib=ib,iter=iter,OD=OD,
+                            crit1=crit1,lam1=lam1,crit2=crit2,lam2=lam2,dfb=dfb,dfw=dfw,betas=b,ws=w)
+        } else{
+          nres[[j]] <- list(model = model[j], CFR = CFR, CFR2 = CFR2, OFR = OFR, PDR = PDR, FDR = FDR, 
+                            AN = AN, MSE = MSE, mses=mses, TIME = TIME, iw=iw, ib=ib,OD=OD)
+        }
     }
     # return
     # Compute Score
@@ -271,3 +290,30 @@ ComputeROC= function(w, cutoff=seq(0,1.01,by=0.01), pro=0.1)
   list(tpr=tpr,fpr=fpr)
 }
 
+PlotBICs=function(res,model=1,iter=0){
+  if(iter==0){ # show all iteration
+    L <- dim(res[[model]]$crit1)[1]
+    for(i in 1:L){
+      PlotBICs(res,model,i)
+      readline(prompt="Press [enter] to continue")
+    }
+    }else { #show paticular iteration
+      res <- res[[model]]
+      lam1 <- res$lam1[iter,]
+      crit1 <- res$crit1[iter,]
+      index1 <- res$iw[iter] 
+      lam2 <- res$lam2[iter,]
+      crit2 <- res$crit2[iter,]
+      index2 <- res$ib[iter]
+      par(mfrow=c(1,2))
+      x1 <- log(lam1)
+      y1 <- crit1
+      plot(x1,y1,type="l",main=paste("w iter",iter,":dfw=",res$dfw[iter],"; dfb=", res$dfb[iter]-1,".", sep=""))
+      abline(v=log(lam1[index1]), col="grey")
+     
+      x2 <- log(lam2)
+      y2 <- crit2
+      plot(x2,y2,type="l",main=paste("beta iter",iter,":dfw=",res$dfw[iter],"; dfb=", res$dfb[iter]-1,".", sep=""))
+      abline(v=log(lam2[index2]), col="grey")
+    }
+  }

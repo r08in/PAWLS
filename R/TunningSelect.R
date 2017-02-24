@@ -109,19 +109,21 @@ BIC4PAWLS = function(loss, dfw, dfb, n, p, type = "beta", criterion = "BIC", pro
       coeff <- log(n) / n
     }else{ # high dimension
       df <- dfb + dfw
-      fitLoss <- loss/n
-      coeff <- log(n)
+      # fitLoss <- loss/n
+      # coeff <- log(n)
+      fitLoss <- log(loss/n)
+      coeff <- log(n) / n
     }
     if (type == "beta") {
         if (criterion == "AIC") {
-            vl = (fitLoss + 2 * df/(n))
+            vl = (log(loss/n) + 2 * df/(n))
         } else {
             vl = (fitLoss + coeff * df )
         }
     } else {
         
         if (criterion == "AIC") {
-            vl = (fitLoss + 2 * df/(n))
+            vl = (log(loss/n) + 2 * df/(n))
         } else {
           vl = (fitLoss + coeff * df)
         }
@@ -134,6 +136,10 @@ BIC4PAWLS = function(loss, dfw, dfb, n, p, type = "beta", criterion = "BIC", pro
     }
     
     index=which.min(vl)
+    if(vl[index]==BIC.max){
+      index=sample(1:length(vl),1)
+    }
+    list(index=index,crit=vl)
 }
 
 dfs = function(x, beta, w) {
@@ -150,3 +156,4 @@ dfs = function(x, beta, w) {
     }
     df
 }
+
