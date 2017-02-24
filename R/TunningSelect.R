@@ -105,25 +105,25 @@ BIC4PAWLS = function(loss, dfw, dfb, n, p, type = "beta", criterion = "BIC", pro
     bs = NULL) {
     if(n >= p){ # low dimension
       df <- dfb + dfw
-      n2 <- n
-      fitLoss <- log(loss/n2)
+      fitLoss <- log(loss/n)
+      coeff <- log(n) / n
     }else{ # high dimension
       df <- dfb + dfw
-      n2 <- n 
-      fitLoss <- loss/n2
+      fitLoss <- loss/n
+      coeff <- log(n)
     }
     if (type == "beta") {
         if (criterion == "AIC") {
             vl = (fitLoss + 2 * df/(n))
         } else {
-            vl = (fitLoss + log(n2) * df)
+            vl = (fitLoss + coeff * df )
         }
     } else {
         
         if (criterion == "AIC") {
             vl = (fitLoss + 2 * df/(n))
         } else {
-          vl = (fitLoss + log(n2) * df)
+          vl = (fitLoss + coeff * df)
         }
     }
     BIC.max=max(vl)

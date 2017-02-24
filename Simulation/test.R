@@ -193,6 +193,45 @@ load("Output/Hres_APAWLS_1.rda")
 load("Output/Hres_APAWLS_2.rda")
 Hres_APAWLS0 <- Hres_APAWLS
 Hres_APAWLS <- test_APAWLS
+
+#PAWLS
+Hres_PAWLS <- simulation(L, n, beta, c("C"), method = "PAWLS", initial = "uniform",
+                         lambda1.min=1e-02, lambda2.min=0.0001,
+                         seed = 2016, intercept = TRUE, 
+                         criterion = "BIC" )
+
+Hres_APAWLS_1 <- simulation(L, n, beta, c( "A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS",
+                            #lambda1.min=0.05,lambda2.min=0.05,
+                            #lambda1.min=0.01, lambda2.min=0.05,
+                            #lambda1.min=0.005, lambda2.min=0.01,#over select
+                            lambda1.min=0, lambda2.min=0,
+                            seed = 2016, intercept = TRUE )
+
+Hres_APAWLS_2 <- simulation(L, n, beta, c( "A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS",
+                            #lambda1.min=0.05,lambda2.min=0.05,
+                            #lambda1.min=0.01, lambda2.min=0.05,
+                            lambda1.min=0.005, lambda2.min=0.01,#over select
+                            #lambda1.min=0, lambda2.min=0,
+                            seed = 2016, useDataFile = FALSE, updateInitial = FALSE, intercept = TRUE )
+
+Hres_APAWLS02 <- simulation(L, n, beta, c("C", "D","E"), method = "PAWLS", initial = "PAWLS",
+                            lambda1.min=0.05, lambda2.min=0.02,
+                            seed = 2016, useDataFile = FALSE, updateInitial = FALSE, intercept = TRUE,pro=0.2 )
+Hres_APAWLS03 <- simulation(L, n, beta, c("C", "D","E"), method = "PAWLS", initial = "PAWLS",
+                            lambda1.min=0.05, lambda2.min=0.01,
+                            seed = 2016, useDataFile = FALSE, updateInitial = FALSE, intercept = TRUE,pro=0.3 )
+save(Hres_APAWLS, file = "Output/Hres_APAWLS.rda")
+save(Hres_APAWLS_1, file = "Output/Hres_APAWLS_1.rda")
+save(Hres_APAWLS_2, file = "Output/Hres_APAWLS_2.rda")
+
+save(Hres_APAWLS02, file = "Output/Hres_APAWLS02.rda")
+save(Hres_APAWLS03, file = "Output/Hres_APAWLS03.rda")
+load("Output/Hres_APAWLS.rda")
+load("Output/Hres_APAWLS_1.rda")
+load("Output/Hres_APAWLS_2.rda")
+Hres_APAWLS0 <- Hres_APAWLS
+Hres_APAWLS <- test_APAWLS
+
 # ADL
 require(ncvreg)
 Hres_ADL = simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "ADL", useDataFile = FALSE, seed=2016)

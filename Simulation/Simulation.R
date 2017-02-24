@@ -4,7 +4,7 @@ source("Simulation/GenerateData.R")
 source('Simulation/mmnngreg.R')
 
 simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL, method = "PAWLS", 
-    matlab = NULL, seed = 2014, useDataFile = FALSE, standardize = TRUE, penalty1 = "1-w0", updateInitial = TRUE, 
+    matlab = NULL, seed = 2014, useDataFile = FALSE, standardize = TRUE, penalty1 = "1-w0", updateInitial = FALSE, 
     criterion = "BIC", intercept = TRUE, initial = "uniform", lambda1 = NULL, 
     lambda2 = NULL,lambda1.min=1e-03, lambda2.min=0.05, range = "cross", type = c("Lasso", 
         "Ridge"), pro=0.1) {

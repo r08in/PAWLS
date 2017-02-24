@@ -1,8 +1,8 @@
 
 srcdreg = function(x, y, penalty1 = c("1-w0", "log", "null"), penalty2 = c("LASSO", "RIDGE", "MCP"), lambda1 = NULL, 
     lambda2 = NULL, nlambda1 = 50, nlambda2 = 100, lambda1.min=1e-03, 
-    #lambda2.min=0.05, 
-    lambda2.min=0,
+    lambda2.min=0.05, 
+    #lambda2.min=0,
     beta0 = NULL, w0 = NULL, startBeta = NULL, startW = NULL, initial = c("uniform", 
         "LTS", "LASSO", "PAWLS"), delta = 1e-06, maxIter = 1000, intercept = TRUE, standardize = TRUE, updateInitialTimes = 0, 
     criterion = c("BIC", "AIC", "CV"), search = c("cross", "all", "fixw", "crossDynamic"), ...) {
@@ -88,7 +88,7 @@ srcdreg = function(x, y, penalty1 = c("1-w0", "log", "null"), penalty2 = c("LASS
     }
     
     ## setup parameter
-    if (missing(lambda1) || missing(lambda2)) {
+    if (missing(lambda1) || missing(lambda2)||is.null(lambda1)||is.null(lambda2)) {
         lambda = SetupParameter(XX, yy, nlambda1, nlambda2, lambda1.min=lambda1.min, lambda2.min=lambda2.min, beta0, w0, intercept = intercept, penalty1 = penalty1)
         if (is.null(lambda1)) 
             lambda1 = lambda$lambda1
