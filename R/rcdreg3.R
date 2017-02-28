@@ -9,17 +9,22 @@ RCDReg3 = function(x, y, penalty1 = c("1-w0", "log"), penalty2 = c("LASSO", "RID
     m = dim(x)[2]
     n = length(y)
     pre1 = pre2 = 0
-    lmaxIter = 10
+    lmaxIter = 50
     beta0 = SetBeta0(beta0)
     w0 = ifelse(w0 == 1, 0.99, w0)
+    blam1=NULL
+    blam2=NULL
     
     # initial lambda
     index2 = round(L2/2)
     res = InnerReg(x, y, penalty1 = penalty1, penalty2 = penalty2, lambda1, lambda2[index2], beta0, w0, delta, maxIter, 
         intercept = intercept, startBeta = startBeta, startW = startW)  #fix lambda2
     bic1 = BIC4PAWLS(as.vector(res$wloss), apply(matrix(res$w, L1, n) != 1 + 0, 1, sum), 
-                     apply(matrix(res$beta, L1, m) != 0 + 0, 1, sum), n, m, type = "w", criterion = criterion, 
-                     x = x, ws = matrix(res$w, L1, n), bs = matrix(res$beta, L1, m)) 
+                     apply(matrix(res$beta, L1, m) != 0 + 0, 1, sum), n, m, type = "w", criterion = criterion,blam=blam1) 
+    if(bic1$index==0){
+      blam2 <- c(blam2,index2) #remove this lambda
+      bic1$index=sample(1:L1,1)
+    }
     index1 =bic1$index  #find best lambda1
     crit1 = bic1$crit
 
@@ -27,7 +32,11 @@ RCDReg3 = function(x, y, penalty1 = c("1-w0", "log"), penalty2 = c("LASSO", "RID
         intercept = intercept, startBeta = startBeta, startW = startW)  #fix lambda1
     bic2 = BIC4PAWLS(as.vector(res$wloss), apply(matrix(res$w, L2, n) != 1 + 0, 1, sum),
                      apply(matrix(res$beta,L2, m) != 0 + 0, 1, sum), n, m, 
-                     criterion = criterion, x = x, ws = matrix(res$w, L2, n), bs = matrix(res$beta, L2, m))
+                     criterion = criterion,blam=blam2)
+    if(bic2$index==0){
+      blam1 <- c(blam1,index1) #remove this lambda
+      bic2$index=sample(1:L2,1)
+    }
     index2 = bic2$index  #find best lambda2
     crit2 = bic2$crit
     ## loop to estimate and find the best
@@ -48,7 +57,11 @@ RCDReg3 = function(x, y, penalty1 = c("1-w0", "log"), penalty2 = c("LASSO", "RID
             maxIter, intercept = intercept, startBeta = startBeta, startW = startW)  #fix lambda2
         bic1 = BIC4PAWLS(as.vector(resw$wloss), apply(matrix(resw$w, L1, n) != 1 + 0, 1, sum), 
                          apply(matrix(resw$beta, L1, m) != 0 + 0, 1, sum), n, m, type = "w", criterion = criterion, 
-                         x = x, ws = matrix(resw$w, L1, n), bs = matrix(resw$beta, L1, m)) 
+                         blam=blam1) 
+        if(bic1$index==0){
+          blam2 <- c(blam2,index2) #remove this lambda
+          bic1$index=sample(1:L1,1)
+        }
         index1 =bic1$index  #find best lambda1
         crit1 = bic1$crit
         
@@ -62,7 +75,11 @@ RCDReg3 = function(x, y, penalty1 = c("1-w0", "log"), penalty2 = c("LASSO", "RID
             maxIter, intercept = intercept, startBeta = startBeta, startW = startW)  #fix lambda1
         bic2 = BIC4PAWLS(as.vector(res$wloss), apply(matrix(res$w, L2, n) != 1 + 0, 1, sum),
                          apply(matrix(res$beta,L2, m) != 0 + 0, 1, sum), n, m, 
-                         criterion = criterion, x = x, ws = matrix(res$w, L2, n), bs = matrix(res$beta, L2, m))
+                         criterion = criterion, blam=blam2)
+        if(bic2$index==0){
+          blam1 <- c(blam1,index1) #remove this lambda
+          bic2$index=sample(1:L2,1)
+        }
         index2 = bic2$index  #find best lambda2
         crit2 = bic2$crit
         if (pre2 == index2 && pre1 == index1) 

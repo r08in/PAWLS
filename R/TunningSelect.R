@@ -2,41 +2,6 @@
 
 ## BIC
 
-BICSelect2 = function(rss, n, betas, lambdas, inv = 1) {
-    # declare and initial
-    m = length(lambdas)
-    indexSelected = 1
-    df = sum(betas[1, ] != 0)
-    BicPre = log(rss[1]/n) + log(n) * df/n
-    res = matrix(0, m, 3)
-    res[1, 1] = lambdas[1]
-    res[1, 2] = BicPre
-    res[1, 3] = df
-    BicPre = 1e+06  # not use the  first lambda(all zero)
-    start = round(m * ((1 - inv)/2))
-    end = round(m * (0.5 + inv/2))
-    for (i in 2:m) {
-        df = sum(betas[i, ] != 0)
-        BicTemp = log(rss[i]/n) + log(n) * df/n
-        res[i, 1] = lambdas[i]
-        res[i, 2] = BicTemp
-        res[i, 3] = df
-        if (i >= start && i <= end && BicTemp <= BicPre) {
-            indexSelected = i
-            BicPre = BicTemp
-        }
-    }
-    res = data.frame(lambda = res[, 1], BIC = res[, 2], df = res[, 3])
-    list(lambda = lambdas[indexSelected], beta = betas[indexSelected, ], rss = rss[indexSelected], df = sum(betas[indexSelected, 
-        ] != 0), index = indexSelected, res = res, betas = betas)
-}
-
-GreedySelect = function(betas, lambdas, inv = 0.9) {
-    m = length(lambdas)
-    index = round(m * (0.5 + inv/2))
-    list(lambda = lambdas[index], df = sum(betas[index, ] != 0), index = index, beta = betas[index, ])
-}
-
 BICPWLQ = function(wloss, beta, w, lambda1, lambda2, inv = 1, alpha = 0, criterion = "BIC", pro = 0.8) {
     # declare and initial
     l1 = length(lambda1)
@@ -57,10 +22,10 @@ BICPWLQ = function(wloss, beta, w, lambda1, lambda2, inv = 1, alpha = 0, criteri
             bdf[i, j] = sum(beta[i, j, ] != 0 + 0)
             # wdf[i,j]=ifelse(wdf[i,j]>n*pro,100000,wdf[i,j])
             if (criterion == "AIC") {
-                bicTemp[i, j] = log(wloss[i, j]/(n) + alpha) + (bdf[i, j] + wdf[i, j]) * 2/(n)
+                bicTemp[i, j] = log(wloss[i, j]/(n)) + (bdf[i, j] + wdf[i, j]) * 2/(n)
             } else {
                 # (log(loss/n+a)+log(n)*df/(n))
-                bicTemp[i, j] = log(wloss[i, j]/(n) + alpha) + (bdf[i, j] + wdf[i, j]) * log(n)/(n)
+                bicTemp[i, j] = log(wloss[i, j]/(n)) + (bdf[i, j] + wdf[i, j]) * log(n)/(n)
             }
             if (bicTemp[i, j] <= bicPre) {
                 index1 = i
@@ -101,8 +66,7 @@ BICPWLQ2 = function(wloss, beta, w, lambda1, lambda2, n, inv = 1) {
         index2, ] != 0 + 0), wdf = sum(w[index1, index2, ] != 1 + 0), index1 = i, index2 = j, res = res)
 }
 
-BIC4PAWLS = function(loss, dfw, dfb, n, p, type = "beta", criterion = "BIC", pro = 0.5, a = 0, x = NULL, ws = NULL, 
-    bs = NULL) {
+BIC4PAWLS = function(loss, dfw, dfb, n, p, type = "beta", criterion = "BIC", pro = 0.5, blam=NULL) {
     if(n >= p){ # low dimension
       df <- dfb + dfw
       fitLoss <- log(loss/n)
@@ -128,18 +92,17 @@ BIC4PAWLS = function(loss, dfw, dfb, n, p, type = "beta", criterion = "BIC", pro
           vl = (fitLoss + coeff * df)
         }
     }
+    crit <- vl
     BIC.max=max(vl)
     for(i in 1: length(vl))
     {
       if(dfw[i] >= n * pro || dfb[i] + dfw[i] >= n)
-        vl[i]=BIC.max
+        crit[i] <- BIC.max
     }
-    
-    index=which.min(vl)
-    if(vl[index]==BIC.max){
-      index=sample(1:length(vl),1)
+    if(min(crit)==BIC.max){
+      crit <- vl
     }
-    list(index=index,crit=vl)
+    list(index=which.min(crit),crit=crit)
 }
 
 dfs = function(x, beta, w) {
