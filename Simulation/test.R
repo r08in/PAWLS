@@ -157,11 +157,19 @@ load("Output/Hres_LTS.rda")
 Hres_APAWLS <- simulation(L, n, beta, c("C"), method = "PAWLS", initial = "PAWLS",
                           lambda1.min=1e-3, lambda2.min=0.05,
                           seed = 2016, useDataFile = FALSE, updateInitial = FALSE, 
-                          intercept = TRUE,initCrit = "BIC" )
-Hres_APAWLS0 <- simulation(L, n, beta, c("C"), method = "PAWLS", initial = "PAWLS",
+                          intercept = TRUE,initCrit = "AIC" )
+Hres_APAWLS2 <- simulation(L, n, beta, c("C"), method = "PAWLS", initial = "PAWLS",
                           lambda1.min=1e-3, lambda2.min=0.05,
                           seed = 2016, useDataFile = FALSE, updateInitial = FALSE, 
                           intercept = TRUE,initCrit = "AIC" )
+Hres_PAWLS <- simulation(L, n, beta, c("C"), method = "PAWLS", initial = "uniform",
+                          lambda1.min=1e-3, lambda2.min=0.05,
+                          seed = 2016, useDataFile = FALSE, updateInitial = FALSE, 
+                          intercept = TRUE,criterion = "BIC" )
+Hres_PAWLS2 <- simulation(L, n, beta, c("C"), method = "PAWLS", initial = "uniform",
+                         lambda1.min=1e-3, lambda2.min=0.05,
+                         seed = 2016, useDataFile = FALSE, updateInitial = FALSE, 
+                         intercept = TRUE,criterion = "AIC" )
 
 Hres_APAWLS_2 <- simulation(L, n, beta, c( "A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS",
                           #lambda1.min=0.05,lambda2.min=0.05,
@@ -191,11 +199,12 @@ Hres_APAWLS <- test_APAWLS
 # PAWLS
 HBIC <- simulation(L, n, beta, c( "A", "B", "C", "D","E"), method = "PAWLS", initial = "uniform",
                          #lambda1.min=1e-3, lambda2.min=0.05,
-                         lambda1.min=1e-3, lambda2.min=0.05,
+                         lambda1.min=1e-3, lambda2.min=0.01,
                          seed = 2016, useDataFile = FALSE, updateInitial = FALSE, 
                          intercept = TRUE,criterion = "BIC" )
 HAIC <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "uniform",
-                          lambda1.min=1e-3, lambda2.min=0.05,
+                          #lambda1.min=1e-3, lambda2.min=0.05,
+                           lambda1.min=1e-3, lambda2.min=0.01,
                           seed = 2016, useDataFile = FALSE, updateInitial = FALSE, 
                           intercept = TRUE,criterion = "AIC" )
 testBIC <- simulation(L, n, beta, c( "C"), method = "PAWLS", initial = "uniform",
