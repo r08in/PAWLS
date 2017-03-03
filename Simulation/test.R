@@ -317,9 +317,9 @@ res$coefficients[res$coefficients != 0]
 lm_nci = lm(out$y ~ out$x)
 studres_nci = studres(lm_nci)
 # pwls-vs lambda2=c(0.4304376,0.2141318,0)
-res_nci_0 = srcdreg(out$x, out$y,standardize = TRUE, initial = "PAWLS", intercept = TRUE)
-res_nci = srcdreg(out$x, out$y, initial = "PAWLS",lambda1=logSeq(1,0.00001,50),lambda2 = logSeq(5e-8,0,100))
-res_nci_PAWLS = srcdreg(out$x, out$y, initial = "uniform", search = "cross", criterion = "BIC", updateInitialTimes = 0)
+res_nci_0 = srcdreg(out$x, out$y,standardize = TRUE, initial = "uniform", intercept = TRUE, search="all")
+res_nci = srcdreg(out$x, out$y, initial = "PAWLS",lambda1.min=1e-3, lambda2.min=0.001)
+res_nci_PAWLS = srcdreg(out$x, out$y, initial = "uniform", search = "all", criterion = "BIC", updateInitialTimes = 0)
 res_nci = srcdreg(out$x, out$y, initial = "PAWLS", search = "crossDynamic", criterion = "BIC", updateInitialTimes = 2, 
     standardize = TRUE)
 names(res_nci$beta) <- c("intercept", colname)
