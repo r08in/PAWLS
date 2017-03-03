@@ -40,7 +40,10 @@ Lres_APAWLS  <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWL
                          #lambda1.min=0.05, lambda2.min=0.01,
                          lambda1.min=0.05, lambda2.min=0.01,
                          seed = NULL, useDataFile = TRUE,       
-                         updateInitial =FALSE, intercept = TRUE, criterion = "BIC")
+                         updateInitial =FALSE, intercept = TRUE, initCrit = "BIC")
+
+
+
 test_APAWLS  <- simulation(L, n, beta, c("C", "D","E"), method = "PAWLS", initial = "PAWLS", 
                            lambda1.min=0.05, lambda2.min=0.01,
                            seed = 2017, useDataFile = FALSE,       
@@ -83,7 +86,7 @@ Lres_PAWLS  <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS
                            #lambda1.min=0.05, lambda2.min=0.01,
                            lambda1.min=0.05, lambda2.min=0.01,
                            seed = NULL, useDataFile = TRUE,       
-                           updateInitial =FALSE, intercept = TRUE, criterion = "BIC")
+                           updateInitial =FALSE, intercept = TRUE, criterion = "BIC",search = "all")
 test_PAWLS  <- simulation(L, n, beta, c("C", "D","E"), method = "PAWLS", initial = "uniform", 
                            lambda1.min=0.05, lambda2.min=0.01,
                            seed = 2017, useDataFile = FALSE,       

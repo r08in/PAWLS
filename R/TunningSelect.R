@@ -2,31 +2,36 @@
 
 ## BIC
 
-BICPWLQ = function(wloss, beta, w, lambda1, lambda2, inv = 1, alpha = 0, criterion = "BIC", pro = 0.8) {
+BICPWLQ = function(wloss, beta, w, lambda1, lambda2, inv = 1, alpha = 0, criterion = "BIC", pro = 0.5) {
     # declare and initial
     l1 = length(lambda1)
     l2 = length(lambda2)
     index1 = index2 = 1
-    bicPre = 1e+08
+    BIC.max= 1e+08
+    bicPre = BIC.max
     bicTemp = matrix(0, l1, l2)
     wdf = matrix(0, l1, l2)
     bdf = matrix(0, l1, l2)
-    start1 = round(l1 * ((1 - inv)/2)) + 1
-    end1 = round(l1 * (0.5 + inv/2))
-    start2 = round(l2 * ((1 - inv)/2)) + 1
-    end2 = round(l2 * (0.5 + inv/2))
+    start1 = 1
+    end1 = l1
+    start2 = 1
+    end2 = l2
     n = length(w[1, 1, ])
     for (i in start1:end1) {
         for (j in start2:end2) {
             wdf[i, j] = sum(w[i, j, ] != 1 + 0)
             bdf[i, j] = sum(beta[i, j, ] != 0 + 0)
-            # wdf[i,j]=ifelse(wdf[i,j]>n*pro,100000,wdf[i,j])
             if (criterion == "AIC") {
                 bicTemp[i, j] = log(wloss[i, j]/(n)) + (bdf[i, j] + wdf[i, j]) * 2/(n)
             } else {
                 # (log(loss/n+a)+log(n)*df/(n))
                 bicTemp[i, j] = log(wloss[i, j]/(n)) + (bdf[i, j] + wdf[i, j]) * log(n)/(n)
             }
+            if(wdf[i,j] >= n * pro || bdf[i,j] + wdf[i,j] >= n){
+              bicTemp[i,j]=-BIC.max
+              next
+            }
+              
             if (bicTemp[i, j] <= bicPre) {
                 index1 = i
                 index2 = j
@@ -34,11 +39,12 @@ BICPWLQ = function(wloss, beta, w, lambda1, lambda2, inv = 1, alpha = 0, criteri
             }
         }
     }
+    bicTemp <- ifelse(bicTemp==-BIC.max,max(bicTemp),bicTemp)
     res = list(lambda1 = lambda1, lambda2 = lambda2, bdf = bdf, wdf = wdf, bic = bicTemp, w = w, beta = beta)
     i = index1
     j = index2
-    list(lambda1 = lambda1[i], lambda2 = lambda2[j], beta = beta[i, j, ], w = w[i, j, ], wloss = wloss[i, j], bdf = bdf[i, 
-        j], wdf = wdf[i, j], index1 = i, index2 = j, res = res)
+    list(lambda1s = lambda1, lambda2s = lambda2, beta = beta[i, j, ], w = w[i, j, ], wloss = wloss[i, j], bdf = bdf[i, 
+        j], wdf = wdf[i, j], index1 = i, index2 = j, iter=0,crit1=bicTemp[,j], crit2=bicTemp[i,],res = res)
 }
 
 BICPWLQ2 = function(wloss, beta, w, lambda1, lambda2, n, inv = 1) {

@@ -50,7 +50,7 @@ srcdreg = function(x, y, penalty1 = c("1-w0", "log", "null"), penalty2 = c("LASS
         # if(intercept) beta0=c(1,beta0)
         w0 = rep(0.99, n)
     } else if (initial == "PAWLS") {
-        init = srcdreg(x, y, intercept = intercept,criterion = initCrit)
+        init = srcdreg(x, y, intercept = intercept,criterion = initCrit, search = "all")
         beta0 = SetBeta0(init$beta)
         w0 = ifelse(init$w == 1, 0.99, init$w)
         
