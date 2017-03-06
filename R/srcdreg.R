@@ -1,8 +1,7 @@
 
 srcdreg = function(x, y, penalty1 = c("1-w0", "log", "null"), penalty2 = c("LASSO", "RIDGE", "MCP"), lambda1 = NULL, 
     lambda2 = NULL, nlambda1 = 50, nlambda2 = 100, lambda1.min=1e-03, 
-    #lambda2.min=0.05, 
-    lambda2.min=0.05,
+    lambda2.min=0.05, 
     beta0 = NULL, w0 = NULL, startBeta = NULL, startW = NULL, initial = c("uniform", 
         "LTS", "LASSO", "PAWLS"), delta = 1e-06, maxIter = 1000, intercept = TRUE, standardize = TRUE, updateInitialTimes = 0, 
     criterion = c("BIC", "AIC", "CV"), initCrit=c("BIC", "AIC", "CV"), search = c("cross", "all", "fixw", "crossDynamic"), ...) {

@@ -24,8 +24,14 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
     mses <- rep(0, L)
     times <- rep(0, L)
     nres <- array(list(), mcount)
-    crit1 <- matrix(0,nrow=L,ncol=ifelse(is.null(lambda1),50,length(lambda1)))
-    crit2 <- matrix(0,nrow=L,ncol=ifelse(is.null(lambda2),100,length(lambda2)))
+    nlambda1 <- ifelse(is.null(lambda1),50,length(lambda1))
+    nlambda2 <- ifelse(is.null(lambda2),100,length(lambda2))
+    crit1 <- matrix(0,nrow=L,ncol=nlambda1)
+    crit2 <- matrix(0,nrow=L,ncol=nlambda2)
+    wdf <- array(0,dim=c(L,nlambda1,nlambda2))
+    bdf <- array(0,dim=c(L,nlambda1,nlambda2))
+    bic <- array(0,dim=c(L,nlambda1,nlambda2))
+    bic2 <- array(0,dim=c(L,nlambda1,nlambda2))
     lam1 <- crit1
     lam2 <- crit2
     dfw <- rep(0,L)
@@ -155,6 +161,10 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
               lam2[i,] = res$lambda2s
               dfb[i] = res$bdf
               dfw[i] = res$wdf
+              bic[i,,] = res$res$bic
+              bic2[i,,] = res$res$bic2
+              bdf[i,,]= res$res$bdf
+              wdf[i,,]= res$res$wdf
             }
             
             # record result
@@ -226,7 +236,9 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
         if(method=="PAWLS"){
           nres[[j]] <- list(model = model[j], CFR = CFR, CFR2 = CFR2, OFR = OFR, PDR = PDR, FDR = FDR, 
                             AN = AN, MSE = MSE, mses=mses, TIME = TIME, iw=iw, ib=ib,iter=iter,OD=OD,
-                            crit1=crit1,lam1=lam1,crit2=crit2,lam2=lam2,dfb=dfb,dfw=dfw,betas=b,ws=w)
+                            crit1=crit1,lam1=lam1,crit2=crit2,lam2=lam2,dfb=dfb,dfw=dfw,betas=b,ws=w,
+                            bic=bic,bic2=bic2,wdf=wdf,bdf=bdf
+                            )
         } else{
           nres[[j]] <- list(model = model[j], CFR = CFR, CFR2 = CFR2, OFR = OFR, PDR = PDR, FDR = FDR, 
                             AN = AN, MSE = MSE, mses=mses, TIME = TIME, iw=iw, ib=ib,OD=OD)
@@ -316,4 +328,48 @@ PlotBICs=function(res,model=1,iter=0){
       plot(x2,y2,type="l",main=paste("beta iter",iter,":dfw=",res$dfw[iter],"; dfb=", res$dfb[iter]-1,".", sep=""))
       abline(v=log(lam2[index2]), col="grey")
     }
+}
+
+PlotBIC2D=function(res,model=1,iter=0){
+  if(iter==0){ # show all iteration
+    L <- dim(res[[model]]$bic)[1]
+    for(i in 1:L){
+      PlotBIC2D(res,model,i)
+      readline(prompt="Press [enter] to continue")
+    }
+  }else { #show paticular iteration
+    res <- res[[model]]
+    crit <- res$bic[iter,,]
+    crit2 <- res$bic2[iter,,]
+    lam1 <- res$lam1[iter,]
+    lam2 <- res$lam2[iter,]
+    wdf <- res$wdf[iter,,]
+    bdf <- res$bdf[iter,,]
+    x11()
+    par(mfrow = c(2, 3))
+    image2D(crit,x=-log(lam1),y=-log(lam2),xlab="-log lambda1", ylab="-log lambda2",main="crit1")
+    # x11()
+    image2D(crit2,x=-log(lam1),y=-log(lam2),xlab="-log lambda1", ylab="-log lambda2",main="crit2")
+    points(-log(lam1[res$iw[iter]]),-log(lam2[res$ib[iter]]),pch=24, col="black")
+    # x11()
+    image2D(wdf,x=-log(lam1),y=-log(lam2),xlab="-log lambda1", ylab="-log lambda2",main="wdf")
+    # x11()
+    image2D(bdf,x=-log(lam1),y=-log(lam2),xlab="-log lambda1", ylab="-log lambda2",main="bdf")
+    # x11()
+    image2D(bdf+wdf,x=-log(lam1),y=-log(lam2),xlab="-log lambda1", ylab="-log lambda2",main="w+bdf")
+    #last one
+    n <- dim(bdf)[1]
+    m <- dim(bdf)[2]
+    df <- matrix(0, nrow=n, ncol=m)
+    for(i in 1:n){
+      for(j in 1:m){
+        if(bdf[i,j]==4 & wdf[i,j]==5){
+          df[i,j]=1
+        }else{
+          df[i,j]=0
+        }
+      }
+    }
+    image2D(df,x=-log(lam1),y=-log(lam2),xlab="-log lambda1", ylab="-log lambda2",main="True df")
   }
+}

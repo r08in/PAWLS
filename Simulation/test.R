@@ -1,6 +1,6 @@
 source("Simulation/Simulation.R")
 # n=50,p=8----------------------------------------------
-L = 100
+L = 10
 n = 50
 p = 8
 beta = c(3, 2, 1.5, 0, 0, 0, 0, 0)
@@ -37,15 +37,15 @@ plot(fpr,tpr,type="p")
 # APAWLS
 
 Lres_APAWLS  <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS", 
-                         #lambda1.min=0.05, lambda2.min=0.01,
-                         lambda1.min=0.05, lambda2.min=0.01,
+                         lambda1.min=0.05, lambda2.min=0.05,
+                         #lambda1.min=1e-03, lambda2.min=0.05,
                          seed = NULL, useDataFile = TRUE,       
                          updateInitial =FALSE, intercept = TRUE, initCrit = "BIC")
 
 
 
 test_APAWLS  <- simulation(L, n, beta, c("C", "D","E"), method = "PAWLS", initial = "PAWLS", 
-                           lambda1.min=0.05, lambda2.min=0.01,
+                           lambda1.min=1e-03, lambda2.min=0.01,
                            seed = 2017, useDataFile = FALSE,       
                            updateInitial =FALSE, intercept = TRUE, criterion = "BIC", pro=0.49)
 
@@ -84,7 +84,7 @@ legend(0.6,0.6,legend=c("Case C", "Case D", "Case E"), col=c("green","blue","red
 
 Lres_PAWLS  <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "uniform", 
                            #lambda1.min=0.05, lambda2.min=0.01,
-                           lambda1.min=0.05, lambda2.min=0.01,
+                           lambda1.min=1e-02, lambda2.min=0.01,
                            seed = NULL, useDataFile = TRUE,       
                            updateInitial =FALSE, intercept = TRUE, criterion = "BIC",search = "all")
 test_PAWLS  <- simulation(L, n, beta, c("C", "D","E"), method = "PAWLS", initial = "uniform", 

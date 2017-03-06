@@ -28,7 +28,7 @@ BICPWLQ = function(wloss, beta, w, lambda1, lambda2, inv = 1, alpha = 0, criteri
                 bicTemp[i, j] = log(wloss[i, j]/(n)) + (bdf[i, j] + wdf[i, j]) * log(n)/(n)
             }
             if(wdf[i,j] >= n * pro || bdf[i,j] + wdf[i,j] >= n){
-              bicTemp[i,j]=-BIC.max
+              #bicTemp[i,j]=-BIC.max
               next
             }
               
@@ -39,8 +39,20 @@ BICPWLQ = function(wloss, beta, w, lambda1, lambda2, inv = 1, alpha = 0, criteri
             }
         }
     }
-    bicTemp <- ifelse(bicTemp==-BIC.max,max(bicTemp),bicTemp)
-    res = list(lambda1 = lambda1, lambda2 = lambda2, bdf = bdf, wdf = wdf, bic = bicTemp, w = w, beta = beta)
+    BIC.max=max(bicTemp)
+    bicTemp2=matrix(0, l1, l2)
+    for (i in start1:end1) {
+      for (j in start2:end2) {
+        if(wdf[i,j] >= n * pro || bdf[i,j] + wdf[i,j] >= n){
+          bicTemp2[i,j]=BIC.max
+        }else{
+          bicTemp2[i,j]=bicTemp[i,j]
+        }
+      }
+    }
+    
+    #bicTemp <- ifelse(bicTemp==-BIC.max,max(bicTemp),bicTemp)
+    res = list(lambda1 = lambda1, lambda2 = lambda2, bdf = bdf, wdf = wdf, bic = bicTemp, bic2=bicTemp2,w = w, beta = beta)
     i = index1
     j = index2
     list(lambda1s = lambda1, lambda2s = lambda2, beta = beta[i, j, ], w = w[i, j, ], wloss = wloss[i, j], bdf = bdf[i, 
