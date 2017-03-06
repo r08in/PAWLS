@@ -37,8 +37,8 @@ plot(fpr,tpr,type="p")
 # APAWLS
 
 Lres_APAWLS  <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS", 
-                         #lambda1.min=0.05, lambda2.min=0.01,
-                         lambda1.min=1e-03, lambda2.min=0.05,
+                         lambda1.min=0.05, lambda2.min=0.01,
+                         #lambda1.min=1e-03, lambda2.min=0.05,
                          seed = NULL, useDataFile = TRUE,       
                          updateInitial =FALSE, intercept = TRUE, initCrit = "BIC",search = "all")
 

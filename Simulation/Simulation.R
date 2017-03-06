@@ -161,10 +161,13 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
               lam2[i,] = res$lambda2s
               dfb[i] = res$bdf
               dfw[i] = res$wdf
-              bic[i,,] = res$res$bic
-              bic2[i,,] = res$res$bic2
-              bdf[i,,]= res$res$bdf
-              wdf[i,,]= res$res$wdf
+              if(search=="all"){
+                bic[i,,] = res$res$bic
+                bic2[i,,] = res$res$bic2
+                bdf[i,,]= res$res$bdf
+                wdf[i,,]= res$res$wdf
+              }
+              
             }
             
             # record result
