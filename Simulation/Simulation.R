@@ -330,11 +330,11 @@ PlotBICs=function(res,model=1,iter=0){
     }
 }
 
-PlotBIC2D=function(res,model=1,iter=0){
+PlotBIC2D=function(res,model=1,iter=0,tb=4,tw=5){
   if(iter==0){ # show all iteration
     L <- dim(res[[model]]$bic)[1]
     for(i in 1:L){
-      PlotBIC2D(res,model,i)
+      PlotBIC2D(res,model,i,tb=tb,tw=tw)
       readline(prompt="Press [enter] to continue")
     }
   }else { #show paticular iteration
@@ -345,6 +345,8 @@ PlotBIC2D=function(res,model=1,iter=0){
     lam2 <- res$lam2[iter,]
     wdf <- res$wdf[iter,,]
     bdf <- res$bdf[iter,,]
+    ib <- res$ib[iter]
+    iw <- res$iw[iter]
     x11()
     par(mfrow = c(2, 3))
     image2D(crit,x=-log(lam1),y=-log(lam2),xlab="-log lambda1", ylab="-log lambda2",main="crit1")
@@ -352,24 +354,36 @@ PlotBIC2D=function(res,model=1,iter=0){
     image2D(crit2,x=-log(lam1),y=-log(lam2),xlab="-log lambda1", ylab="-log lambda2",main="crit2")
     points(-log(lam1[res$iw[iter]]),-log(lam2[res$ib[iter]]),pch=24, col="black")
     # x11()
-    image2D(wdf,x=-log(lam1),y=-log(lam2),xlab="-log lambda1", ylab="-log lambda2",main="wdf")
+    image2D(wdf,x=-log(lam1),y=-log(lam2),xlab="-log lambda1", ylab="-log lambda2",
+            main=paste("wdf=",wdf[iw,ib],sep = ""))
+    points(-log(lam1[res$iw[iter]]),-log(lam2[res$ib[iter]]),pch=24, col="black")
     # x11()
-    image2D(bdf,x=-log(lam1),y=-log(lam2),xlab="-log lambda1", ylab="-log lambda2",main="bdf")
+    image2D(bdf,x=-log(lam1),y=-log(lam2),xlab="-log lambda1", ylab="-log lambda2",
+            main=paste("bdf=",bdf[iw,ib],sep = ""))
+    points(-log(lam1[res$iw[iter]]),-log(lam2[res$ib[iter]]),pch=24, col="black")
     # x11()
     image2D(bdf+wdf,x=-log(lam1),y=-log(lam2),xlab="-log lambda1", ylab="-log lambda2",main="w+bdf")
+    points(-log(lam1[res$iw[iter]]),-log(lam2[res$ib[iter]]),pch=24, col="black")
     #last one
     n <- dim(bdf)[1]
     m <- dim(bdf)[2]
     df <- matrix(0, nrow=n, ncol=m)
     for(i in 1:n){
       for(j in 1:m){
-        if(bdf[i,j]==4 & wdf[i,j]==5){
+        if(bdf[i,j]==tb & wdf[i,j]==tw){
           df[i,j]=1
+        }else if( (bdf[i,j]>tb & bdf[i,j]<=tb*1.5) & (wdf[i,j]>tw & wdf[i,j]<= tw*1.5)){
+          df[i,j]=0.7
+        }else if( (bdf[i,j]>tb*1.5 & bdf[i,j]<=tb*2) & (wdf[i,j]>tw*1.5 & wdf[i,j]<= tw*2)){
+          df[i,j]=0.4
+        }else if( (bdf[i,j]>tb*2 & bdf[i,j]<=tb*3) & (wdf[i,j]>tw*2 & wdf[i,j]<= tw*3)){
+          df[i,j]=0.2
         }else{
           df[i,j]=0
         }
       }
     }
     image2D(df,x=-log(lam1),y=-log(lam2),xlab="-log lambda1", ylab="-log lambda2",main="True df")
+    points(-log(lam1[res$iw[iter]]),-log(lam2[res$ib[iter]]),pch=24, col="black")
   }
 }
