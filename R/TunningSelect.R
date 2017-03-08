@@ -10,6 +10,7 @@ BICPWLQ = function(wloss, beta, w, lambda1, lambda2, inv = 1, alpha = 0, criteri
     BIC.max= 1e+08
     bicPre = BIC.max
     bicTemp = matrix(0, l1, l2)
+    bicTemp2 = matrix(0, l1, l2)
     wdf = matrix(0, l1, l2)
     bdf = matrix(0, l1, l2)
     start1 = 1
@@ -17,8 +18,6 @@ BICPWLQ = function(wloss, beta, w, lambda1, lambda2, inv = 1, alpha = 0, criteri
     start2 = 1
     end2 = l2
     n = length(w[1, 1, ])
-    lim1 = NULL
-    lim2 = NULL
     for (i in start1:end1) {
         for (j in start2:end2) {
             wdf[i, j] = sum(w[i, j, ] != 1 + 0)
@@ -31,49 +30,18 @@ BICPWLQ = function(wloss, beta, w, lambda1, lambda2, inv = 1, alpha = 0, criteri
             }
             #compute limit of lambda1 & lambda2
             if(wdf[i,j] >= n * pro || bdf[i,j] + wdf[i,j] >= n){
-              if(is.null(lim1)){
-                lim1=i
-                lim2=j
+             bicTemp2[i,j]=BIC.max
+            } else{
+              bicTemp2[i,j]=bicTemp[i,j]
+              if (bicTemp[i, j] <= bicPre) {
+                index1 = i
+                index2 = j
+                bicPre = bicTemp[i, j]
               }
-              if(!is.null(lim1) & lim1==i){}
-                lim2=j
             }
-            
-              next
-            }
-              
-#             if (bicTemp[i, j] <= bicPre) {
-#                 index1 = i
-#                 index2 = j
-#                 bicPre = bicTemp[i, j]
-#             }
         }
     }
-    BIC.max=max(bicTemp)
-    bicTemp2=matrix(0, l1, l2)
-    for (i in start1:end1) {
-      for (j in start2:end2) {
-        if(i < lim1 & j<=lim2){
-          bicTemp2[i,j]=bicTemp[i,j]
-          if (bicTemp[i, j] <= bicPre) {
-            index1 = i
-            index2 = j
-            bicPre = bicTemp[i, j]
-          }
-        }else{
-          bicTemp2[i,j]=BIC.max
-        }
-#         if(wdf[i,j] >= n * pro || bdf[i,j] + wdf[i,j] >= n){
-#           bicTemp2[i,j]=BIC.max
-#         }else{
-#           bicTemp2[i,j]=bicTemp[i,j]
-#         }
-      }
-    }
-    
-    
-    
-    #bicTemp <- ifelse(bicTemp==-BIC.max,max(bicTemp),bicTemp)
+    bicTemp2 <- ifelse(bicTemp2==BIC.max,max(bicTemp),bicTemp2)
     res = list(lambda1 = lambda1, lambda2 = lambda2, bdf = bdf, wdf = wdf, bic = bicTemp, bic2=bicTemp2,w = w, beta = beta)
     i = index1
     j = index2
