@@ -1,6 +1,6 @@
 source("Simulation/Simulation.R")
 # n=100,500
-L = 5
+L = 10
 n = 100
 p = 500
 num = 10
