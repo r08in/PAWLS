@@ -37,16 +37,10 @@ plot(fpr,tpr,type="p")
 # APAWLS
 
 Lres_APAWLS  <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS", 
-                         lambda1.min=0.05, lambda2.min=0.01,
+                         lambda1.min=0.05, lambda2.min=0.001,
                          seed = NULL, useDataFile = TRUE,       
-                         updateInitial =FALSE, intercept = TRUE, initCrit = "BIC")
+                         updateInitial =FALSE, intercept = TRUE, search = "all")
 
-
-
-test_APAWLS  <- simulation(L, n, beta, c("C", "D","E"), method = "PAWLS", initial = "PAWLS", 
-                           lambda1.min=1e-03, lambda2.min=0.05,
-                           seed = 2017, useDataFile = FALSE,       
-                           updateInitial =FALSE, intercept = TRUE, criterion = "BIC", pro=0.49)
 
 Lres_APAWLS02  <- simulation(L, n, beta, c( "C", "D","E"), method = "PAWLS", initial = "PAWLS", 
                            lambda1.min=0.05, lambda2.min=0.01,
@@ -85,21 +79,17 @@ Lres_PAWLS  <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS
                            #lambda1.min=0.05, lambda2.min=0.01,
                            lambda1.min=1e-03, lambda2.min=0.05,
                            seed = NULL, useDataFile = TRUE,       
-                           updateInitial =FALSE, intercept = TRUE, criterion = "BIC",search = "all")
-test_PAWLS  <- simulation(L, n, beta, c("C", "D","E"), method = "PAWLS", initial = "uniform", 
-                           lambda1.min=0.05, lambda2.min=0.01,
-                           seed = 2017, useDataFile = FALSE,       
-                           updateInitial =FALSE, intercept = TRUE, criterion = "BIC", pro=0.49)
+                           updateInitial =FALSE, intercept = TRUE, criterion = "BIC", search = "all")
 
 Lres_PAWLS02  <- simulation(L, n, beta, c( "C", "D","E"), method = "PAWLS", initial = "uniform", 
-                             lambda1.min=0.05, lambda2.min=0.01,
+                            lambda1.min=1e-03, lambda2.min=0.05,
                              seed = NULL, useDataFile = TRUE,       
-                             updateInitial =FALSE, intercept = TRUE, criterion = "BIC",pro=0.2)
+                             updateInitial =FALSE, intercept = TRUE, criterion = "BIC",pro=0.2, search = "all")
 
 Lres_PAWLS03  <- simulation(L, n, beta, c( "C", "D","E"), method = "PAWLS", initial = "uniform", 
-                             lambda1.min=0.05, lambda2.min=0.01,
+                            lambda1.min=1e-03, lambda2.min=0.05,
                              seed = NULL, useDataFile = TRUE,       
-                             updateInitial =FALSE, intercept = TRUE, criterion = "BIC",pro=0.3)
+                             updateInitial =FALSE, intercept = TRUE, criterion = "BIC",pro=0.3, search = "all")
 
 endreq(Hres_APAWLS,100,5,t=2)
 endreq(Hres_APAWLS,50,5,t=1)
@@ -139,7 +129,7 @@ plot(fpr,tpr,type="p")
 #-------------------------------------------------------------------------------------
 source("Simulation/Simulation.R")
 # n=100,500
-L = 5
+L = 100
 n = 100
 p = 500
 num = 10
@@ -159,32 +149,14 @@ load("Output/Hres_LTS.rda")
 Hres_APAWLS <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS",
                           lambda1.min=1e-3, lambda2.min=0.05,
                           seed = 2016, useDataFile = FALSE, updateInitial = FALSE, 
-                          intercept = TRUE,initCrit = "BIC" )
-Hres_APAWLS2 <- simulation(L, n, beta, c("C"), method = "PAWLS", initial = "PAWLS",
-                          lambda1.min=1e-3, lambda2.min=0.05,
-                          seed = 2016, useDataFile = FALSE, updateInitial = FALSE, 
-                          intercept = TRUE,initCrit = "AIC" )
-Hres_PAWLS <- simulation(L, n, beta, c("A", "B", "C", "D"), method = "PAWLS", initial = "uniform",
-                          lambda1.min=1e-3, lambda2.min=0.05,
-                          seed = 2016, useDataFile = FALSE, updateInitial = FALSE, 
-                          intercept = TRUE,criterion = "BIC",search = "all")
-Hres_PAWLS2 <- simulation(L, n, beta, c("C"), method = "PAWLS", initial = "uniform",
-                         lambda1.min=1e-3, lambda2.min=0.05,
-                         seed = 2016, useDataFile = FALSE, updateInitial = FALSE, 
-                         intercept = TRUE,criterion = "AIC" )
+                          intercept = TRUE )
 
-Hres_APAWLS_2 <- simulation(L, n, beta, c( "A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS",
-                          #lambda1.min=0.05,lambda2.min=0.05,
-                          #lambda1.min=0.01, lambda2.min=0.05,
-                          lambda1.min=0.005, lambda2.min=0.01,#over select
-                          #lambda1.min=0, lambda2.min=0,
-                          seed = 2016, useDataFile = FALSE, updateInitial = FALSE, intercept = TRUE )
 
 Hres_APAWLS02 <- simulation(L, n, beta, c("C", "D","E"), method = "PAWLS", initial = "PAWLS",
-                          lambda1.min=0.05, lambda2.min=0.02,
+                            lambda1.min=1e-3, lambda2.min=0.05,
                           seed = 2016, useDataFile = FALSE, updateInitial = FALSE, intercept = TRUE,pro=0.2 )
 Hres_APAWLS03 <- simulation(L, n, beta, c("C", "D","E"), method = "PAWLS", initial = "PAWLS",
-                          lambda1.min=0.05, lambda2.min=0.01,
+                            lambda1.min=1e-3, lambda2.min=0.05,
                           seed = 2016, useDataFile = FALSE, updateInitial = FALSE, intercept = TRUE,pro=0.3 )
 save(Hres_APAWLS, file = "Output/Hres_APAWLS.rda")
 save(Hres_APAWLS_1, file = "Output/Hres_APAWLS_1.rda")
@@ -199,20 +171,25 @@ Hres_APAWLS0 <- Hres_APAWLS
 Hres_APAWLS <- test_APAWLS
 
 # PAWLS
-HBIC <- simulation(L, n, beta, c( "A", "B", "C", "D","E"), method = "PAWLS", initial = "uniform",
-                         #lambda1.min=1e-3, lambda2.min=0.05,
-                         lambda1.min=1e-3, lambda2.min=0.01,
-                         seed = 2016, useDataFile = FALSE, updateInitial = FALSE, 
-                         intercept = TRUE,criterion = "BIC" )
-HAIC <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "uniform",
-                          #lambda1.min=1e-3, lambda2.min=0.05,
-                           lambda1.min=1e-3, lambda2.min=0.01,
+Hres_PAWLS <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "uniform",
+                          lambda1.min=1e-3, lambda2.min=0.05,
                           seed = 2016, useDataFile = FALSE, updateInitial = FALSE, 
-                          intercept = TRUE,criterion = "AIC" )
-testBIC <- simulation(L, n, beta, c( "C"), method = "PAWLS", initial = "uniform",
-                   lambda1.min=1e-3, lambda2.min=0.05,
-                   seed = 2016, useDataFile = FALSE, updateInitial = FALSE, 
-                   intercept = TRUE,criterion = "BIC" )
+                          intercept = TRUE, search = "all")
+
+
+Hres_PAWLS02 <- simulation(L, n, beta, c("C", "D","E"), method = "PAWLS", initial = "uniform",
+                            lambda1.min=1e-3, lambda2.min=0.05,
+                            seed = 2016, useDataFile = FALSE, updateInitial = FALSE,
+                           intercept = TRUE,pro=0.2, search = "all")
+Hres_PAWLS03 <- simulation(L, n, beta, c("C", "D","E"), method = "PAWLS", initial = "uniform",
+                            lambda1.min=1e-3, lambda2.min=0.05,
+                            seed = 2016, useDataFile = FALSE, updateInitial = FALSE,
+                           intercept = TRUE,pro=0.3, search = "all")
+
+save(Hres_PAWLS, file = "Output/Hres_PAWLS.rda")
+
+save(Hres_PAWLS02, file = "Output/Hres_PAWLS02.rda")
+save(Hres_PAWLS03, file = "Output/Hres_PAWLS03.rda")
 
 # ADL
 require(ncvreg)

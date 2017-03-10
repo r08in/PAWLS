@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2016.1.9)  9 MAR 2017 10:46
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2016.1.9)  10 MAR 2017 14:50
 entering extended mode
 **./result.tex
 (result.tex
@@ -456,7 +456,7 @@ Overfull \hbox (98.38963pt too wide) in paragraph at lines 431--456
  []
 
 
-Overfull \hbox (12.81966pt too wide) in paragraph at lines 463--502
+Overfull \hbox (38.55574pt too wide) in paragraph at lines 463--502
  [] 
  []
 
@@ -466,12 +466,12 @@ Overfull \hbox (46.51399pt too wide) in paragraph at lines 508--535
  []
 
 
-Overfull \hbox (86.4168pt too wide) in paragraph at lines 541--568
+Overfull \hbox (64.29182pt too wide) in paragraph at lines 541--568
  [] 
  []
 
 
-Overfull \hbox (12.81966pt too wide) in paragraph at lines 573--596
+Overfull \hbox (38.55574pt too wide) in paragraph at lines 573--596
  [] 
  []
 
@@ -666,7 +666,7 @@ lic/amsfonts/cm/cmr10.pfb><C:/Users/Administrator/AppData/Local/Programs/MiKTeX
 cal/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/Adm
 inistrator/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cms
 y7.pfb>
-Output written on result.pdf (12 pages, 131188 bytes).
+Output written on result.pdf (12 pages, 128808 bytes).
 PDF statistics:
  153 PDF objects out of 1000 (max. 8388607)
  26 named destinations out of 1000 (max. 500000)

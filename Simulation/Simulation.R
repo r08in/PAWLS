@@ -94,13 +94,15 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
               times[i] <- (proc.time() - ptm)[1]
               res <- list(beta=beta.alasso)
             }else if (method == "LTS") {
-                require(robustHD)
-                ptm <- proc.time()
-                res = sparseLTS(out$x, out$y, intercept = TRUE, alpha = 1 - pro)
-                times[i] <- (proc.time() - ptm)[1]
-                b[i, ] = res$coefficients
-                w[i, ] = res$wt
-                res$beta <- res$coefficients
+              require(robustHD)
+              ptm <- proc.time()
+              res = sparseLTS(out$x, out$y, lambda=seq(from=1, to=0.01,length.out = 100), mode = "fraction",
+                              intercept = TRUE, alpha = 0.75)
+              times[i] <- (proc.time() - ptm)[1]
+              best <- res$crit$best[1]
+              b[i, ] = res$coefficients[,best]
+              w[i, ] = res$wt[,best]
+              res$beta <- res$coefficients[,best]
             } else if (method == "IPOD") {
               ptm <- proc.time()
               H <- out$x %*% solve(t(out$x)%*%out$x)%*%t(out$x)
