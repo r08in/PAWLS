@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2016.1.9)  6 MAR 2017 13:49
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2016.1.9)  9 MAR 2017 10:46
 entering extended mode
 **./result.tex
 (result.tex
@@ -350,6 +350,9 @@ Package: longtable 2014/10/28 v4.11 Multi-page Table package (DPC)
 \c@LT@tables=\count115
 \c@LT@chunks=\count116
 \LT@p@ftn=\toks20
+) ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\upquote\upquote.sty"
+Package: upquote 2012/04/19 v1.3 upright-quote and grave-accent glyphs in verba
+tim
 ) (result.aux)
 \openout1 = `result.aux'.
 
@@ -367,8 +370,7 @@ LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 134.
 LaTeX Font Info:    ... okay on input line 134.
 LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 134.
 LaTeX Font Info:    ... okay on input line 134.
-
-("C:\Program Files (x86)\MiKTeX 2.9\tex\context\base\supp-pdf.mkii"
+ ("C:\Program Files (x86)\MiKTeX 2.9\tex\context\base\supp-pdf.mkii"
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count117
 \scratchdimen=\dimen125
@@ -646,10 +648,10 @@ Package rerunfilecheck Info: File `result.out' has not changed.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 639.
  ) 
 Here is how much of TeX's memory you used:
- 6170 strings out of 493634
- 90772 string characters out of 3141291
- 234986 words of memory out of 3000000
- 9442 multiletter control sequences out of 15000+200000
+ 6179 strings out of 493634
+ 91038 string characters out of 3141291
+ 235108 words of memory out of 3000000
+ 9448 multiletter control sequences out of 15000+200000
  8701 words of font info for 33 fonts, out of 3000000 for 9000
  1025 hyphenation exceptions out of 8191
  29i,10n,28p,286b,433s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -664,7 +666,7 @@ lic/amsfonts/cm/cmr10.pfb><C:/Users/Administrator/AppData/Local/Programs/MiKTeX
 cal/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/Adm
 inistrator/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cms
 y7.pfb>
-Output written on result.pdf (12 pages, 131056 bytes).
+Output written on result.pdf (12 pages, 131188 bytes).
 PDF statistics:
  153 PDF objects out of 1000 (max. 8388607)
  26 named destinations out of 1000 (max. 500000)
