@@ -96,8 +96,8 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
             }else if (method == "LTS") {
               require(robustHD)
               ptm <- proc.time()
-              res = sparseLTS(out$x, out$y, lambda=seq(from=1, to=0.01,length.out = 100), mode = "fraction",
-                              intercept = TRUE, alpha = 0.75)
+              res = sparseLTS(out$x, out$y, lambda=seq(from=1, to=ifelse(n>p,0.001,0.01),length.out = ifelse(n>p,100,20)), mode = "fraction",
+                              intercept = TRUE, alpha = 0.65)
               times[i] <- (proc.time() - ptm)[1]
               best <- res$crit$best[1]
               b[i, ] = res$coefficients[,best]
