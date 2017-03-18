@@ -8,12 +8,12 @@ beta = c(3, 2, 1.5, 0, 0, 0, 0, 0)
 
 
 # MMNNG
-pro=0.3
+pro=0.1
 Lres_mmnngA = simulation(L, n, beta, "A", method = "MMNNG_DATA", useDataFile = FALSE, seed = NULL, pro=pro)
 Lres_mmnngB = simulation(L, n, beta, "B", method = "MMNNG_DATA", useDataFile = FALSE, seed = NULL, pro=pro)
 Lres_mmnngC = simulation(L, n, beta, "C", method = "MMNNG_DATA", useDataFile = FALSE, seed = NULL, pro=pro)
 Lres_mmnngD = simulation(L, n, beta, "D", method = "MMNNG_DATA", useDataFile = FALSE, seed = NULL, pro=pro)
-Lres_mmnngE = simulation(L, n, beta, "E", method = "MMNNG_DATA", useDataFile = FALSE, seed = NULL, pro=pro)
+Lres_mmnngE = simulation(L, n, beta, "E2", method = "MMNNG_DATA", useDataFile = FALSE, seed = NULL, pro=pro)
 Lres_mmnng = simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "MMNNG_DATA", useDataFile = TRUE, seed = NULL)
 Lres_mmnng02 = simulation(L, n, beta, c("C", "D","E"), method = "MMNNG_DATA", useDataFile = TRUE, seed = NULL,pro=0.2)
 Lres_mmnng03 = simulation(L, n, beta, c("C", "D","E"), method = "MMNNG_DATA", useDataFile = TRUE, seed = NULL,pro=0.3)
@@ -40,6 +40,11 @@ Lres_APAWLS  <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWL
                          lambda1.min=0.05, lambda2.min=0.001,
                          seed = NULL, useDataFile = TRUE,       
                          updateInitial =FALSE, intercept = TRUE, search = "all")
+
+test_APAWLS2  <- simulation(L, n, beta, c("E2"), method = "PAWLS", initial = "PAWLS", 
+                           lambda1.min=0.05, lambda2.min=0.001,
+                           seed = NULL, useDataFile = TRUE,       
+                           updateInitial =FALSE, intercept = TRUE, search = "all",pro=0.1)
 
 
 Lres_APAWLS02  <- simulation(L, n, beta, c( "C", "D","E"), method = "PAWLS", initial = "PAWLS", 
@@ -80,6 +85,12 @@ Lres_PAWLS  <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS
                            lambda1.min=1e-03, lambda2.min=0.05,
                            seed = NULL, useDataFile = TRUE,       
                            updateInitial =FALSE, intercept = TRUE, criterion = "BIC", search = "all")
+
+test_PAWLS2  <- simulation(L, n, beta, c("E2"), method = "PAWLS", initial = "uniform", 
+                          #lambda1.min=0.05, lambda2.min=0.01,
+                          lambda1.min=1e-03, lambda2.min=0.05,
+                          seed = NULL, useDataFile = TRUE,       
+                          updateInitial =FALSE, intercept = TRUE, criterion = "BIC", search = "all")
 
 Lres_PAWLS02  <- simulation(L, n, beta, c( "C", "D","E"), method = "PAWLS", initial = "uniform", 
                             lambda1.min=1e-03, lambda2.min=0.05,
@@ -129,7 +140,7 @@ plot(fpr,tpr,type="p")
 #-------------------------------------------------------------------------------------
 source("Simulation/Simulation.R")
 # n=100,500
-L = 100
+L = 1
 n = 100
 p = 500
 num = 10
@@ -138,6 +149,7 @@ beta = c(rep(2, num), rep(0, p - num))
 # LTS
 require(robustHD)
 Hres_LTS = simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "LTS", useDataFile = FALSE, seed=2016)
+test_LTS = simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "LTS", useDataFile = FALSE, seed=2016)
 Hres_LTS02 = simulation(L, n, beta, c("C", "D","E"), method = "LTS", useDataFile = FALSE, seed=2016, pro=0.2)
 Hres_LTS03 = simulation(L, n, beta, c("C", "D","E"), method = "LTS", useDataFile = FALSE, seed=2016, pro=0.3)
 save(Hres_LTS, file = "Output/Hres_LTS.rda")
