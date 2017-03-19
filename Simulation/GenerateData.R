@@ -280,7 +280,6 @@ GenerateDataByModel = function(n, beta, errorSigma = 2, r = 0.5, model = c("A", 
       out = GenerateData(n = n, dataSetNum = 1, beta = beta, errorSigma = errorSigma, r = r, dataType = dataType)
       pnum = sum(beta != 0)
       oNum = round(n * pro)
-    
       xx <- out$x
       svd_out <- svd(xx)
       v <- svd_out$v
@@ -289,6 +288,22 @@ GenerateDataByModel = function(n, beta, errorSigma = 2, r = 0.5, model = c("A", 
       u1 = runif(oNum, 0, 1)
       u2 = runif(oNum, 0, 1)
       out$y[1:oNum] = out$y[1:oNum] + ifelse(u1 < 0.5, -1, 1) * (20 + 10 * u2)
+      #out$y[1:oNum] = xx[1:oNum,]%*% beta + errorSigma * rnorm(oNum, 0, 1) + 
+        #ifelse(u1 < 0.5, -1, 1) * (20 + 10 * u2)
+    }else if (model == "E3") {
+      out = GenerateData(n = n, dataSetNum = 1, beta = beta, errorSigma = errorSigma, r = r, dataType = dataType)
+      pnum = sum(beta != 0)
+      oNum = round(n * pro)
+      xx <- out$x
+      svd_out <- svd(xx)
+      v <- svd_out$v
+      xx[1:oNum,] <- xx[1:oNum,] + matrix(rep(5* v[,p],oNum),nrow=oNum,byrow = TRUE)
+      out$x <- xx
+      u1 = runif(oNum, 0, 1)
+      u2 = runif(oNum, 0, 1)
+      #out$y[1:oNum] = out$y[1:oNum] + ifelse(u1 < 0.5, -1, 1) * (20 + 10 * u2)
+      out$y[1:oNum] = xx[1:oNum,]%*% beta + errorSigma * rnorm(oNum, 0, 1) + 
+        ifelse(u1 < 0.5, -1, 1) * (20 + 10 * u2)
     }else if (model == "C2") {
         out = GenerateData(n = n, dataSetNum = 1, beta = beta, errorSigma = errorSigma, r = r, dataType = dataType)
         oNum = round(n * 0.1)
