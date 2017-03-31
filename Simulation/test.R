@@ -154,9 +154,9 @@ beta = c(rep(2, num), rep(0, p - num))
 
 # LTS
 require(robustHD)
-Hres_LTS = simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "LTS", useDataFile = FALSE, seed=2016)
-Hres_LTS02 = simulation(L, n, beta, c("C", "D","E"), method = "LTS", useDataFile = FALSE, seed=2016, pro=0.2)
-Hres_LTS03 = simulation(L, n, beta, c("C", "D","E"), method = "LTS", useDataFile = FALSE, seed=2016, pro=0.3)
+Hres_LTS = simulation(L, n, beta, c("A", "B", "C", "D"), method = "LTS", useDataFile = FALSE, seed=2016)
+Hres_LTS02 = simulation(L, n, beta, c("C", "D"), method = "LTS", useDataFile = FALSE, seed=2016, pro=0.2)
+Hres_LTS03 = simulation(L, n, beta, c("C", "D"), method = "LTS", useDataFile = FALSE, seed=2016, pro=0.3)
 save(Hres_LTS, file = "Output/Hres_LTS.rda")
 save(Hres_LTS02, file = "Output/Hres_LTS02.rda")
 save(Hres_LTS03, file = "Output/Hres_LTS03.rda")
