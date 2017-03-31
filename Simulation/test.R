@@ -7,13 +7,16 @@ beta = c(3, 2, 1.5, 0, 0, 0, 0, 0)
 #beta = c(0, 0, 0, 0, 0, 0, 0, 0)
 
 
-# MMNNG
+# MMNNG(yes)
 pro=0.1
 Lres_mmnngA = simulation(L, n, beta, "A", method = "MMNNG_DATA", useDataFile = FALSE, seed = NULL, pro=pro)
 Lres_mmnngB = simulation(L, n, beta, "B", method = "MMNNG_DATA", useDataFile = FALSE, seed = NULL, pro=pro)
 Lres_mmnngC = simulation(L, n, beta, "C", method = "MMNNG_DATA", useDataFile = FALSE, seed = NULL, pro=pro)
 Lres_mmnngD = simulation(L, n, beta, "D", method = "MMNNG_DATA", useDataFile = FALSE, seed = NULL, pro=pro)
-Lres_mmnngE = simulation(L, n, beta, "E2", method = "MMNNG_DATA", useDataFile = FALSE, seed = NULL, pro=pro)
+
+Lres_mmnngE1 = simulation(L, n, beta, "E", method = "MMNNG_DATA", useDataFile = FALSE, seed = NULL, pro=0.1)
+Lres_mmnngE2 = simulation(L, n, beta, "E", method = "MMNNG_DATA", useDataFile = FALSE, seed = NULL, pro=0.2)
+Lres_mmnngE3 = simulation(L, n, beta, "E", method = "MMNNG_DATA", useDataFile = FALSE, seed = NULL, pro=0.3)
 Lres_mmnng = simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "MMNNG_DATA", useDataFile = TRUE, seed = NULL)
 Lres_mmnng02 = simulation(L, n, beta, c("C", "D","E"), method = "MMNNG_DATA", useDataFile = TRUE, seed = NULL,pro=0.2)
 Lres_mmnng03 = simulation(L, n, beta, c("C", "D","E"), method = "MMNNG_DATA", useDataFile = TRUE, seed = NULL,pro=0.3)
@@ -21,11 +24,12 @@ save(Lres_mmnng, file = "Output/Lres_mmnng.rda")
 save(Lres_mmnng02, file = "Output/Lres_mmnng02.rda")
 save(Lres_mmnng03, file = "Output/Lres_mmnng03.rda")
 
-# LTS
+# LTS(yes)
 require(robustHD)
 Lres_LTS = simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "LTS", useDataFile = TRUE)
 Lres_LTS02 = simulation(L, n, beta, c("C", "D","E"), method = "LTS", useDataFile = TRUE, pro=0.2)
 Lres_LTS03 = simulation(L, n, beta, c("C", "D","E"), method = "LTS", useDataFile = TRUE, pro=0.3)
+
 save(Lres_LTS, file = "Output/Lres_LTS.rda")
 save(Lres_LTS02, file = "Output/Lres_LTS02.rda")
 save(Lres_LTS03, file = "Output/Lres_LTS03.rda")
@@ -109,14 +113,16 @@ save(Lres_PAWLS02, file = "Output/Lres_PAWLS02.rda")
 save(Lres_PAWLS03, file = "Output/Lres_PAWLS03.rda")
 
 
-# ROSS
+# ROSS(yes)
 matLabDir = paste(getwd(),"Simulation/ROSS" , sep = "/")
 source("Simulation/SetupMatlab.R")
 matlab = PrepareMatlab(matLabDir)
-Lres_ROSS <- simulation(L, n, beta, c("A", "B", "C", "D"), method = "ROSS",matlab = matlab,
+Lres_ROSS <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "ROSS",matlab = matlab,
                         seed = NULL, useDataFile = TRUE, intercept = TRUE)
-Lres_ROSSE <- simulation(L, n, beta, c("E"), method = "ROSS",matlab = matlab,
-                        seed = NULL, useDataFile = TRUE, intercept = TRUE)
+Lres_ROSS02 <- simulation(L, n, beta, c("C", "D","E"), method = "ROSS",matlab = matlab,
+                        seed = NULL, useDataFile = TRUE, intercept = TRUE, pro=0.2)
+Lres_ROSS03 <- simulation(L, n, beta, c("C", "D","E"), method = "ROSS",matlab = matlab,
+                          seed = NULL, useDataFile = TRUE, intercept = TRUE, pro=0.3)
 save(Lres_ROSS , file = "Output/Lres_ROSS.rda")
 save(Lres_ROSS02 , file = "Output/Lres_ROSS02.rda")
 save(Lres_ROSS03 , file = "Output/Lres_ROSS03.rda")
@@ -140,7 +146,7 @@ plot(fpr,tpr,type="p")
 #-------------------------------------------------------------------------------------
 source("Simulation/Simulation.R")
 # n=100,500
-L = 1
+L = 100
 n = 100
 p = 500
 num = 10
@@ -149,7 +155,6 @@ beta = c(rep(2, num), rep(0, p - num))
 # LTS
 require(robustHD)
 Hres_LTS = simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "LTS", useDataFile = FALSE, seed=2016)
-test_LTS = simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "LTS", useDataFile = FALSE, seed=2016)
 Hres_LTS02 = simulation(L, n, beta, c("C", "D","E"), method = "LTS", useDataFile = FALSE, seed=2016, pro=0.2)
 Hres_LTS03 = simulation(L, n, beta, c("C", "D","E"), method = "LTS", useDataFile = FALSE, seed=2016, pro=0.3)
 save(Hres_LTS, file = "Output/Hres_LTS.rda")

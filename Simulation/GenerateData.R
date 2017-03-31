@@ -258,8 +258,7 @@ GenerateDataByModel = function(n, beta, errorSigma = 2, r = 0.5, model = c("A", 
         u2 = runif(oNum, 0, 1)
         out$y[1:oNum] = out$y[1:oNum] + ifelse(u1 < 0.5, -1, 1) * (20 + 10 * u2)
         out$x[1:oNum, (pnum + 1):(pnum + 5)] = out$x[1:oNum, (pnum + 1):(pnum + 5)] + 10
-        browser()
-    } else if (model == "E") {
+    } else if (model == "E2") {
       out = GenerateData(n = n, dataSetNum = 1, beta = beta, errorSigma = errorSigma, r = r, dataType = dataType)
       pnum = sum(beta != 0)
       ratio <- 3
@@ -276,7 +275,7 @@ GenerateDataByModel = function(n, beta, errorSigma = 2, r = 0.5, model = c("A", 
       u1 = runif(oNum, 0, 1)
       u2 = runif(oNum, 0, 1)
       out$y[1:oNum] = out$y[1:oNum] + ifelse(u1 < 0.5, -1, 1) * (20 + 10 * u2)
-    }else if (model == "E2") {
+    }else if (model == "E") {
       out = GenerateData(n = n, dataSetNum = 1, beta = beta, errorSigma = errorSigma, r = r, dataType = dataType)
       pnum = sum(beta != 0)
       oNum = round(n * pro)
