@@ -282,7 +282,7 @@ GenerateDataByModel = function(n, beta, errorSigma = 2, r = 0.5, model = c("A", 
       xx <- out$x
       svd_out <- svd(xx)
       v <- svd_out$v
-      xx[1:oNum,] <- xx[1:oNum,] + matrix(rep(5* v[,p],oNum),nrow=oNum,byrow = TRUE)
+      xx[1:oNum,] <- xx[1:oNum,] + matrix(rep(5* v[,dim(v)[2]],oNum),nrow=oNum,byrow = TRUE)
       out$x <- xx
       u1 = runif(oNum, 0, 1)
       u2 = runif(oNum, 0, 1)

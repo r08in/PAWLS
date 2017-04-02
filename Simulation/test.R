@@ -160,6 +160,9 @@ Hres_LTS03 = simulation(L, n, beta, c("C", "D"), method = "LTS", useDataFile = F
 save(Hres_LTS, file = "Output/Hres_LTS.rda")
 save(Hres_LTS02, file = "Output/Hres_LTS02.rda")
 save(Hres_LTS03, file = "Output/Hres_LTS03.rda")
+Hres_LTSE = simulation(L, n, beta, c("E"), method = "LTS", useDataFile = FALSE, seed=2016)
+Hres_LTSE02 = simulation(L, n, beta, c("E"), method = "LTS", useDataFile = FALSE, seed=2016, pro=0.2)
+Hres_LTSE03 = simulation(L, n, beta, c("E"), method = "LTS", useDataFile = FALSE, seed=2016, pro=0.3)
 load("Output/Hres_LTS.rda")
 
 #APAWLS
