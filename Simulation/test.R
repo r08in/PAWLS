@@ -169,9 +169,6 @@ Hres_APAWLS03 <- simulation(L, n, beta, c("C", "D","E"), method = "PAWLS", initi
                             lambda1.min=1e-3, lambda2.min=0.05,
                           seed = 2016, useDataFile = FALSE, updateInitial = FALSE, intercept = TRUE,pro=0.3 )
 save(Hres_APAWLS, file = "Output/Hres_APAWLS.rda")
-save(Hres_APAWLS_1, file = "Output/Hres_APAWLS_1.rda")
-save(Hres_APAWLS_2, file = "Output/Hres_APAWLS_2.rda")
-
 save(Hres_APAWLS02, file = "Output/Hres_APAWLS02.rda")
 save(Hres_APAWLS03, file = "Output/Hres_APAWLS03.rda")
 load("Output/Hres_APAWLS.rda")
