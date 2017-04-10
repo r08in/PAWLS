@@ -74,7 +74,7 @@ BICPWLQ2 = function(wloss, beta, w, lambda1, lambda2, n, inv = 1) {
         index2, ] != 0 + 0), wdf = sum(w[index1, index2, ] != 1 + 0), index1 = i, index2 = j, res = res)
 }
 
-BIC4PAWLS = function(loss, dfw, dfb, n, p, type = "beta", criterion = "BIC", pro = 0.5, blam=NULL) {
+BIC4PAWLS = function(loss, dfw, dfb, n, p, type = "beta", criterion = "BIC", pro = 0.5) {
     if(n >= p){ # low dimension
       df <- dfb + dfw
       fitLoss <- log(loss/n)

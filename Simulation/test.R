@@ -1,10 +1,11 @@
 source("Simulation/Simulation.R")
 # n=50,p=8----------------------------------------------
-L = 100
+L = 2
 n = 50
 p = 8
 beta = c(3, 2, 1.5, 0, 0, 0, 0, 0)
 #beta = c(0, 0, 0, 0, 0, 0, 0, 0)
+
 
 
 # MMNNG(yes)
@@ -23,6 +24,29 @@ Lres_mmnng03 = simulation(L, n, beta, c("C", "D","E"), method = "MMNNG_DATA", us
 save(Lres_mmnng, file = "Output/Lres_mmnng.rda")
 save(Lres_mmnng02, file = "Output/Lres_mmnng02.rda")
 save(Lres_mmnng03, file = "Output/Lres_mmnng03.rda")
+
+# PAWLS
+
+Lres_PAMLS  <- simulation(L, n, beta, c("C"), method = "PAMLS", initial = "uniform", 
+                          #lambda1.min=0.05, lambda2.min=0.01,
+                          lambda1.min=1e-03, lambda2.min=0.05,
+                          seed = NULL, useDataFile = TRUE,       
+                          updateInitial =FALSE, intercept = TRUE, criterion = "BIC", search = "all")
+Lres_PAMLS  <- simulation(L, n, beta, c("C"), method = "PAMLS", initial = "PAMLS", 
+                          #lambda1.min=0.05, lambda2.min=0.01,
+                          lambda1.min=1e-03, lambda2.min=0.05,
+                          seed = NULL, useDataFile = TRUE,       
+                          updateInitial =FALSE, intercept = TRUE, criterion = "BIC")
+
+Lres_PAMLS02  <- simulation(L, n, beta, c( "C", "D","E"), method = "PAWLS", initial = "uniform", 
+                            lambda1.min=1e-03, lambda2.min=0.05,
+                            seed = NULL, useDataFile = TRUE,       
+                            updateInitial =FALSE, intercept = TRUE, criterion = "BIC",pro=0.2, search = "all")
+
+Lres_PAMLS03  <- simulation(L, n, beta, c( "C", "D","E"), method = "PAWLS", initial = "uniform", 
+                            lambda1.min=1e-03, lambda2.min=0.05,
+                            seed = NULL, useDataFile = TRUE,       
+                            updateInitial =FALSE, intercept = TRUE, criterion = "BIC",pro=0.3, search = "all")
 
 # LTS(yes)
 require(robustHD)

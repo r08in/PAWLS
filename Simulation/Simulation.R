@@ -53,6 +53,7 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
         }
         b = array(0, dim = c(L, ifelse(intercept,p+1,p)))
         w = array(0, dim = c(L, n))
+        gam = array(0, dim = c(L, n))
         # ROC
         # simulation
         for (i in 1:L) {
@@ -144,7 +145,32 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
                 times[i] <- (proc.time() - ptm)[1]
                 res$beta <- res$betac
                 
-            } else if (method == "PAWLS") {
+            } else if (method == "PAMLS") {
+              ptm <- proc.time()
+              res = pamls(out$x, out$y, penalty1 = penalty1, nlambda1 = 50, nlambda2 = 100, lambda1 = lambda1,
+                            lambda2=lambda2, lambda1.min=lambda1.min, lambda2.min=lambda2.min, delta = 1e-06, 
+                            maxIter = 1000, initial = initial, intercept = intercept, standardize = standardize, 
+                            updateInitialTimes = 0, criterion = criterion, initCrit=initCrit, search = search)
+              times[i] <- (proc.time() - ptm)[1]
+              b[i, ] = res$beta
+              w[i, ] = 1-res$gam
+              iter[i] = res$iter
+              iw[i] = res$index1
+              ib[i] = res$index2
+              crit1[i,] = res$crit1
+              crit2[i,] =  res$crit2
+              lam1[i,] =  res$lambda1s
+              lam2[i,] = res$lambda2s
+              dfb[i] = res$bdf
+              dfw[i] = res$gdf
+              if(search=="all"){
+                bic[i,,] = res$res$bic
+                bic2[i,,] = res$res$bic2
+                bdf[i,,]= res$res$bdf
+                wdf[i,,]= res$res$gdf
+              }
+              
+            }else if (method == "PAWLS") {
               updateInitialTimes <- ifelse(updateInitial, 2, 0)
               ptm <- proc.time()
               res = srcdreg(out$x, out$y, penalty1 = penalty1, nlambda1 = 50, nlambda2 = 100, lambda1 = lambda1,
@@ -224,7 +250,7 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
         TIME <- sum(times)
         # outlier dectection
         OD <- "not applicable."
-        if(method == "PAWLS" || method == "LTS"|| method=="IPOD" ){
+        if(method == "PAWLS" || method == "PAMLS" || method == "LTS"|| method=="IPOD" ){
           if(model[j] == "A" || model[j] == "B"){
             curPro <- 0
           }
@@ -238,7 +264,7 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
         }
        
         # BIC curve
-        if(method=="PAWLS"){
+        if(method=="PAWLS"||method=="PAMLS"){
           nres[[j]] <- list(model = model[j], CFR = CFR, CFR2 = CFR2, OFR = OFR, PDR = PDR, FDR = FDR, 
                             AN = AN, MSE = MSE, mses=mses, TIME = TIME, iw=iw, ib=ib,iter=iter,OD=OD,
                             crit1=crit1,lam1=lam1,crit2=crit2,lam2=lam2,dfb=dfb,dfw=dfw,betas=b,ws=w,
@@ -250,18 +276,6 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
         }
     }
     # return
-    # Compute Score
-    std.score <- c(74,88,72,63,79)
-    overall <- 0
-    beat <- 1
-    se <- 0
-    for(i in 1:mcount)
-    {
-      if(nres[[i]]$CFR-std.score[i]<0) beat <- 0
-      overall <- overall+(nres[[i]]$CFR-std.score[i])
-      se <- se+(nres[[i]]$CFR-std.score[i])^2
-    }
-    nres[[mcount+1]] <- list(overall=overall,beat=beat,se=se)
     nres
 }
 
