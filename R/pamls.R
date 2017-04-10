@@ -174,8 +174,30 @@ ComputeParameter = function(x, y, nlambda1, nlambda2,lambda1.min=1e-03, lambda2.
   return(list(lambda1 = lambda1, lambda2 = lambda2))
 }
 
-
 Innerpamls = function(x, y,lambda1, lambda2, beta0, gam0, delta, maxIter, intercept = TRUE, 
+                      startBeta = NULL, startGam = NULL) {
+  # return (res2=InnerReg2(x, y,penalty1,penalty2,lambda1,lambda2,beta0,w0,delta,
+  # maxIter,intercept,startBeta=startBeta,startW=startW))
+  L1 = length(lambda1)
+  L2 = length(lambda2)
+  m = dim(x)[2]
+  n = dim(x)[1]
+  if (is.null(startBeta)) {
+    startBeta = rep(0, m)
+  }
+  if (is.null(startW)) {
+    startGam = rep(0, n)
+  }
+  res <- .Call("Innerpamls", x, y,lambda1, lambda2, beta0, gam0, delta, maxIter, ifelse(intercept,1, 0), startBeta = startBeta, startGam = startGam)
+  
+  res = list(beta = array(res[[1]], dim = c(L1, L2, m)), gam = array(res[[2]], dim = c(L1, L2, n)),
+             loss = array(res[[3]], dim = c(L1, L2)), iter = array(res[[4]], dim = c(L1, L2)))
+  
+  res
+  
+}
+
+Innerpamls2 = function(x, y,lambda1, lambda2, beta0, gam0, delta, maxIter, intercept = TRUE, 
                      startBeta = NULL, startGam = NULL) {
   
   ## declaration
