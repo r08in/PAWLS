@@ -45,7 +45,7 @@ SEXP CleanupG2(double *r, double *betaPre, double *gamPre, double * shift,  doub
 }
 
 
-SEXP Innerpamls( SEXP X_, SEXP Y_, SEXP Lambda1_, SEXP Lambda2_,
+SEXP INNERPAMLS( SEXP X_, SEXP Y_, SEXP Lambda1_, SEXP Lambda2_,
                SEXP Beta0_, SEXP Gam0_, SEXP Delta_, SEXP MaxIter_, 
                SEXP Intercept_, SEXP StarBeta_, SEXP StarGam_ )
 {
@@ -63,9 +63,9 @@ SEXP Innerpamls( SEXP X_, SEXP Y_, SEXP Lambda1_, SEXP Lambda2_,
     starBeta=REAL(StarBeta_);
   }
   double *starGam=NULL;
-  if(starGam_!=NULL)
+  if(StarGam_!=NULL)
   {
-    starGam=REAL(starGam_);
+    starGam=REAL(StarGam_);
   }
   double delta=REAL(Delta_)[0];
   double maxIter = REAL(MaxIter_)[0];
@@ -110,7 +110,7 @@ SEXP Innerpamls( SEXP X_, SEXP Y_, SEXP Lambda1_, SEXP Lambda2_,
      betaPre[i]=starBeta[i];
    }
   }
-  if(starGam_==NULL)
+  if(StarGam_==NULL)
   {
     for(int i=0;i<n;i++)
    {

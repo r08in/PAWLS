@@ -1,6 +1,6 @@
 source("Simulation/Simulation.R")
 # n=50,p=8----------------------------------------------
-L = 2
+L = 100
 n = 50
 p = 8
 beta = c(3, 2, 1.5, 0, 0, 0, 0, 0)
@@ -25,18 +25,13 @@ save(Lres_mmnng, file = "Output/Lres_mmnng.rda")
 save(Lres_mmnng02, file = "Output/Lres_mmnng02.rda")
 save(Lres_mmnng03, file = "Output/Lres_mmnng03.rda")
 
-# PAWLS
+# PAMLS
 
-Lres_PAMLS  <- simulation(L, n, beta, c("C"), method = "PAMLS", initial = "uniform", 
+Lres_PAMLS  <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAMLS", initial = "uniform", 
                           #lambda1.min=0.05, lambda2.min=0.01,
                           lambda1.min=1e-03, lambda2.min=0.05,
                           seed = NULL, useDataFile = TRUE,       
                           updateInitial =FALSE, intercept = TRUE, criterion = "BIC", search = "all")
-Lres_PAMLS  <- simulation(L, n, beta, c("C"), method = "PAMLS", initial = "PAMLS", 
-                          #lambda1.min=0.05, lambda2.min=0.01,
-                          lambda1.min=1e-03, lambda2.min=0.05,
-                          seed = NULL, useDataFile = TRUE,       
-                          updateInitial =FALSE, intercept = TRUE, criterion = "BIC")
 
 Lres_PAMLS02  <- simulation(L, n, beta, c( "C", "D","E"), method = "PAWLS", initial = "uniform", 
                             lambda1.min=1e-03, lambda2.min=0.05,
@@ -124,7 +119,7 @@ endreq(Hres_APAWLS,50,5,t=1)
 save(Lres_PAWLS, file = "Output/Lres_PAWLS.rda")
 save(Lres_PAWLS02, file = "Output/Lres_PAWLS02.rda")
 save(Lres_PAWLS03, file = "Output/Lres_PAWLS03.rda")
-
+load("Output/Lres_PAWLS.rda")
 
 # ROSS(yes)
 matLabDir = paste(getwd(),"Simulation/ROSS" , sep = "/")
