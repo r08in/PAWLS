@@ -178,6 +178,7 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
                 maxIter = 1000, initial = initial, intercept = intercept, standardize = standardize, 
                 updateInitialTimes = updateInitialTimes, criterion = criterion, initCrit=initCrit, search = search)
               times[i] <- (proc.time() - ptm)[1]
+              browser()
               b[i, ] = res$beta
               w[i, ] = res$w
               iter[i] = res$iter
@@ -404,5 +405,26 @@ PlotBIC2D=function(res,model=1,iter=0,tb=4,tw=5){
     }
     image2D(df,x=-log(lam1),y=-log(lam2),xlab="-log lambda1", ylab="-log lambda2",main="True df")
     points(-log(lam1[res$iw[iter]]),-log(lam2[res$ib[iter]]),pch=24, col="black")
+  }
+}
+
+PlotEfficiency <- function(lambda,weight,x, sigma=2,main=NULL)
+{
+  L <- length(lambda)
+  n <- dim(x)[1]
+  p <- dim(x)[2]
+  varb <- matrix(0,nrow=L,ncol=p)
+  for(i in 1 : L){
+    varb[i,] <- diag(solve(t(x) %*% diag(weight[i,]^2) %*% x))  * sigma^2
+  }
+  op <- apply(weight!=1,1,sum)/n
+  #plot
+  plot(op,varb[,p],type="n",xlim=c(0,0.6), 
+       xlab="Percent of Outliers", main=main, ylab=expression(paste("Var(",hat(beta),")",sep = "")))
+  qual_col_pals <-  brewer.pal.info[brewer.pal.info$category == 'qual',]
+  col_vector <-  unlist(mapply(brewer.pal, qual_col_pals$maxcolors, rownames(qual_col_pals)))
+  col <- sample(col_vector, p)
+  for(i in 1:p){
+    lines(op,varb[,i],lwd=2, lty=1,col=col[i])
   }
 }

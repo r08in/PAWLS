@@ -1,4 +1,26 @@
 
+source("Simulation/Simulation.R")
+# n=50,p=8----------------------------------------------
+L = 100
+n = 50
+p = 8
+beta = c(3, 2, 1.5, 0, 0, 0, 0, 0)
+#beta = c(0, 0, 0, 0, 0, 0, 0, 0)
+
+model <- c("A","B", "C", "D","E")
+m <- length(model)
+par(mfrow = c(3, 2))
+for(i in 1:m){
+  out <- GenerateDataByModel(n = n, beta = beta, model = model[i], pro=0.2)
+  res <- srcdreg(out$x, out$y,search = "all")
+  lambda <- res$lambda1s
+  weight <- matrix(res$res$w[,res$index2,],50,50)
+  PlotEfficiency(lambda,weight,out$x,main=paste("Case",model[i]))
+}
+
+
+
+
 n = 50
 p = 8
 pNum = 8
