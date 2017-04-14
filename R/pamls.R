@@ -191,7 +191,6 @@ Innerpamls = function(x, y,lambda1, lambda2, beta0, gam0, delta, maxIter, interc
   
   res = list(beta = array(res[[1]], dim = c(L1, L2, m)), gam = array(res[[2]], dim = c(L1, L2, n)),
              loss = array(res[[3]], dim = c(L1, L2)), iter = array(res[[4]], dim = c(L1, L2)))
-  browser()
   
   res
   
@@ -277,7 +276,6 @@ Innerpamls2 = function(x, y,lambda1, lambda2, beta0, gam0, delta, maxIter, inter
     }  #end iteration for each lambda2 fixed lambda1
     
   }  #end iteration for each lambda1
-  browser()
   list(beta = beta, loss = loss, iter = iter, gam = gam)
 }
 

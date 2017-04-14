@@ -304,27 +304,19 @@ options(digits=2)
 	    sLTS & \Sexpr{Hres_LTS[[1]]$CFR} & \Sexpr{Hres_LTS[[1]]$OFR} & \Sexpr{round(Hres_LTS[[1]]$AN,digits=2)}  &  \Sexpr{round(Hres_LTS[[1]]$TIME,digits=2)}
 	         &&& \Sexpr{Hres_LTS[[2]]$CFR} & \Sexpr{Hres_LTS[[2]]$OFR} & \Sexpr{round(Hres_LTS[[2]]$AN,digits=2)} &  \Sexpr{round(Hres_LTS[[2]]$TIME,digits=2)}\\
 	  PAMLS & \Sexpr{Hres_PAMLS[[1]]$CFR} & \Sexpr{Hres_PAMLS[[1]]$OFR} & \Sexpr{round(Hres_PAMLS[[1]]$AN,digits=2)} &  \Sexpr{round(Hres_PAMLS[[1]]$TIME,digits=2)} &&& \Sexpr{Hres_PAMLS[[2]]$CFR} & \Sexpr{Hres_PAMLS[[2]]$OFR} & \Sexpr{round(Hres_PAMLS [[2]]$AN,digits=2)} &  \Sexpr{round(Hres_PAMLS[[2]]$TIME,digits=2)}\\
-	\\
 	    APAMLS & \Sexpr{Hres_APAMLS[[1]]$CFR} & \Sexpr{Hres_APAMLS[[1]]$OFR} & \Sexpr{round(Hres_APAMLS[[1]]$AN,digits=2)} &  \Sexpr{round(Hres_APAMLS[[1]]$TIME,digits=2)} &&& \Sexpr{Hres_APAMLS[[2]]$CFR} & \Sexpr{Hres_APAMLS[[2]]$OFR} & \Sexpr{round(Hres_APAMLS [[2]]$AN,digits=2)} &  \Sexpr{round(Hres_APAMLS[[2]]$TIME,digits=2)}\\
-	\\
-	
 	  PAWLS & \Sexpr{Hres_PAWLS[[1]]$CFR} & \Sexpr{Hres_PAWLS[[1]]$OFR} & \Sexpr{round(Hres_PAWLS[[1]]$AN,digits=2)} &  \Sexpr{round(Hres_PAWLS[[1]]$TIME,digits=2)} &&& \Sexpr{Hres_PAWLS[[2]]$CFR} & \Sexpr{Hres_PAWLS[[2]]$OFR} & \Sexpr{round(Hres_PAWLS [[2]]$AN,digits=2)} &  \Sexpr{round(Hres_PAWLS[[2]]$TIME,digits=2)}\\
-	\\
 	    APAWLS & \Sexpr{Hres_APAWLS[[1]]$CFR} & \Sexpr{Hres_APAWLS[[1]]$OFR} & \Sexpr{round(Hres_APAWLS[[1]]$AN,digits=2)} &  \Sexpr{round(Hres_APAWLS[[1]]$TIME,digits=2)} &&& \Sexpr{Hres_APAWLS[[2]]$CFR} & \Sexpr{Hres_APAWLS[[2]]$OFR} & \Sexpr{round(Hres_APAWLS [[2]]$AN,digits=2)} &  \Sexpr{round(Hres_APAWLS[[2]]$TIME,digits=2)}\\
-	\\
+	    \\
 	   & \multicolumn{4}{c} {\bf Case C} & &  & \multicolumn{4}{c} {\bf Case D}\\
 	   
 	    ALasso & \Sexpr{Hres_ADL[[3]]$CFR} & \Sexpr{Hres_ADL[[3]]$OFR} & \Sexpr{round(Hres_ADL[[3]]$AN,digits=2)} & \Sexpr{round(Hres_ADL[[3]]$TIME,digits=2)} &  && \Sexpr{Hres_ADL[[4]]$CFR} & \Sexpr{Hres_ADL[[4]]$OFR} & \Sexpr{round(Hres_ADL[[4]]$AN,digits=2)} & \Sexpr{round(Hres_ADL[[4]]$TIME,digits=2)}\\
 	    
 	    sLTS & \Sexpr{Hres_LTS[[3]]$CFR} & \Sexpr{Hres_LTS[[3]]$OFR} & \Sexpr{round(Hres_LTS[[3]]$AN,digits=2)}  &  \Sexpr{round(Hres_LTS[[3]]$TIME,digits=2)}& && \Sexpr{Hres_LTS[[4]]$CFR} & \Sexpr{Hres_LTS[[4]]$OFR} & \Sexpr{round(Hres_LTS[[4]]$AN,digits=2)} &  \Sexpr{round(Hres_LTS[[4]]$TIME,digits=2)}\\
 	   PAMLS & \Sexpr{Hres_PAMLS[[3]]$CFR} & \Sexpr{Hres_PAMLS[[3]]$OFR} & \Sexpr{round(Hres_PAMLS[[3]]$AN,digits=2)}  &  \Sexpr{round(Hres_PAMLS[[3]]$TIME,digits=2)}& && \Sexpr{Hres_PAMLS[[4]]$CFR} & \Sexpr{Hres_PAMLS[[4]]$OFR} & \Sexpr{round(Hres_PAMLS[[4]]$AN,digits=2)} &  \Sexpr{round(Hres_PAMLS[[4]]$TIME,digits=2)}\\
-	    \\
-	    
 	    APAMLS & \Sexpr{Hres_APAMLS[[3]]$CFR} & \Sexpr{Hres_APAMLS[[3]]$OFR} & \Sexpr{round(Hres_APAMLS[[3]]$AN,digits=2)}  &  \Sexpr{round(Hres_APAMLS[[3]]$TIME,digits=2)}& && \Sexpr{Hres_APAMLS[[4]]$CFR} & \Sexpr{Hres_APAMLS[[4]]$OFR} & \Sexpr{round(Hres_APAMLS[[4]]$AN,digits=2)} &  \Sexpr{round(Hres_APAMLS[[4]]$TIME,digits=2)}\\
 	    
 	   PAWLS & \Sexpr{Hres_PAWLS[[3]]$CFR} & \Sexpr{Hres_PAWLS[[3]]$OFR} & \Sexpr{round(Hres_PAWLS[[3]]$AN,digits=2)}  &  \Sexpr{round(Hres_PAWLS[[3]]$TIME,digits=2)}& && \Sexpr{Hres_PAWLS[[4]]$CFR} & \Sexpr{Hres_PAWLS[[4]]$OFR} & \Sexpr{round(Hres_PAWLS[[4]]$AN,digits=2)} &  \Sexpr{round(Hres_PAWLS[[4]]$TIME,digits=2)}\\
-	    \\
-	    
 	    APAWLS & \Sexpr{Hres_APAWLS[[3]]$CFR} & \Sexpr{Hres_APAWLS[[3]]$OFR} & \Sexpr{round(Hres_APAWLS[[3]]$AN,digits=2)}  &  \Sexpr{round(Hres_APAWLS[[3]]$TIME,digits=2)}& && \Sexpr{Hres_APAWLS[[4]]$CFR} & \Sexpr{Hres_APAWLS[[4]]$OFR} & \Sexpr{round(Hres_APAWLS[[4]]$AN,digits=2)} &  \Sexpr{round(Hres_APAWLS[[4]]$TIME,digits=2)}\\
 	    \\
 	    
