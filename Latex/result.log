@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2016.1.9)  11 APR 2017 09:37
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2016.1.9)  14 APR 2017 10:43
 entering extended mode
 **./result.tex
 (result.tex
@@ -416,32 +416,32 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 142.
 msb.fd"
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Overfull \hbox (83.3896pt too wide) in paragraph at lines 143--200
+Overfull \hbox (83.38959pt too wide) in paragraph at lines 143--200
  [] 
  []
 
 
-Overfull \hbox (83.3896pt too wide) in paragraph at lines 207--245
+Overfull \hbox (83.38959pt too wide) in paragraph at lines 207--245
  [] 
  []
 
 
-Overfull \hbox (83.3896pt too wide) in paragraph at lines 252--288
+Overfull \hbox (83.38959pt too wide) in paragraph at lines 252--288
  [] 
  []
 
 
-Overfull \hbox (126.80617pt too wide) in paragraph at lines 295--336
+Overfull \hbox (126.80615pt too wide) in paragraph at lines 295--336
  [] 
  []
 
 
-Overfull \hbox (126.80617pt too wide) in paragraph at lines 343--373
+Overfull \hbox (126.80615pt too wide) in paragraph at lines 343--373
  [] 
  []
 
 
-Overfull \hbox (126.80617pt too wide) in paragraph at lines 381--412
+Overfull \hbox (126.80615pt too wide) in paragraph at lines 381--412
  [] 
  []
 
@@ -461,7 +461,7 @@ Overfull \hbox (33.55573pt too wide) in paragraph at lines 510--537
  []
 
 
-Overfull \hbox (33.55573pt too wide) in paragraph at lines 543--570
+Overfull \hbox (42.90288pt too wide) in paragraph at lines 543--570
  [] 
  []
 
@@ -671,7 +671,7 @@ lic/amsfonts/cm/cmr10.pfb><C:/Users/Administrator/AppData/Local/Programs/MiKTeX
 cal/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/Adm
 inistrator/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cms
 y7.pfb>
-Output written on result.pdf (14 pages, 130064 bytes).
+Output written on result.pdf (14 pages, 130220 bytes).
 PDF statistics:
  163 PDF objects out of 1000 (max. 8388607)
  29 named destinations out of 1000 (max. 500000)
