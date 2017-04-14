@@ -9,6 +9,17 @@
 #define true 1
 typedef int bool; 
 
+double VectorProduct2(double *x, double *y)
+{
+  int n=sizeof(y);
+  double val=0;
+  for(int i=0;i<n;i++)
+  {
+    val+=x[i]*y[i];
+  }  
+  return val;
+}
+
 double UpdateSoftThreshold(double z,double lambda)
 {
   if(z>lambda)
@@ -214,6 +225,7 @@ SEXP INNERPAMLS( SEXP X_, SEXP Y_, SEXP Lambda1_, SEXP Lambda2_,
           //fprintf(f,"\nbeta(%d,%d,%d)=%f ",l1,l2,j,beta[j*L1*L2+l2*L1+l1]);
           //(3)update r
           shift[j]=beta[j*L1*L2+l2*L1+l1]-betaPre[j];
+          //fprintf(f,"\n shift %d: %f \n",j,shift[j]);
           for(int i=0;i<n;i++)
           {
             r[i]-=x[j*n+i]*shift[j];
@@ -230,6 +242,7 @@ SEXP INNERPAMLS( SEXP X_, SEXP Y_, SEXP Lambda1_, SEXP Lambda2_,
         for(int i=0;i<n;i++)
         {
           shift[m+i]=Gam[i*L1*L2+l2*L1+l1]-gamPre[i];
+          //fprintf(f,"\n shift %d: %f \n",i+m,shift[m+i]);
         }
         
         //update betaPre and gamPre for next iteration
@@ -243,10 +256,11 @@ SEXP INNERPAMLS( SEXP X_, SEXP Y_, SEXP Lambda1_, SEXP Lambda2_,
         }
         
         //Check for convergence
-        if(VectorProduct(shift,shift)<delta)
+        if(VectorProduct2(shift,shift)<delta)
         {
           break;
         }
+        //fprintf(f,"\n VectorProduct2= %f ",VectorProduct2(shift,shift));
         
       }//end for the inner loop
       //printf("exit inner loopw\n");
