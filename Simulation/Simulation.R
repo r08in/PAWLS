@@ -173,12 +173,10 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
             }else if (method == "PAWLS") {
               updateInitialTimes <- ifelse(updateInitial, 2, 0)
               ptm <- proc.time()
-              res = srcdreg(out$x, out$y, penalty1 = penalty1, nlambda1 = 50, nlambda2 = 100, lambda1 = lambda1,
+              res = pawls(out$x, out$y, nlambda1 = 50, nlambda2 = 100, lambda1 = lambda1,
                             lambda2=lambda2, lambda1.min=lambda1.min, lambda2.min=lambda2.min, delta = 1e-06, 
-                maxIter = 1000, initial = initial, intercept = intercept, standardize = standardize, 
-                updateInitialTimes = updateInitialTimes, criterion = criterion, initCrit=initCrit, search = search)
+                maxIter = 1000, initial = initial, intercept = intercept, standardize = standardize, search = search)
               times[i] <- (proc.time() - ptm)[1]
-              browser()
               b[i, ] = res$beta
               w[i, ] = res$w
               iter[i] = res$iter

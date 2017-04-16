@@ -61,7 +61,7 @@ pamls= function(x, y, penalty1 = c("L1"), penalty2 = c("L1"), lambda1 = NULL,
     std = 0
     scale = 0
     if (standardize) {
-        std <- .Call("GroupStandardize", x, y)
+        std <- .Call("Standardize", x, y)
         XX <- std[[1]]
         yy <- std[[2]]
         scale <- std[[3]]

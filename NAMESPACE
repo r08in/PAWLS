@@ -1,5 +1,4 @@
 exportPattern("^[[:alpha:]]+")
-useDynLib(RobustCD,GroupStandardize)
-useDynLib(RobustCD,MaxProduct)
-useDynLib(RobustCD,INNERREG)
+useDynLib(RobustCD,Standardize)
+useDynLib(RobustCD,PAWLS_GRID)
 useDynLib(RobustCD,INNERPAMLS)

@@ -27,7 +27,7 @@ save(Lres_mmnng03, file = "Output/Lres_mmnng03.rda")
 
 # PAMLS
 
-Lres_PAMLS  <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAMLS", initial = "uniform", 
+Lres_PAMLS  <- simulation(L, n, beta, c("A"), method = "PAMLS", initial = "uniform", 
                           #lambda1.min=0.05, lambda2.min=0.01,
                           lambda1.min=1e-03, lambda2.min=0.05,
                           seed = NULL, useDataFile = TRUE,       
@@ -95,7 +95,7 @@ plot(fpr,tpr,type="p")
 
 # APAWLS
 
-Lres_APAWLS  <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS", 
+test_APAWLS  <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS", 
                          lambda1.min=0.05, lambda2.min=0.001,
                          seed = NULL, useDataFile = TRUE,       
                          updateInitial =FALSE, intercept = TRUE)
@@ -116,7 +116,7 @@ Lres_APAWLS03  <- simulation(L, n, beta, c( "C", "D","E"), method = "PAWLS", ini
 save(Lres_APAWLS, file = "Output/Lres_APAWLS.rda")
 save(Lres_APAWLS02, file = "Output/Lres_APAWLS02.rda")
 save(Lres_APAWLS03, file = "Output/Lres_APAWLS03.rda")
-#load("Output/Lres_APAWLS.rda")
+load("Output/Lres_APAWLS.rda")
 
 
 fpr3 <- Lres_APAWLS[[3]]$OD$fpr
@@ -320,12 +320,12 @@ lm1 = lm(y ~ x)
 lm0 = lm(as.vector(airData[, 5]) ~ as.matrix(airData[, -c(5)]))
 
 # Apwls
-res_air0 = srcdreg(out$x, out$y)
-res_air = srcdreg(out$x, out$y, initial = "PAWLS", search = "cross", criterion = "BIC", updateInitialTimes = 2)
-res_air = srcdreg(out$x, out$y, initial = "PAWLS", search = "crossDynamic", criterion = "BIC", updateInitialTimes = 2)
+res_air0 = pawls(out$x, out$y)
+res_air = pawls(out$x, out$y, initial = "PAWLS", search = "cross", criterion = "BIC", updateInitialTimes = 2)
+res_air = pawls(out$x, out$y, initial = "PAWLS", search = "crossDynamic", criterion = "BIC", updateInitialTimes = 2)
 
 res2_air = res_air
-res2_air = srcdreg(out$x, out$y, initial = "LTS", search = "all")
+res2_air = pawls(out$x, out$y, initial = "LTS", search = "all")
 colnames[res_air$beta[-1] != 0]
 studres = studres(lm1)
 plot(studres)
@@ -337,7 +337,7 @@ label_beta = rep(colnames, 100)
 paramPlot(res2_air, label2 = label_beta)
 
 # ADL
-res_air_ADL = srcdreg(out$x, out$y, nlambda1 = 1, initial = "LASSO", search = "fixw")
+res_air_ADL = pawls(out$x, out$y, nlambda1 = 1, initial = "LASSO", search = "fixw")
 colnames[res_air_ADL$beta[-1] != 0]
 
 # sLTS
@@ -375,7 +375,7 @@ out = DataNormByMAD(out$x, out$y)
 colname = colnames(out$x)
 
 # ADL
-res_nci_ADL = srcdreg(out$x, out$y, nlambda1 = 1, initial = "LASSO", search = "fixw")
+res_nci_ADL = pawls(out$x, out$y, nlambda1 = 1, initial = "LASSO", search = "fixw")
 lm_nci = lm(out$y ~ out$x[, res_nci_ADL$beta[-1] != 0])
 studres_nci = studres(lm_nci)
 studres_nci = out$y - out$x %*% res_nci_ADL$beta[-1] - res_nci_ADL$beta[1]
@@ -392,10 +392,10 @@ res$coefficients[res$coefficients != 0]
 lm_nci = lm(out$y ~ out$x)
 studres_nci = studres(lm_nci)
 # pwls-vs lambda2=c(0.4304376,0.2141318,0)
-res_nci_0 = srcdreg(out$x, out$y,standardize = TRUE, initial = "uniform", intercept = TRUE, search="all")
-res_nci = srcdreg(out$x, out$y, initial = "PAWLS",lambda1.min=1e-3, lambda2.min=0.001)
-res_nci_PAWLS = srcdreg(out$x, out$y, initial = "uniform", search = "all", criterion = "BIC", updateInitialTimes = 0)
-res_nci = srcdreg(out$x, out$y, initial = "PAWLS", search = "crossDynamic", criterion = "BIC", updateInitialTimes = 2, 
+res_nci_0 = pawls(out$x, out$y,standardize = TRUE, initial = "uniform", intercept = TRUE, search="all")
+res_nci = pawls(out$x, out$y, initial = "PAWLS",lambda1.min=1e-3, lambda2.min=0.001)
+res_nci_PAWLS = pawls(out$x, out$y, initial = "uniform", search = "all", criterion = "BIC", updateInitialTimes = 0)
+res_nci = pawls(out$x, out$y, initial = "PAWLS", search = "crossDynamic", criterion = "BIC", updateInitialTimes = 2, 
     standardize = TRUE)
 names(res_nci$beta) <- c("intercept", colname)
 res_nci$beta[res_nci$beta != 0]
@@ -405,7 +405,7 @@ res_nci$beta[res_nci$beta != 0]
 corr = cor(out$x[, 1], out$x[, -1])
 View(corr[order(abs(corr), decreasing = TRUE)])
 
-res_nci2 = srcdreg(out$x[, -1], out$y - (out$x[, 1] * res_nci$beta[2]), updateInitialTimes = 4)  #1
+res_nci2 = pawls(out$x[, -1], out$y - (out$x[, 1] * res_nci$beta[2]), updateInitialTimes = 4)  #1
 
 i = index[res2_nci$beta[-1] != 0]
 res2_nci$beta[res2_nci$beta != 0]

@@ -1,4 +1,4 @@
-SetupParameter = function(x, y, nlambda1, nlambda2,lambda1.min=1e-03, lambda2.min=0.05, beta0, w0, intercept = TRUE, alpha = 0.1, penalty1 = "1-w0") {
+setup_parameter = function(x, y, nlambda1, nlambda2,lambda1.min=1e-03, lambda2.min=0.05, beta0, w0, intercept = TRUE, alpha = 0.1, penalty1 = "1-w0") {
     n = length(y)
     p =dim(x)[2]
     # set lambda2
@@ -50,25 +50,4 @@ logSeq2 = function(smax, smin, n) {
     exp(seq(log(smax), log(smin), length.out=n))
   }
   
-}
-
-
-SetupGroupParameter = function(x, y, nlambda1, nlambda2, w0, groupInfo) {
-    # set lambda1
-    lambda1Max = max(y^2 * abs(log(w0))/n)
-    lambda1 = logSeq(lambda1Max, 0, nlambda1)
-    
-    # set lambda2
-    lambda2Max = (.Call("MaxProduct", x, y, groupInfo)/sqrt(min(groupInfo)))
-    lambda2 = logSeq(lambda2Max, 0, nlambda2)
-    return(list(lambda1 = lambda1, lambda2 = lambda2))
-}
-
-GetRidgeLambda = function(x, y, matlab = NULL) {
-    setVariable(matlab, X = x)
-    setVariable(matlab, y = y)
-    evaluate(matlab, "[lamdas,deltas]=GetLambda(X,y)")  #with intercept
-    lambdas = getVariable(matlab, "lamdas")
-    deltas = getVariable(matlab, "deltas")
-    list(lambdas = lambdas$lamdas, deltas = as.vector(deltas$deltas))
 }

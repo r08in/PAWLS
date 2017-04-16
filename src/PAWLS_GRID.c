@@ -60,7 +60,7 @@ SEXP CleanupG(double *r, double *betaPre, double *wPre, double * shift,
 }
 
 
-SEXP INNERREG( SEXP X_, SEXP Y_, SEXP Penalty1_, SEXP Penalty2_, SEXP Lambda1_, SEXP Lambda2_,
+SEXP PAWLS_GRID( SEXP X_, SEXP Y_, SEXP Penalty1_, SEXP Penalty2_, SEXP Lambda1_, SEXP Lambda2_,
                SEXP Beta0_, SEXP W0_, SEXP Delta_, SEXP MaxIter_, 
                SEXP Intercept_, SEXP StarBeta_, SEXP StarW_ )
 {
