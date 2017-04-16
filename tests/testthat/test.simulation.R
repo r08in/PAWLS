@@ -1,4 +1,4 @@
-library(RobustCD)
+library(pawls)
 #setwd("E:/R/RobustCD")
 setwd("D:/RProject/RobustCD")
 source("Simulation/GenerateData.R")

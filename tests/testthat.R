@@ -1,4 +1,4 @@
 library(testthat)
-library(RobustCD)
+library(pawls)
 
-test_check("RobustCD")
+test_check("pawls")
