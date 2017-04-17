@@ -16,9 +16,9 @@ standardizes the data and includes an intercept by default.}
 
 \item{y}{a numeric vector containing the response variable.}
 
-\item{nlambda1}{The number of lambda1 values. Default is 100.}
+\item{nlambda1}{The number of lambda1 values (the default is 100).}
 
-\item{nlambda2}{The number of lambda2 values. Default is 50.}
+\item{nlambda2}{The number of lambda2 values (the default is 50).}
 
 \item{lambda1}{a numeric vector of non-negative values to be used as penalty parameter for coefficients. 
 By default, a sequence of values of length \code{nlambda1} is computed, equally
@@ -28,14 +28,36 @@ spaced on the log scale.}
 By default, a sequence of values of length \code{nlambda2} is computed, equally
 spaced on the log scale.}
 
-\item{lambda1.min}{a numeric value giving the ratio of minimum \code{lambda1} and maximum \code{lambda1}. 
+\item{lambda1.min}{a numeric value giving the ratio of minimum \code{lambda1} to maximum \code{lambda1}. 
 The maximum \code{lambda1} is an estimate of penalty parameter that set all the coefficientes to 0.}
 
-\item{lambda2.min}{a numeric value giving the ratio of minimum \code{lambda1} and maximum \code{lambda2}. 
+\item{lambda2.min}{a numeric value giving the ratio of minimum \code{lambda2} to maximum \code{lambda2}. 
 The maximum \code{lambda2} is an estimate of penalty parameter that set all the weight to 1.}
+
+\item{beta0}{the initial estimates of coefficients \code{beta} used in the adaptive penalty.}
+
+\item{w0}{the initial estimates of weight vector \code{w} used in the adaptive penalty.}
+
+\item{initial}{a character string specifying the initial estimates of both coeffcients and weight vectors in the adaptive penalties.
+If "\code{uniform}", a non-adaptive \code{pawls} is performed. If "\code{pawls}", then the estimates are obtained by non-adaptive pawls (the 
+default is "\code{uniform}").}
+
+\item{delta}{a small positive numeric value used to determine whether the variability within a variable is 
+too small (the default is 1e-06).}
+
+\item{maxIter}{a positive numeric value used to determin the maximum number of iteration for optimization.}
+
+\item{intercept}{a logical indicating whether a constant term should be 
+included in the model (the default is \code{TRUE}).}
+
+\item{standardize}{a logical indicating whether the predictor variables should be normalized 
+to have unit L2 norm (the default is TRUE).}
+
+\item{search}{a character string specifying the algorithm to select tunning parameters for both coefficients and weight
+vectors. If "cross", the optimal tuning parameters are searched alternatively by minimizing \code{BIC}. If "grid", 
+the optimal tuning parameters are selected as the pair that minimiz \code{BIC} over a fine grid.}
 }
 \description{
 Compute weighted least squares regression with \eqn{L_{1}}{L1} regularization on both the
 coefficients and weight vectors.
 }
-

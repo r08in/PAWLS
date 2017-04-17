@@ -19,10 +19,10 @@
 #' @param lambda2.min a numeric value giving the ratio of minimum \code{lambda2} to maximum \code{lambda2}. 
 #' The maximum \code{lambda2} is an estimate of penalty parameter that set all the weight to 1.
 #' @param beta0 the initial estimates of coefficients \code{beta} used in the adaptive penalty.
-#' @param w0 the initial estimates of weight vector used in the adaptive penalty.
-#' @param a character string specifying the initial estimates of both coeffcients and weight vectors in the adaptive penalties.
-#' If "uniform", a non-adaptive \code{pawls} is performed. If "pawls", then the estimates are obtained by non-adaptive pawls (the 
-#' default is "uniform").
+#' @param w0 the initial estimates of weight vector \code{w} used in the adaptive penalty.
+#' @param initial a character string specifying the initial estimates of both coeffcients and weight vectors in the adaptive penalties.
+#' If "\code{uniform}", a non-adaptive \code{pawls} is performed. If "\code{pawls}", then the estimates are obtained by non-adaptive pawls (the 
+#' default is "\code{uniform}").
 #' @param delta a small positive numeric value used to determine whether the variability within a variable is 
 #' too small (the default is 1e-06).
 #' @param maxIter a positive numeric value used to determin the maximum number of iteration for optimization.
@@ -118,10 +118,12 @@ pawls = function(x, y, nlambda1 = 100, nlambda2 = 50, lambda1 = NULL, lambda2 = 
       res = pawls_grid(x=XX, y=yy, penalty1 = penalty1, penalty2 = penalty2, lambda1=lambda1, lambda2=lambda2,
                      beta0=beta0, w0=w0, delta=delta, maxIter=maxIter, intercept = intercept)
       res = BIC_grid(res$wloss, res$beta, res$w, lambda2, lambda1, criterion = criterion)
+      class(res) <- "grid.pawls"
     } else {# serach="cross"
       res = pawls_cross(x=XX, y=yy, penalty1 = penalty1, penalty2 = penalty2, lambda1=lambda1, lambda2=lambda2, 
                         beta0=beta0, w0=w0, delta=delta, maxIter=maxIter, intercept = intercept, 
                         criterion = criterion, startBeta = startBeta, startW = startW)
+      class(res) <- "cross.pawls"
     }
     
     ## unstandardize
