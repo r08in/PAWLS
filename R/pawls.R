@@ -6,7 +6,19 @@
 #' @param x a numeric matrix containing the predictor variables without an intercept.  \code{pawls}
 #' standardizes the data and includes an intercept by default.
 #' @param y a numeric vector containing the response variable.
-pawls = function(x, y, lambda1 = NULL, lambda2 = NULL,  nlambda1 = 100, nlambda2 = 50, lambda1.min=0.05,
+#' @param nlambda1 The number of lambda1 values. Default is 100.
+#' @param nlambda2 The number of lambda2 values. Default is 50.
+#' @param lambda1  a numeric vector of non-negative values to be used as penalty parameter for coefficients. 
+#' By default, a sequence of values of length \code{nlambda1} is computed, equally
+#' spaced on the log scale. 
+#' @param lambda2  a numeric vector of non-negative values to be used as penalty parameter for weight vectors. 
+#' By default, a sequence of values of length \code{nlambda2} is computed, equally
+#' spaced on the log scale. 
+#' @param lambda1.min a numeric value giving the ratio of minimum \code{lambda1} and maximum \code{lambda1}. 
+#' The maximum \code{lambda1} is an estimate of penalty parameter that set all the coefficientes to 0.
+#' @param lambda2.min a numeric value giving the ratio of minimum \code{lambda1} and maximum \code{lambda2}. 
+#' The maximum \code{lambda2} is an estimate of penalty parameter that set all the weight to 1.
+pawls = function(x, y, nlambda1 = 100, nlambda2 = 50, lambda1 = NULL, lambda2 = NULL, lambda1.min=0.05,
     lambda2.min=1e-03, beta0 = NULL, w0 = NULL,initial = c("uniform","PAWLS"), delta = 1e-06, 
     maxIter = 1e03, intercept = TRUE, standardize = TRUE, search = c("cross", "grid")) {
   

@@ -4,17 +4,35 @@
 \alias{pawls}
 \title{Penalized adaptive weighted least squares regression}
 \usage{
-pawls(x, y, lambda1 = NULL, lambda2 = NULL, nlambda1 = 100,
-  nlambda2 = 50, lambda1.min = 0.05, lambda2.min = 0.001, beta0 = NULL,
+pawls(x, y, nlambda1 = 100, nlambda2 = 50, lambda1 = NULL,
+  lambda2 = NULL, lambda1.min = 0.05, lambda2.min = 0.001, beta0 = NULL,
   w0 = NULL, initial = c("uniform", "PAWLS"), delta = 1e-06,
   maxIter = 1000, intercept = TRUE, standardize = TRUE,
-  search = c("cross", "all"))
+  search = c("cross", "grid"))
 }
 \arguments{
 \item{x}{a numeric matrix containing the predictor variables without an intercept.  \code{pawls}
 standardizes the data and includes an intercept by default.}
 
 \item{y}{a numeric vector containing the response variable.}
+
+\item{nlambda1}{The number of lambda1 values. Default is 100.}
+
+\item{nlambda2}{The number of lambda2 values. Default is 50.}
+
+\item{lambda1}{a numeric vector of non-negative values to be used as penalty parameter for coefficients. 
+By default, a sequence of values of length \code{nlambda1} is computed, equally
+spaced on the log scale.}
+
+\item{lambda2}{a numeric vector of non-negative values to be used as penalty parameter for weight vectors. 
+By default, a sequence of values of length \code{nlambda2} is computed, equally
+spaced on the log scale.}
+
+\item{lambda1.min}{a numeric value giving the ratio of minimum \code{lambda1} and maximum \code{lambda1}. 
+The maximum \code{lambda1} is an estimate of penalty parameter that set all the coefficientes to 0.}
+
+\item{lambda2.min}{a numeric value giving the ratio of minimum \code{lambda1} and maximum \code{lambda2}. 
+The maximum \code{lambda2} is an estimate of penalty parameter that set all the weight to 1.}
 }
 \description{
 Compute weighted least squares regression with \eqn{L_{1}}{L1} regularization on both the
