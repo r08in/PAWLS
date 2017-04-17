@@ -1,7 +1,14 @@
-
-pawls = function(x, y, lambda1 = NULL, lambda2 = NULL, nlambda1 = 50, nlambda2 = 100, 
-    lambda1.min=1e-03, lambda2.min=0.05, beta0 = NULL, w0 = NULL,initial = c("uniform","PAWLS"), 
-    delta = 1e-06, maxIter = 1000, intercept = TRUE, standardize = TRUE, search = c("cross", "all")) {
+#' Penalized adaptive weighted least squares regression
+#' 
+#' Compute weighted least squares regression with \eqn{L_{1}}{L1} regularization on both the
+#' coefficients and weight vectors.
+#' 
+#' @param x a numeric matrix containing the predictor variables without an intercept.  \code{pawls}
+#' standardizes the data and includes an intercept by default.
+#' @param y a numeric vector containing the response variable.
+pawls = function(x, y, lambda1 = NULL, lambda2 = NULL,  nlambda1 = 100, nlambda2 = 50, lambda1.min=0.05,
+    lambda2.min=1e-03, beta0 = NULL, w0 = NULL,initial = c("uniform","PAWLS"), delta = 1e-06, 
+    maxIter = 1e03, intercept = TRUE, standardize = TRUE, search = c("cross", "grid")) {
   
     ## check error
     if (class(x) != "matrix") {
@@ -20,21 +27,23 @@ pawls = function(x, y, lambda1 = NULL, lambda2 = NULL, nlambda1 = 50, nlambda2 =
     initial <- match.arg(initial)
     search <- match.arg(search)
     
-    penalty1 <- "1-w0"
-    penalty2 <- "LASSO"
+    ## default setting
+    penalty2 <- "L1"
+    penalty1 <- "L1"
     criterion <- "BIC"
     startBeta <- NULL
     startW <- NULL
+    
     if (!is.null(lambda1)) 
-        nlambda1 <- length(lambda1)
+      nlambda1 <- length(lambda1)
     if (!is.null(lambda2)) 
         nlambda2 <- length(lambda2)
-    
+
     ## set initial
     n = length(y)
     p = dim(x)[2]
     if (initial == "PAWLS") {
-      init = pawls(x, y, intercept = intercept,search = "all")
+      init = pawls(x, y, intercept = intercept,search = "grid")
       beta0 = SetBeta0(init$beta)
       w0 = ifelse(init$w == 1, 0.99, init$w)
     } else if (initial == "uniform") {
@@ -68,22 +77,24 @@ pawls = function(x, y, lambda1 = NULL, lambda2 = NULL, nlambda1 = 50, nlambda2 =
     }
     
     ## set tunning parameter
-    if (missing(lambda1) || missing(lambda2)||is.null(lambda1)||is.null(lambda2)) {
-        lambda = setup_parameter(XX, yy, nlambda1, nlambda2, lambda1.min=lambda1.min, lambda2.min=lambda2.min, beta0, w0, intercept = intercept, penalty1 = penalty1)
+    if (is.null(lambda1)||is.null(lambda2)) {
+        lambda = setup_parameter(x=XX, y=yy, nlambda1=nlambda1, nlambda2=nlambda2, 
+                                 lambda1.min=lambda1.min, lambda2.min=lambda2.min, beta0=beta0, w0=w0)
         if (is.null(lambda1)) 
-            lambda1 = lambda$lambda1
+          lambda1 = lambda$lambda1
         if (is.null(lambda2)) 
             lambda2 = lambda$lambda2
     }
     
     ## Fit
-    if (search == "all") { # search for the whole grid
-      res = pawls_grid(XX, yy, penalty1 = penalty1, penalty2 = penalty2, lambda1, lambda2, beta0, w0, delta, 
-                     maxIter, intercept = intercept)
-      res = BIC_grid(res$wloss, res$beta, res$w, lambda1, lambda2, criterion = criterion)
+    if (search == "grid") { # search for the whole grid
+      res = pawls_grid(x=XX, y=yy, penalty1 = penalty1, penalty2 = penalty2, lambda1=lambda1, lambda2=lambda2,
+                     beta0=beta0, w0=w0, delta=delta, maxIter=maxIter, intercept = intercept)
+      res = BIC_grid(res$wloss, res$beta, res$w, lambda2, lambda1, criterion = criterion)
     } else {# serach="cross"
-      res = pawls_cross(XX, yy, penalty1 = penalty1, penalty2 = penalty2, lambda1, lambda2, beta0, w0, delta, maxIter, 
-                    intercept = intercept, criterion = criterion, startBeta = startBeta, startW = startW)
+      res = pawls_cross(x=XX, y=yy, penalty1 = penalty1, penalty2 = penalty2, lambda1=lambda1, lambda2=lambda2, 
+                        beta0=beta0, w0=w0, delta=delta, maxIter=maxIter, intercept = intercept, 
+                        criterion = criterion, startBeta = startBeta, startW = startW)
     }
     
     ## unstandardize

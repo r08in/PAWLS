@@ -5,8 +5,8 @@ source('Simulation/mmnngreg.R')
 
 simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL, method = "PAWLS", 
     matlab = NULL, seed = 2014, useDataFile = FALSE, standardize = TRUE, penalty1 = "1-w0", updateInitial = FALSE, 
-    criterion = "BIC", initCrit="BIC",intercept = TRUE, initial = "uniform", lambda1 = NULL, 
-    lambda2 = NULL,lambda1.min=1e-03, lambda2.min=0.05, search = "cross", type = c("Lasso", 
+    criterion = "BIC", initCrit="BIC",intercept = TRUE, initial = "uniform", lambda2 = NULL, 
+    lambda1 = NULL,lambda2.min=1e-03, lambda1.min=0.05, search = "cross", type = c("Lasso", 
         "Ridge"), pro=0.1) {
     mcount <- length(model)
     
@@ -24,16 +24,16 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
     mses <- rep(0, L)
     times <- rep(0, L)
     nres <- array(list(), mcount)
-    nlambda1 <- ifelse(is.null(lambda1),50,length(lambda1))
-    nlambda2 <- ifelse(is.null(lambda2),100,length(lambda2))
-    crit1 <- matrix(0,nrow=L,ncol=nlambda1)
+    nlambda2 <- ifelse(is.null(lambda2),50,length(lambda2))
+    nlambda1 <- ifelse(is.null(lambda1),100,length(lambda1))
     crit2 <- matrix(0,nrow=L,ncol=nlambda2)
-    wdf <- array(0,dim=c(L,nlambda1,nlambda2))
-    bdf <- array(0,dim=c(L,nlambda1,nlambda2))
-    bic <- array(0,dim=c(L,nlambda1,nlambda2))
-    bic2 <- array(0,dim=c(L,nlambda1,nlambda2))
-    lam1 <- crit1
+    crit1 <- matrix(0,nrow=L,ncol=nlambda1)
+    wdf <- array(0,dim=c(L,nlambda2,nlambda1))
+    bdf <- array(0,dim=c(L,nlambda2,nlambda1))
+    bic <- array(0,dim=c(L,nlambda2,nlambda1))
+    bic2 <- array(0,dim=c(L,nlambda2,nlambda1))
     lam2 <- crit2
+    lam1 <- crit1
     dfw <- rep(0,L)
     dfb <- rep(0,L)
     pb <- txtProgressBar(1, mcount * L, style = 3)
@@ -147,23 +147,23 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
                 
             } else if (method == "PAMLS") {
               ptm <- proc.time()
-              res = pamls(out$x, out$y, penalty1 = penalty1, nlambda1 = 50, nlambda2 = 100, lambda1 = lambda1,
-                            lambda2=lambda2, lambda1.min=lambda1.min, lambda2.min=lambda2.min, delta = 1e-06, 
+              res = pamls(out$x, out$y, penalty1 = penalty1, nlambda2 = 50, nlambda1 = 100, lambda2 = lambda2,
+                            lambda1=lambda1, lambda2.min=lambda2.min, lambda1.min=lambda1.min, delta = 1e-06, 
                             maxIter = 1000, initial = initial, intercept = intercept, standardize = standardize, 
                             updateInitialTimes = 0, criterion = criterion, initCrit=initCrit, search = search)
               times[i] <- (proc.time() - ptm)[1]
               b[i, ] = res$beta
               w[i, ] = 1-res$gam
               iter[i] = res$iter
-              iw[i] = res$index1
-              ib[i] = res$index2
-              crit1[i,] = res$crit1
-              crit2[i,] =  res$crit2
-              lam1[i,] =  res$lambda1s
-              lam2[i,] = res$lambda2s
+              iw[i] = res$index2
+              ib[i] = res$index1
+              crit2[i,] = res$crit2
+              crit1[i,] =  res$crit1
+              lam2[i,] =  res$lambda2s
+              lam1[i,] = res$lambda1s
               dfb[i] = res$bdf
               dfw[i] = res$gdf
-              if(search=="all"){
+              if(search=="grid"){
                 bic[i,,] = res$res$bic
                 bic2[i,,] = res$res$bic2
                 bdf[i,,]= res$res$bdf
@@ -173,22 +173,22 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
             }else if (method == "PAWLS") {
               updateInitialTimes <- ifelse(updateInitial, 2, 0)
               ptm <- proc.time()
-              res = pawls(out$x, out$y, nlambda1 = 50, nlambda2 = 100, lambda1 = lambda1,
-                            lambda2=lambda2, lambda1.min=lambda1.min, lambda2.min=lambda2.min, delta = 1e-06, 
+              res = pawls(out$x, out$y, nlambda2 = 50, nlambda1 = 100, lambda2 = lambda2,
+                            lambda1=lambda1, lambda2.min=lambda2.min, lambda1.min=lambda1.min, delta = 1e-06, 
                 maxIter = 1000, initial = initial, intercept = intercept, standardize = standardize, search = search)
               times[i] <- (proc.time() - ptm)[1]
               b[i, ] = res$beta
               w[i, ] = res$w
               iter[i] = res$iter
-              iw[i] = res$index1
-              ib[i] = res$index2
-              crit1[i,] = res$crit1
-              crit2[i,] =  res$crit2
-              lam1[i,] =  res$lambda1s
-              lam2[i,] = res$lambda2s
+              iw[i] = res$index2
+              ib[i] = res$index1
+              crit2[i,] = res$crit2
+              crit1[i,] =  res$crit1
+              lam2[i,] =  res$lambda2s
+              lam1[i,] = res$lambda1s
               dfb[i] = res$bdf
               dfw[i] = res$wdf
-              if(search=="all"){
+              if(search=="grid"){
                 bic[i,,] = res$res$bic
                 bic2[i,,] = res$res$bic2
                 bdf[i,,]= res$res$bdf
@@ -266,7 +266,7 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
         if(method=="PAWLS"||method=="PAMLS"){
           nres[[j]] <- list(model = model[j], CFR = CFR, CFR2 = CFR2, OFR = OFR, PDR = PDR, FDR = FDR, 
                             AN = AN, MSE = MSE, mses=mses, TIME = TIME, iw=iw, ib=ib,iter=iter,OD=OD,
-                            crit1=crit1,lam1=lam1,crit2=crit2,lam2=lam2,dfb=dfb,dfw=dfw,betas=b,ws=w,
+                            crit2=crit2,lam2=lam2,crit1=crit1,lam1=lam1,dfb=dfb,dfw=dfw,betas=b,ws=w,
                             bic=bic,bic2=bic2,wdf=wdf,bdf=bdf
                             )
         } else{
@@ -321,35 +321,35 @@ ComputeROC= function(w, cutoff=seq(0,1.01,by=0.01), pro=0.1)
 }
 
 PlotBICs=function(res,model=1,iter=0){
-  if(iter==0){ # show all iteration
-    L <- dim(res[[model]]$crit1)[1]
+  if(iter==0){ # show grid iteration
+    L <- dim(res[[model]]$crit2)[1]
     for(i in 1:L){
       PlotBICs(res,model,i)
       readline(prompt="Press [enter] to continue")
     }
     }else { #show paticular iteration
       res <- res[[model]]
-      lam1 <- res$lam1[iter,]
-      crit1 <- res$crit1[iter,]
-      index1 <- res$iw[iter] 
       lam2 <- res$lam2[iter,]
       crit2 <- res$crit2[iter,]
-      index2 <- res$ib[iter]
+      index2 <- res$iw[iter] 
+      lam1 <- res$lam1[iter,]
+      crit1 <- res$crit1[iter,]
+      index1 <- res$ib[iter]
       par(mfrow=c(1,2))
-      x1 <- log(lam1)
-      y1 <- crit1
+      x1 <- log(lam2)
+      y1 <- crit2
       plot(x1,y1,type="l",main=paste("w iter",iter,":dfw=",res$dfw[iter],"; dfb=", res$dfb[iter]-1,".", sep=""))
-      abline(v=log(lam1[index1]), col="grey")
-     
-      x2 <- log(lam2)
-      y2 <- crit2
-      plot(x2,y2,type="l",main=paste("beta iter",iter,":dfw=",res$dfw[iter],"; dfb=", res$dfb[iter]-1,".", sep=""))
       abline(v=log(lam2[index2]), col="grey")
+     
+      x2 <- log(lam1)
+      y2 <- crit1
+      plot(x2,y2,type="l",main=paste("beta iter",iter,":dfw=",res$dfw[iter],"; dfb=", res$dfb[iter]-1,".", sep=""))
+      abline(v=log(lam1[index1]), col="grey")
     }
 }
 
 PlotBIC2D=function(res,model=1,iter=0,tb=4,tw=5){
-  if(iter==0){ # show all iteration
+  if(iter==0){ # show grid iteration
     L <- dim(res[[model]]$bic)[1]
     for(i in 1:L){
       PlotBIC2D(res,model,i,tb=tb,tw=tw)
@@ -358,30 +358,30 @@ PlotBIC2D=function(res,model=1,iter=0,tb=4,tw=5){
   }else { #show paticular iteration
     res <- res[[model]]
     crit <- res$bic[iter,,]
-    crit2 <- res$bic2[iter,,]
-    lam1 <- res$lam1[iter,]
+    crit1 <- res$bic2[iter,,]
     lam2 <- res$lam2[iter,]
+    lam1 <- res$lam1[iter,]
     wdf <- res$wdf[iter,,]
     bdf <- res$bdf[iter,,]
     ib <- res$ib[iter]
     iw <- res$iw[iter]
     x11()
     par(mfrow = c(2, 3))
-    image2D(crit,x=-log(lam1),y=-log(lam2),xlab="-log lambda1", ylab="-log lambda2",main="crit1")
+    image2D(crit,x=-log(lam2),y=-log(lam1),xlab="-log lambda2", ylab="-log lambda1",main="crit2")
     # x11()
-    image2D(crit2,x=-log(lam1),y=-log(lam2),xlab="-log lambda1", ylab="-log lambda2",main="crit2")
-    points(-log(lam1[res$iw[iter]]),-log(lam2[res$ib[iter]]),pch=24, col="black")
+    image2D(crit1,x=-log(lam2),y=-log(lam1),xlab="-log lambda2", ylab="-log lambda1",main="crit1")
+    points(-log(lam2[res$iw[iter]]),-log(lam1[res$ib[iter]]),pch=24, col="black")
     # x11()
-    image2D(wdf,x=-log(lam1),y=-log(lam2),xlab="-log lambda1", ylab="-log lambda2",
+    image2D(wdf,x=-log(lam2),y=-log(lam1),xlab="-log lambda2", ylab="-log lambda1",
             main=paste("wdf=",wdf[iw,ib],sep = ""))
-    points(-log(lam1[res$iw[iter]]),-log(lam2[res$ib[iter]]),pch=24, col="black")
+    points(-log(lam2[res$iw[iter]]),-log(lam1[res$ib[iter]]),pch=24, col="black")
     # x11()
-    image2D(bdf,x=-log(lam1),y=-log(lam2),xlab="-log lambda1", ylab="-log lambda2",
+    image2D(bdf,x=-log(lam2),y=-log(lam1),xlab="-log lambda2", ylab="-log lambda1",
             main=paste("bdf=",bdf[iw,ib],sep = ""))
-    points(-log(lam1[res$iw[iter]]),-log(lam2[res$ib[iter]]),pch=24, col="black")
+    points(-log(lam2[res$iw[iter]]),-log(lam1[res$ib[iter]]),pch=24, col="black")
     # x11()
-    image2D(bdf+wdf,x=-log(lam1),y=-log(lam2),xlab="-log lambda1", ylab="-log lambda2",main="w+bdf")
-    points(-log(lam1[res$iw[iter]]),-log(lam2[res$ib[iter]]),pch=24, col="black")
+    image2D(bdf+wdf,x=-log(lam2),y=-log(lam1),xlab="-log lambda2", ylab="-log lambda1",main="w+bdf")
+    points(-log(lam2[res$iw[iter]]),-log(lam1[res$ib[iter]]),pch=24, col="black")
     #last one
     n <- dim(bdf)[1]
     m <- dim(bdf)[2]
@@ -401,8 +401,8 @@ PlotBIC2D=function(res,model=1,iter=0,tb=4,tw=5){
         }
       }
     }
-    image2D(df,x=-log(lam1),y=-log(lam2),xlab="-log lambda1", ylab="-log lambda2",main="True df")
-    points(-log(lam1[res$iw[iter]]),-log(lam2[res$ib[iter]]),pch=24, col="black")
+    image2D(df,x=-log(lam2),y=-log(lam1),xlab="-log lambda2", ylab="-log lambda1",main="True df")
+    points(-log(lam2[res$iw[iter]]),-log(lam1[res$ib[iter]]),pch=24, col="black")
   }
 }
 

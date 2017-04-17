@@ -1,49 +1,14 @@
-setup_parameter = function(x, y, nlambda1, nlambda2,lambda1.min=1e-03, lambda2.min=0.05, beta0, w0, intercept = TRUE, alpha = 0.1, penalty1 = "1-w0") {
+setup_parameter = function(x, y, nlambda1, nlambda2, lambda1.min=0.05,lambda2.min=1e-03, beta0, w0) {
     n = length(y)
     p =dim(x)[2]
-    # set lambda2
-    intercept=FALSE
-    if (intercept) {
-        # set lambda1
-        if (penalty1 == "log") {
-            l1 = (y - mean(y))^2 * abs(log(w0))/n
-            
-        } else {
-            # penalty1='1-w0'
-            l1 = (y - mean(y))^2 * abs(1 - w0)/n
-        }
-        # 
-        num = round(n * alpha)
-        lambda1Max = l1[order(l1, decreasing = TRUE)[1]]
-        # lambda1Max=1
-        l2 = abs(t(x[, -1]) %*% (y - median(y))/n) * abs(beta0[-1])
-        lambda2Max = quantile(l2, probs = 0.8)
-        # lambda2Max=1 lambda2Max=max(abs(t(x[,-1])%*%(y-median(y))/n)*abs(beta0[-1])) # max |betaj|*|xj'y/n|
-    } else {
-        if (penalty1 == "log") {
-            l1 = y^2 * abs(log(w0))/n
-        } else {
-            # penalty1='1-w0'
-            l1 = y^2 * abs(1 - w0)/n
-        }
-        num = round(length(y) * alpha)
-        lambda1Max = l1[order(l1, decreasing = TRUE)[1]]
-        lambda2Max = max(abs(t(x) %*% y/n) * abs(beta0))  # max |betaj|*|xj'y/n|
-    }
-    if(p<n){ # for low dimension
-      lambda1 = logSeq2(lambda1Max, lambda1Max * lambda1.min, nlambda1)
-      lambda2 = logSeq2(lambda2Max, lambda2Max * lambda2.min, nlambda2)
-    }else{ # for high dimension
-      lambda1 = logSeq2(lambda1Max, lambda1Max * lambda1.min, nlambda1)
-      lambda2 = logSeq2(lambda2Max, lambda2Max * lambda2.min, nlambda2)
-    }
-    
-    # lambda1=seq(0.001,0.002,length=50) lambda2=seq(0.2,0,length=100)
-    return(list(lambda1 = lambda1, lambda2 = lambda2))
+    lambda2Max = max(y^2 * abs(1 - w0)/n)
+    lambda1Max = max(abs(t(x) %*% y/n) * abs(beta0))  # max |betaj|*|xj'y/n|
+    lambda2 = logSeq2(lambda2Max, lambda2Max * lambda2.min, nlambda2)
+    lambda1 = logSeq2(lambda1Max, lambda1Max * lambda1.min, nlambda1)
+    return(list(lambda2 = lambda2, lambda1 = lambda1))
 }
 
 logSeq2 = function(smax, smin, n) {
-    #smin + (smax - smin)/(log(n)) * (log(n) - log(1:n))
   if(smin==0){
     c(exp(seq(log(smax), log(1e-10), length.out=n-1)),0)
   }else{

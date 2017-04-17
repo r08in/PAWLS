@@ -1,137 +1,107 @@
-source("Simulation/Simulation.R")
-# n=100,500
-L = 10
-n = 100
-p = 500
-num = 10
-beta = c(rep(2, num), rep(0, p - num))
 
-
-APAWLS_AIC <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS",
-                          lambda1.min=1e-3, lambda2.min=0.05,
-                          seed = 2016, useDataFile = FALSE, updateInitial = FALSE, 
-                          intercept = TRUE,initCrit = "AIC" )
-APAWLS_BIC <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS",
-                           lambda1.min=1e-3, lambda2.min=0.05,
-                           seed = 2016, useDataFile = FALSE, updateInitial = FALSE, 
-                           intercept = TRUE,initCrit = "BIC" )
-
-PAWLS_AIC <- simulation(L, n, beta, c( "A", "B", "C", "D","E"), method = "PAWLS", initial = "uniform",
-                   #lambda1.min=1e-3, lambda2.min=0.05,
-                   lambda1.min=1e-3, lambda2.min=0.001,
-                   seed = 2016, useDataFile = FALSE, updateInitial = FALSE, 
-                   intercept = TRUE,criterion = "AIC", search="all")
-PAWLS_BIC <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "uniform",
-                   #lambda1.min=1e-3, lambda2.min=0.05,
-                   lambda1.min=1e-3, lambda2.min=0.05,
-                   seed = 2016, useDataFile = FALSE, updateInitial = FALSE, 
-                   intercept = TRUE,criterion = "BIC",search="all")
-
-save(APAWLS_AIC , file = "Output/APAWLS_AIC.rda")
-save(APAWLS_BIC , file = "Output/APAWLS_BIC.rda")
-save(PAWLS_AIC , file = "Output/PAWLS_AIC.rda")
-save(PAWLS_BIC , file = "Output/PAWLS_BIC.rda")
-load("Output/APAWLs_AIC.rda")
-load("Output/APAWLs_BIC.rda")
-load("Output/PAWLs_AIC.rda")
-load("Output/PAWLs_BIC.rda")
-
-#-----------------------------------------------------------------------
-
-source("Simulation/Simulation.R")
-# n=50,p=8----------------------------------------------
-L = 100
-n = 50
-p = 8
-beta = c(3, 2, 1.5, 0, 0, 0, 0, 0)
-#beta = c(0, 0, 0, 0, 0, 0, 0, 0)
-
-
-APAWLS_AIC <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS",
-                         lambda1.min=1e-3, lambda2.min=0.05,
-                         seed = 2016, useDataFile = FALSE, updateInitial = FALSE, 
-                         intercept = TRUE,initCrit = "AIC" )
-APAWLS_BIC <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS",
-                         lambda1.min=1e-3, lambda2.min=0.05,
-                         seed = 2016, useDataFile = FALSE, updateInitial = FALSE, 
-                         intercept = TRUE,initCrit = "BIC" )
-
-PAWLS_AIC <- simulation(L, n, beta, c( "A", "B", "C", "D","E"), method = "PAWLS", initial = "uniform",
-                        #lambda1.min=1e-3, lambda2.min=0.05,
-                        lambda1.min=1e-3, lambda2.min=0.001,
-                        seed = 2016, useDataFile = FALSE, updateInitial = FALSE, 
-                        intercept = TRUE,criterion = "AIC", search="all")
-PAWLS_BIC <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "uniform",
-                        #lambda1.min=1e-3, lambda2.min=0.05,
-                        lambda1.min=1e-3, lambda2.min=0.05,
-                        seed = 2016, useDataFile = FALSE, updateInitial = FALSE, 
-                        intercept = TRUE,criterion = "BIC",search="all")
-
-save(APAWLS_AIC , file = "Output/APAWLS_AIC.rda")
-save(APAWLS_BIC , file = "Output/APAWLS_BIC.rda")
-save(PAWLS_AIC , file = "Output/PAWLS_AIC.rda")
-save(PAWLS_BIC , file = "Output/PAWLS_BIC.rda")
-load("Output/APAWLs_AIC.rda")
-load("Output/APAWLs_BIC.rda")
-load("Output/PAWLs_AIC.rda")
-load("Output/PAWLs_BIC.rda")
-
-# Find Lambda
-lambda1s <- c(0.01, 0.05, 0.001, 0.005,0)
-lambda2s <- c(0.01,0.05,0.001,0.005,0)
-nlambda1 <- length(lambda1s)
-nlambda2 <- length(lambda2s)
-overall <- matrix(0,nrow=nlambda1,ncol=nlambda2)
-beat <- matrix(0,nrow=nlambda1,ncol=nlambda2)
-se <- matrix(0,nrow=nlambda1,ncol=nlambda2)
-for(i in 1: length(lambda1s))
-  for(j in 1: length(lambda2s)){
-    lambda1.min <- lambda1s[i]
-    lambda2.min <- lambda2s[j]
-    res <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS", lambda1.min=lambda1.min, 
-                      lambda2.min=lambda2.min, seed = NULL, useDataFile = TRUE, updateInitial = FALSE, intercept = TRUE)
-    overall[i,j] <- res[[6]]$overall
-    beat[i,j] <- res[[6]]$beat
-    se[i,j] <- res[[6]]$se
+pawls2 = function(x, y, lambda1 = NULL, lambda2 = NULL, nlambda1 = 50, nlambda2 = 100, 
+                 lambda1.min=1e-03, lambda2.min=0.05, beta0 = NULL, w0 = NULL,initial = c("uniform","PAWLS"), 
+                 delta = 1e-06, maxIter = 1000, intercept = TRUE, standardize = TRUE, search = c("cross", "all")) {
+  
+  ## check error
+  if (class(x) != "matrix") {
+    tmp <- try(x <- as.matrix(x), silent = TRUE)
+    if (class(tmp)[1] == "try-error") 
+      stop("x must be a matrix or able to be coerced to a matrix")
   }
-
-
-endreq <- function(res,nlambda,m, t=c(1,2),L=100){
-  s=0
-  if(t==1){
-    for(i in 1:m){
-      s <- s+ sum(res[[m]]$iw==nlambda)
-    }
-  } else{
-    for(i in 1:m){
-      s <- s+ sum(res[[m]]$ib==nlambda)
-    }
+  if (class(y) != "numeric") {
+    tmp <- try(y <- as.numeric(y), silent = TRUE)
+    if (class(tmp)[1] == "try-error") 
+      stop("y must numeric or able to be coerced to numeric")
   }
-  s/(L * m)
+  if (any(is.na(y)) | any(is.na(x))) 
+    stop("Missing data (NA's) detected.Take actions to eliminate missing data before passing 
+         X and y to pawls.")
+  initial <- match.arg(initial)
+  search <- match.arg(search)
+  
+  penalty1 <- "1-w0"
+  penalty2 <- "LASSO"
+  criterion <- "BIC"
+  startBeta <- NULL
+  startW <- NULL
+  if (!is.null(lambda1)) 
+    nlambda1 <- length(lambda1)
+  if (!is.null(lambda2)) 
+    nlambda2 <- length(lambda2)
+  
+  ## set initial
+  n = length(y)
+  p = dim(x)[2]
+  if (initial == "PAWLS") {
+    init = pawls(x, y, intercept = intercept,search = "all")
+    beta0 = SetBeta0(init$beta)
+    w0 = ifelse(init$w == 1, 0.99, init$w)
+  } else if (initial == "uniform") {
+    if (is.null(beta0)) {
+      beta0 = rep(1, p)
+      if (intercept) 
+        beta0 = c(1, beta0)
+    }
+    if (is.null(w0)) 
+      w0 = rep(0.99, n)
+    beta0 = SetBeta0(beta0)
+    w0 = ifelse(w0 == 1, 0.99, w0)
+  }
+  
+  ## check intercept
+  if (intercept) {
+    x = AddIntercept(x)
+  }
+  
+  ## sandardize
+  std = 0
+  scale = 0
+  if (standardize) {
+    std <- .Call("Standardize", x, y)
+    XX <- std[[1]]
+    yy <- std[[2]]
+    scale <- std[[3]]
+  } else {
+    XX = x
+    yy = y
+  }
+  
+  ## set tunning parameter
+  if (missing(lambda1) || missing(lambda2)||is.null(lambda1)||is.null(lambda2)) {
+    lambda = setup_parameter(XX, yy, nlambda1, nlambda2, lambda1.min=lambda1.min, lambda2.min=lambda2.min, beta0, w0, intercept = intercept, penalty1 = penalty1)
+    if (is.null(lambda1)) 
+      lambda1 = lambda$lambda1
+    if (is.null(lambda2)) 
+      lambda2 = lambda$lambda2
+  }
+  
+  ## Fit
+  if (search == "all") { # search for the whole grid
+    res = pawls_grid(XX, yy, penalty1 = penalty1, penalty2 = penalty2, lambda1, lambda2, beta0, w0, delta, 
+                     maxIter, intercept = intercept)
+    res = BIC_grid(res$wloss, res$beta, res$w, lambda1, lambda2, criterion = criterion)
+  } else {# serach="cross"
+    res = pawls_cross(XX, yy, penalty1 = penalty1, penalty2 = penalty2, lambda1, lambda2, beta0, w0, delta, maxIter, 
+                      intercept = intercept, criterion = criterion, startBeta = startBeta, startW = startW)
+  }
+  
+  ## unstandardize
+  if (standardize) {
+    scale = ifelse(scale == 0, 0, 1/scale)
+    res$beta = res$beta * scale
+  }
+  res
 }
 
+SetBeta0 = function(beta0) {
+  b = 1e-6
+  ifelse(abs(beta0) < b, b, beta0)
+}
 
-## generate data
-# example is not high-dimensional to keep computation time low
-library("mvtnorm")
-set.seed(1234)  # for reproducibility
-n <- 100  # number of observations
-p <- 25   # number of variables
-beta <- rep.int(c(1, 0), c(5, p-5))  # coefficients
-sigma <- 0.5      # controls signal-to-noise ratio
-epsilon <- 0.1    # contamination level
-Sigma <- 0.5^t(sapply(1:p, function(i, j) abs(i-j), 1:p))
-x <- rmvnorm(n, sigma=Sigma)    # predictor matrix
-e <- rnorm(n)                   # error terms
-i <- 1:ceiling(epsilon*n)       # observations to be contaminated
-e[i] <- e[i] + 5                # vertical outliers
-y <- c(x %*% beta + sigma * e)  # response
-x[i,] <- x[i,] + 5              # bad leverage points
-
-## fit sparse LTS model for one value of lambda
-out_LTS <- sparseLTS(x, y, lambda = 0.05, mode = "fraction")
-
-## fit sparse LTS models over a grid of values for lambda
-frac <- seq(0.2, 0.05, by = -0.05)
-out_LTS <- sparseLTS(x, y, lambda = frac, mode = "fraction")
-
+AddIntercept = function(x) {
+  n = dim(x)[1]
+  x1 = rep(1, n)
+  xx = cbind(x1, x)
+  xx
+}
