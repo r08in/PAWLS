@@ -6,18 +6,33 @@
 #' @param x a numeric matrix containing the predictor variables without an intercept.  \code{pawls}
 #' standardizes the data and includes an intercept by default.
 #' @param y a numeric vector containing the response variable.
-#' @param nlambda1 The number of lambda1 values. Default is 100.
-#' @param nlambda2 The number of lambda2 values. Default is 50.
+#' @param nlambda1 The number of lambda1 values (the default is 100).
+#' @param nlambda2 The number of lambda2 values (the default is 50).
 #' @param lambda1  a numeric vector of non-negative values to be used as penalty parameter for coefficients. 
 #' By default, a sequence of values of length \code{nlambda1} is computed, equally
 #' spaced on the log scale. 
 #' @param lambda2  a numeric vector of non-negative values to be used as penalty parameter for weight vectors. 
 #' By default, a sequence of values of length \code{nlambda2} is computed, equally
 #' spaced on the log scale. 
-#' @param lambda1.min a numeric value giving the ratio of minimum \code{lambda1} and maximum \code{lambda1}. 
+#' @param lambda1.min a numeric value giving the ratio of minimum \code{lambda1} to maximum \code{lambda1}. 
 #' The maximum \code{lambda1} is an estimate of penalty parameter that set all the coefficientes to 0.
-#' @param lambda2.min a numeric value giving the ratio of minimum \code{lambda1} and maximum \code{lambda2}. 
+#' @param lambda2.min a numeric value giving the ratio of minimum \code{lambda2} to maximum \code{lambda2}. 
 #' The maximum \code{lambda2} is an estimate of penalty parameter that set all the weight to 1.
+#' @param beta0 the initial estimates of coefficients \code{beta} used in the adaptive penalty.
+#' @param w0 the initial estimates of weight vector used in the adaptive penalty.
+#' @param a character string specifying the initial estimates of both coeffcients and weight vectors in the adaptive penalties.
+#' If "uniform", a non-adaptive \code{pawls} is performed. If "pawls", then the estimates are obtained by non-adaptive pawls (the 
+#' default is "uniform").
+#' @param delta a small positive numeric value used to determine whether the variability within a variable is 
+#' too small (the default is 1e-06).
+#' @param maxIter a positive numeric value used to determin the maximum number of iteration for optimization.
+#' @param intercept  a logical indicating whether a constant term should be 
+#' included in the model (the default is \code{TRUE}).
+#' @param standardize a logical indicating whether the predictor variables should be normalized 
+#' to have unit L2 norm (the default is TRUE). 
+#' @param search a character string specifying the algorithm to select tunning parameters for both coefficients and weight
+#' vectors. If "cross", the optimal tuning parameters are searched alternatively by minimizing \code{BIC}. If "grid", 
+#' the optimal tuning parameters are selected as the pair that minimiz \code{BIC} over a fine grid.
 pawls = function(x, y, nlambda1 = 100, nlambda2 = 50, lambda1 = NULL, lambda2 = NULL, lambda1.min=0.05,
     lambda2.min=1e-03, beta0 = NULL, w0 = NULL,initial = c("uniform","PAWLS"), delta = 1e-06, 
     maxIter = 1e03, intercept = TRUE, standardize = TRUE, search = c("cross", "grid")) {
