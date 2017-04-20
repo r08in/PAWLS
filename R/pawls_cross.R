@@ -24,7 +24,7 @@ pawls_cross = function(x, y, penalty1 = c("L1"), penalty2 = c("L1"), lambda1,lam
                           intercept = intercept, startBeta = startBeta, startW = startW)
         ## search for best lambda2
         bic2 = BIC_cross(as.vector(resw$wloss), apply(matrix(resw$w, L2, n) != 1, 1, sum), 
-                         apply(matrix(resw$beta, L2, m) != 0, 1, sum), n, m, type = "w", criterion = criterion) 
+                         apply(matrix(resw$beta, L2, m) != 0, 1, sum),n) 
         index2 =bic2$index
         crit2 = bic2$crit
         ## fix lambda2
@@ -33,15 +33,12 @@ pawls_cross = function(x, y, penalty1 = c("L1"), penalty2 = c("L1"), lambda1,lam
                          intercept = intercept, startBeta = startBeta, startW = startW)
         ## search for best lambda1
         bic1 = BIC_cross(as.vector(res$wloss), apply(matrix(res$w, L1, n) != 1, 1, sum),
-                         apply(matrix(res$beta,L1, m) != 0, 1, sum), n, m, 
-                         criterion = criterion)
+                         apply(matrix(res$beta,L1, m) != 0, 1, sum),n)
         index1 = bic1$index 
         crit1 = bic1$crit
     }
     
-    list(lambda2 = lambda2[index2], lambda1 = lambda1[index1], beta = as.vector(res$beta[1, index1, ]), w = as.vector(res$w[1, 
-        index1, ]), wloss = res$wloss[1, index1], bdf = sum(res$beta[1, index1, ] != 0 + 0), wdf = sum(res$w[1, index1, 
-        ] != 1 + 0), index2 = index2, index1 = index1, iter = iter, w0 = w0, beta0 = beta0, lambda2s = lambda2, lambda1s = lambda1, 
-        betas = matrix(res$beta, L1, m), ws = matrix(resw$w, L2, n), crit2=crit2, crit1=crit1)
+    list(beta = as.vector(res$beta[1, index1, ]), w = as.vector(res$w[1, index1, ]),
+         opt.lambda1=lambda1[index1], opt.lambda2 = lambda2[index2], iter = iter, crit1=crit1, crit2=crit2)
     
 }

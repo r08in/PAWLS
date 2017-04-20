@@ -5,10 +5,10 @@
 \title{Penalized adaptive weighted least squares regression}
 \usage{
 pawls(x, y, nlambda1 = 100, nlambda2 = 50, lambda1 = NULL,
-  lambda2 = NULL, lambda1.min = 0.05, lambda2.min = 0.001, beta0 = NULL,
-  w0 = NULL, initial = c("uniform", "PAWLS"), delta = 1e-06,
-  maxIter = 1000, intercept = TRUE, standardize = TRUE,
-  search = c("cross", "grid"))
+  lambda2 = NULL, lambda1.min = ifelse(n > p, 0.001, 0.05),
+  lambda2.min = ifelse(n > p, 0.05, 0.001), beta0 = NULL, w0 = NULL,
+  initial = c("uniform", "PAWLS"), delta = 1e-06, maxIter = 1000,
+  intercept = TRUE, standardize = TRUE, search = c("cross", "grid"))
 }
 \arguments{
 \item{x}{a numeric matrix containing the predictor variables without an intercept.  \code{pawls}
@@ -20,32 +20,34 @@ standardizes the data and includes an intercept by default.}
 
 \item{nlambda2}{The number of lambda2 values (the default is 50).}
 
-\item{lambda1}{a numeric vector of non-negative values to be used as penalty parameter for coefficients. 
-By default, a sequence of values of length \code{nlambda1} is computed, equally
+\item{lambda1}{a numeric vector of non-negative values to be used as tuning parameters of the penalty
+ for coefficients. By default, a sequence of values of length \code{nlambda1} is computed, equally
 spaced on the log scale.}
 
-\item{lambda2}{a numeric vector of non-negative values to be used as penalty parameter for weight vectors. 
-By default, a sequence of values of length \code{nlambda2} is computed, equally
+\item{lambda2}{a numeric vector of non-negative values to be used as tunning parameters of the penalty
+ for weight vectors. By default, a sequence of values of length \code{nlambda2} is computed, equally
 spaced on the log scale.}
 
-\item{lambda1.min}{a numeric value giving the ratio of minimum \code{lambda1} to maximum \code{lambda1}. 
-The maximum \code{lambda1} is an estimate of penalty parameter that set all the coefficientes to 0.}
+\item{lambda1.min}{a numeric value giving the smallest value for \code{lambda1}, as a fraction of the
+\code{lambda1} maximum. The default is .001 if the number of observations is larger than the number of
+covariates and .05 otherwise. Note that the \code{lambda1}  maximum  is an estimate of tuning parameter that set all the coefficientes to 0.}
 
-\item{lambda2.min}{a numeric value giving the ratio of minimum \code{lambda2} to maximum \code{lambda2}. 
-The maximum \code{lambda2} is an estimate of penalty parameter that set all the weight to 1.}
+\item{lambda2.min}{a numeric value giving the smallest value for \code{lambda2}, as a fraction of the
+\code{lambda2} maximum.  The default is .05 if the number of observations is larger than the number of
+covariates and .001 otherwise. Note that the \code{lambda2}  maximum  is an estimate of tuning parameter that set all the weights to 1.}
 
-\item{beta0}{the initial estimates of coefficients \code{beta} used in the adaptive penalty.}
+\item{beta0}{the initial estimates of coefficients to be used in the adaptive penalty for \code{beta}.}
 
-\item{w0}{the initial estimates of weight vector \code{w} used in the adaptive penalty.}
+\item{w0}{the initial estimates of weight vector to be used in the adaptive penalty for  \code{w}.}
 
 \item{initial}{a character string specifying the initial estimates of both coeffcients and weight vectors in the adaptive penalties.
 If "\code{uniform}", a non-adaptive \code{pawls} is performed. If "\code{pawls}", then the estimates are obtained by non-adaptive pawls (the 
 default is "\code{uniform}").}
 
-\item{delta}{a small positive numeric value used to determine whether the variability within a variable is 
-too small (the default is 1e-06).}
+\item{delta}{a small positive numeric value as a convergence threshold. The algorithm iterates until the RMSD for the change in both coefficents
+and weight vectors is less than delta  (the default is 1e-06).}
 
-\item{maxIter}{a positive numeric value used to determin the maximum number of iteration for optimization.}
+\item{maxIter}{a positive numeric value used to determin the maximum number of iterations (the default is 1000).}
 
 \item{intercept}{a logical indicating whether a constant term should be 
 included in the model (the default is \code{TRUE}).}
@@ -61,3 +63,4 @@ the optimal tuning parameters are selected as the pair that minimiz \code{BIC} o
 Compute weighted least squares regression with \eqn{L_{1}}{L1} regularization on both the
 coefficients and weight vectors.
 }
+

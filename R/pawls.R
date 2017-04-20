@@ -8,24 +8,26 @@
 #' @param y a numeric vector containing the response variable.
 #' @param nlambda1 The number of lambda1 values (the default is 100).
 #' @param nlambda2 The number of lambda2 values (the default is 50).
-#' @param lambda1  a numeric vector of non-negative values to be used as penalty parameter for coefficients. 
-#' By default, a sequence of values of length \code{nlambda1} is computed, equally
+#' @param lambda1  a numeric vector of non-negative values to be used as tuning parameters of the penalty
+#'  for coefficients. By default, a sequence of values of length \code{nlambda1} is computed, equally
 #' spaced on the log scale. 
-#' @param lambda2  a numeric vector of non-negative values to be used as penalty parameter for weight vectors. 
-#' By default, a sequence of values of length \code{nlambda2} is computed, equally
+#' @param lambda2  a numeric vector of non-negative values to be used as tunning parameters of the penalty
+#'  for weight vectors. By default, a sequence of values of length \code{nlambda2} is computed, equally
 #' spaced on the log scale. 
-#' @param lambda1.min a numeric value giving the ratio of minimum \code{lambda1} to maximum \code{lambda1}. 
-#' The maximum \code{lambda1} is an estimate of penalty parameter that set all the coefficientes to 0.
-#' @param lambda2.min a numeric value giving the ratio of minimum \code{lambda2} to maximum \code{lambda2}. 
-#' The maximum \code{lambda2} is an estimate of penalty parameter that set all the weight to 1.
-#' @param beta0 the initial estimates of coefficients \code{beta} used in the adaptive penalty.
-#' @param w0 the initial estimates of weight vector \code{w} used in the adaptive penalty.
+#' @param lambda1.min a numeric value giving the smallest value for \code{lambda1}, as a fraction of the
+#' \code{lambda1} maximum. The default is .001 if the number of observations is larger than the number of
+#' covariates and .05 otherwise. Note that the \code{lambda1}  maximum  is an estimate of tuning parameter that set all the coefficientes to 0.
+#' @param lambda2.min a numeric value giving the smallest value for \code{lambda2}, as a fraction of the
+#' \code{lambda2} maximum.  The default is .05 if the number of observations is larger than the number of
+#' covariates and .001 otherwise. Note that the \code{lambda2}  maximum  is an estimate of tuning parameter that set all the weights to 1.
+#' @param beta0 the initial estimates of coefficients to be used in the adaptive penalty for \code{beta}.
+#' @param w0 the initial estimates of weight vector to be used in the adaptive penalty for  \code{w}.
 #' @param initial a character string specifying the initial estimates of both coeffcients and weight vectors in the adaptive penalties.
 #' If "\code{uniform}", a non-adaptive \code{pawls} is performed. If "\code{pawls}", then the estimates are obtained by non-adaptive pawls (the 
 #' default is "\code{uniform}").
-#' @param delta a small positive numeric value used to determine whether the variability within a variable is 
-#' too small (the default is 1e-06).
-#' @param maxIter a positive numeric value used to determin the maximum number of iteration for optimization.
+#' @param delta a small positive numeric value as a convergence threshold. The algorithm iterates until the RMSD for the change in both coefficents
+#' and weight vectors is less than delta  (the default is 1e-06).
+#' @param maxIter a positive numeric value used to determin the maximum number of iterations (the default is 1000).
 #' @param intercept  a logical indicating whether a constant term should be 
 #' included in the model (the default is \code{TRUE}).
 #' @param standardize a logical indicating whether the predictor variables should be normalized 
@@ -33,10 +35,11 @@
 #' @param search a character string specifying the algorithm to select tunning parameters for both coefficients and weight
 #' vectors. If "cross", the optimal tuning parameters are searched alternatively by minimizing \code{BIC}. If "grid", 
 #' the optimal tuning parameters are selected as the pair that minimiz \code{BIC} over a fine grid.
-pawls = function(x, y, nlambda1 = 100, nlambda2 = 50, lambda1 = NULL, lambda2 = NULL, lambda1.min=0.05,
-    lambda2.min=1e-03, beta0 = NULL, w0 = NULL,initial = c("uniform","PAWLS"), delta = 1e-06, 
+pawls = function(x, y, nlambda1 = 100, nlambda2 = 50, lambda1 = NULL, lambda2 = NULL, lambda1.min=ifelse(n>p,0.001,0.05),
+    lambda2.min=ifelse(n>p,0.05,0.001), beta0 = NULL, w0 = NULL,initial = c("uniform","PAWLS"), delta = 1e-06, 
     maxIter = 1e03, intercept = TRUE, standardize = TRUE, search = c("cross", "grid")) {
-  
+    n = length(y)
+    p = dim(x)[2]
     ## check error
     if (class(x) != "matrix") {
         tmp <- try(x <- as.matrix(x), silent = TRUE)
@@ -67,10 +70,8 @@ pawls = function(x, y, nlambda1 = 100, nlambda2 = 50, lambda1 = NULL, lambda2 = 
         nlambda2 <- length(lambda2)
 
     ## set initial
-    n = length(y)
-    p = dim(x)[2]
     if (initial == "PAWLS") {
-      init = pawls(x, y, intercept = intercept,search = "grid")
+      init = pawls(x, y, lambda1.min = 0.05,lambda2.min = 0.001,intercept = intercept,search = "grid")
       beta0 = SetBeta0(init$beta)
       w0 = ifelse(init$w == 1, 0.99, init$w)
     } else if (initial == "uniform") {
@@ -115,23 +116,41 @@ pawls = function(x, y, nlambda1 = 100, nlambda2 = 50, lambda1 = NULL, lambda2 = 
     
     ## Fit
     if (search == "grid") { # search for the whole grid
-      res = pawls_grid(x=XX, y=yy, penalty1 = penalty1, penalty2 = penalty2, lambda1=lambda1, lambda2=lambda2,
+      res1 <- pawls_grid(x=XX, y=yy, penalty1 = penalty1, penalty2 = penalty2, lambda1=lambda1, lambda2=lambda2,
                      beta0=beta0, w0=w0, delta=delta, maxIter=maxIter, intercept = intercept)
-      res = BIC_grid(res$wloss, res$beta, res$w, lambda2, lambda1, criterion = criterion)
-      class(res) <- "grid.pawls"
+      res2 <-  BIC_grid(res1$wloss, res1$beta, res1$w)
+      fit <- list(beta = res2$beta,
+                  w = res2$w,
+                  lambda1 = lambda1,
+                  lambda2 = lambda2,
+                  opt.lambda1 = lambda1[res2$index1],
+                  opt.lambda2 = lambda2[res2$index2],
+                  iter = res1$iter,
+                  raw.bic = res2$raw.bic,
+                  bic = res2$bic)
+      class(fit) <- "pawls.grid"
     } else {# serach="cross"
       res = pawls_cross(x=XX, y=yy, penalty1 = penalty1, penalty2 = penalty2, lambda1=lambda1, lambda2=lambda2, 
                         beta0=beta0, w0=w0, delta=delta, maxIter=maxIter, intercept = intercept, 
                         criterion = criterion, startBeta = startBeta, startW = startW)
-      class(res) <- "cross.pawls"
+      fit <- list(beta = res$beta,
+                  w = res$w,
+                  lambda1 = lambda1,
+                  lambda2 = lambda2,
+                  opt.lambda1 = res$opt.lambda1,
+                  opt.lambda2 = res$opt.lambda2,
+                  iter = res$iter,
+                  crit1 = res$crit1,
+                  crit2 = res$crit2)
+      class(fit) <- "pawls.cross"
     }
     
     ## unstandardize
     if (standardize) {
         scale = ifelse(scale == 0, 0, 1/scale)
-        res$beta = res$beta * scale
+        fit$beta = fit$beta * scale
     }
-    res
+    fit
 }
 
 SetBeta0 = function(beta0) {

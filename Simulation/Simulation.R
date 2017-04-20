@@ -174,25 +174,19 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
               updateInitialTimes <- ifelse(updateInitial, 2, 0)
               ptm <- proc.time()
               res = pawls(out$x, out$y, nlambda2 = 50, nlambda1 = 100, lambda2 = lambda2,
-                            lambda1=lambda1, lambda2.min=lambda2.min, lambda1.min=lambda1.min, delta = 1e-06, 
+                            lambda1=lambda1, delta = 1e-06, 
                 maxIter = 1000, initial = initial, intercept = intercept, standardize = standardize, search = search)
               times[i] <- (proc.time() - ptm)[1]
               b[i, ] = res$beta
               w[i, ] = res$w
               iter[i] = res$iter
-              iw[i] = res$index2
-              ib[i] = res$index1
               crit2[i,] = res$crit2
               crit1[i,] =  res$crit1
-              lam2[i,] =  res$lambda2s
-              lam1[i,] = res$lambda1s
-              dfb[i] = res$bdf
-              dfw[i] = res$wdf
+              lam2[i,] =  res$lambda2
+              lam1[i,] = res$lambda1
               if(search=="grid"){
-                bic[i,,] = res$res$bic
-                bic2[i,,] = res$res$bic2
-                bdf[i,,]= res$res$bdf
-                wdf[i,,]= res$res$wdf
+                bic[i,,] = res$raw.bic
+                bic2[i,,] = res$bic
               }
               
             }
@@ -265,9 +259,9 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
         # BIC curve
         if(method=="PAWLS"||method=="PAMLS"){
           nres[[j]] <- list(model = model[j], CFR = CFR, CFR2 = CFR2, OFR = OFR, PDR = PDR, FDR = FDR, 
-                            AN = AN, MSE = MSE, mses=mses, TIME = TIME, iw=iw, ib=ib,iter=iter,OD=OD,
-                            crit2=crit2,lam2=lam2,crit1=crit1,lam1=lam1,dfb=dfb,dfw=dfw,betas=b,ws=w,
-                            bic=bic,bic2=bic2,wdf=wdf,bdf=bdf
+                            AN = AN, MSE = MSE, mses=mses, TIME = TIME,iter=iter,OD=OD,
+                            crit2=crit2,lam2=lam2,crit1=crit1,lam1=lam1,betas=b,ws=w,
+                            bic=bic,bic2=bic2
                             )
         } else{
           nres[[j]] <- list(model = model[j], CFR = CFR, CFR2 = CFR2, OFR = OFR, PDR = PDR, FDR = FDR, 
