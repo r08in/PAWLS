@@ -200,6 +200,198 @@ options(digits=2)
 	\end{tabular}
 	\end{center}
 	\end{table}
+	
+	%------------------------------------ Low dimensional case (combined) ------------------------------%
+		\begin{table}[thp]
+	\begin{center}
+	 \caption{Variable Selection and outliers detection Results for Example 1 ($\bbeta=(3,2,1.5,0,0,0,0,0)'$ with 10\% outliers )}\label{table1}
+	\begin{tabular}{ccrrrrrrrrrrrr}\\\hline\hline
+	  & & \multicolumn{5}{c} {Variable Selection} &&  \multicolumn{5}{c} {Outliers detection} & \\
+	   Case & Method & CFR & OFR  & AN & FP& FN  &  M & S  & JD & FP & FN  & TIME\\ \hline
+	  \multirow{8}{*}{{\bf A}}
+	      & ALasso & \Sexpr{Lres_ADL[[1]]$CFR} & \Sexpr{Lres_ADL[[1]]$OFR} & \Sexpr{Lres_ADL[[1]]$AN} & 
+	      \Sexpr{Lres_ADL[[1]]$PDR} & \Sexpr{Lres_ADL[[1]]$FDR} & - & - & - & - & - & \Sexpr{Lres_ADL[[1]]$TIME}\\
+	
+	      & MMNNG & \Sexpr{Lres_mmnng[[1]]$CFR} & \Sexpr{Lres_mmnng[[1]]$OFR} & \Sexpr{Lres_mmnng[[1]]$AN} & 
+	      \Sexpr{Lres_mmnng[[1]]$PDR} & \Sexpr{Lres_mmnng[[1]]$FDR} & - & - & - & - & - & \Sexpr{Lres_mmnng[[1]]$TIME}\\
+	      
+	      & SROS & \Sexpr{Lres_ROSS[[1]]$CFR} & \Sexpr{Lres_ROSS[[1]]$OFR} & \Sexpr{Lres_ROSS[[1]]$AN} & 
+	      \Sexpr{Lres_ROSS[[1]]$PDR} & \Sexpr{Lres_ROSS[[1]]$FDR} & - & - & - & - & - & \Sexpr{Lres_ROSS[[1]]$TIME}\\
+	      
+	      & SROS-2 & \Sexpr{Lres_PAMLS[[1]]$CFR} & \Sexpr{Lres_PAMLS[[1]]$OFR} & \Sexpr{Lres_PAMLS[[1]]$AN} & 
+	      \Sexpr{Lres_PAMLS[[1]]$PDR} & \Sexpr{Lres_PAMLS[[1]]$FDR} &
+	      \Sexpr{Lres_PAMLS[[1]]$OD$M} & \Sexpr{Lres_PAMLS[[1]]$OD$S} & \Sexpr{Lres_PAMLS[[1]]$OD$JD}
+	      & \Sexpr{Lres_PAMLS[[1]]$OD$tpr[1]} & \Sexpr{Lres_PAMLS[[1]]$OD$fpr[1]} & \Sexpr{Lres_PAMLS[[1]]$TIME}\\
+	      
+	     & ASROS-2 & \Sexpr{Lres_APAMLS[[1]]$CFR} & \Sexpr{Lres_APAMLS[[1]]$OFR} & \Sexpr{Lres_APAMLS[[1]]$AN} & 
+	      \Sexpr{Lres_APAMLS[[1]]$PDR} & \Sexpr{Lres_APAMLS[[1]]$FDR} &
+	      \Sexpr{Lres_APAMLS[[1]]$OD$M} & \Sexpr{Lres_APAMLS[[1]]$OD$S} & \Sexpr{Lres_APAMLS[[1]]$OD$JD}
+	      & \Sexpr{Lres_APAMLS[[1]]$OD$tpr[1]} & \Sexpr{Lres_APAMLS[[1]]$OD$fpr[1]} & \Sexpr{Lres_APAMLS[[1]]$TIME}\\
+	      
+	       & sLTS & \Sexpr{Lres_LTS[[1]]$CFR} & \Sexpr{Lres_LTS[[1]]$OFR} & \Sexpr{Lres_LTS[[1]]$AN} & 
+	      \Sexpr{Lres_LTS[[1]]$PDR} & \Sexpr{Lres_LTS[[1]]$FDR} &
+	      \Sexpr{Lres_LTS[[1]]$OD$M} & \Sexpr{Lres_LTS[[1]]$OD$S} & \Sexpr{Lres_LTS[[1]]$OD$JD}
+	      & \Sexpr{Lres_LTS[[1]]$OD$tpr[1]} & \Sexpr{Lres_LTS[[1]]$OD$fpr[1]} & \Sexpr{Lres_LTS[[1]]$TIME}\\
+	      
+	      & PAWLS & \Sexpr{Lres_PAWLS[[1]]$CFR} & \Sexpr{Lres_PAWLS[[1]]$OFR} & \Sexpr{Lres_PAWLS[[1]]$AN} & 
+	      \Sexpr{Lres_PAWLS[[1]]$PDR} & \Sexpr{Lres_PAWLS[[1]]$FDR} &
+	      \Sexpr{Lres_PAWLS[[1]]$OD$M} & \Sexpr{Lres_PAWLS[[1]]$OD$S} & \Sexpr{Lres_PAWLS[[1]]$OD$JD}
+	      & \Sexpr{Lres_PAWLS[[1]]$OD$tpr[1]} & \Sexpr{Lres_PAWLS[[1]]$OD$fpr[1]} & \Sexpr{Lres_PAWLS[[1]]$TIME}\\
+	      
+	      & APAWLS & \Sexpr{Lres_APAWLS[[1]]$CFR} & \Sexpr{Lres_APAWLS[[1]]$OFR} & \Sexpr{Lres_APAWLS[[1]]$AN} & 
+	      \Sexpr{Lres_APAWLS[[1]]$PDR} & \Sexpr{Lres_APAWLS[[1]]$FDR} &
+	      \Sexpr{Lres_APAWLS[[1]]$OD$M} & \Sexpr{Lres_APAWLS[[1]]$OD$S} & \Sexpr{Lres_APAWLS[[1]]$OD$JD}
+	      & \Sexpr{Lres_APAWLS[[1]]$OD$tpr[1]} & \Sexpr{Lres_APAWLS[[1]]$OD$fpr[1]} & \Sexpr{Lres_APAWLS[[1]]$TIME}\\
+	      \\
+	      	  \multirow{8}{*}{{\bf B}}
+	      & ALasso & \Sexpr{Lres_ADL[[2]]$CFR} & \Sexpr{Lres_ADL[[2]]$OFR} & \Sexpr{Lres_ADL[[2]]$AN} & 
+	      \Sexpr{Lres_ADL[[2]]$PDR} & \Sexpr{Lres_ADL[[2]]$FDR} & - & - & - & - & - & \Sexpr{Lres_ADL[[2]]$TIME}\\
+	
+	      & MMNNG & \Sexpr{Lres_mmnng[[2]]$CFR} & \Sexpr{Lres_mmnng[[2]]$OFR} & \Sexpr{Lres_mmnng[[2]]$AN} & 
+	      \Sexpr{Lres_mmnng[[2]]$PDR} & \Sexpr{Lres_mmnng[[2]]$FDR} & - & - & - & - & - & \Sexpr{Lres_mmnng[[2]]$TIME}\\
+	      
+	      & SROS & \Sexpr{Lres_ROSS[[2]]$CFR} & \Sexpr{Lres_ROSS[[2]]$OFR} & \Sexpr{Lres_ROSS[[2]]$AN} & 
+	      \Sexpr{Lres_ROSS[[2]]$PDR} & \Sexpr{Lres_ROSS[[2]]$FDR} & - & - & - & - & - & \Sexpr{Lres_ROSS[[2]]$TIME}\\
+	      
+	      & SROS-2 & \Sexpr{Lres_PAMLS[[2]]$CFR} & \Sexpr{Lres_PAMLS[[2]]$OFR} & \Sexpr{Lres_PAMLS[[2]]$AN} & 
+	      \Sexpr{Lres_PAMLS[[2]]$PDR} & \Sexpr{Lres_PAMLS[[2]]$FDR} &
+	      \Sexpr{Lres_PAMLS[[2]]$OD$M} & \Sexpr{Lres_PAMLS[[2]]$OD$S} & \Sexpr{Lres_PAMLS[[2]]$OD$JD}
+	      & \Sexpr{Lres_PAMLS[[2]]$OD$tpr[1]} & \Sexpr{Lres_PAMLS[[2]]$OD$fpr[1]} & \Sexpr{Lres_PAMLS[[2]]$TIME}\\
+	      
+	     & ASROS-2 & \Sexpr{Lres_APAMLS[[2]]$CFR} & \Sexpr{Lres_APAMLS[[2]]$OFR} & \Sexpr{Lres_APAMLS[[2]]$AN} & 
+	      \Sexpr{Lres_APAMLS[[2]]$PDR} & \Sexpr{Lres_APAMLS[[2]]$FDR} &
+	      \Sexpr{Lres_APAMLS[[2]]$OD$M} & \Sexpr{Lres_APAMLS[[2]]$OD$S} & \Sexpr{Lres_APAMLS[[2]]$OD$JD}
+	      & \Sexpr{Lres_APAMLS[[2]]$OD$tpr[1]} & \Sexpr{Lres_APAMLS[[2]]$OD$fpr[1]} & \Sexpr{Lres_APAMLS[[2]]$TIME}\\
+	      
+	       & sLTS & \Sexpr{Lres_LTS[[2]]$CFR} & \Sexpr{Lres_LTS[[2]]$OFR} & \Sexpr{Lres_LTS[[2]]$AN} & 
+	      \Sexpr{Lres_LTS[[2]]$PDR} & \Sexpr{Lres_LTS[[2]]$FDR} &
+	      \Sexpr{Lres_LTS[[2]]$OD$M} & \Sexpr{Lres_LTS[[2]]$OD$S} & \Sexpr{Lres_LTS[[2]]$OD$JD}
+	      & \Sexpr{Lres_LTS[[2]]$OD$tpr[1]} & \Sexpr{Lres_LTS[[2]]$OD$fpr[1]} & \Sexpr{Lres_LTS[[2]]$TIME}\\
+	      
+	      & PAWLS & \Sexpr{Lres_PAWLS[[2]]$CFR} & \Sexpr{Lres_PAWLS[[2]]$OFR} & \Sexpr{Lres_PAWLS[[2]]$AN} & 
+	      \Sexpr{Lres_PAWLS[[2]]$PDR} & \Sexpr{Lres_PAWLS[[2]]$FDR} &
+	      \Sexpr{Lres_PAWLS[[2]]$OD$M} & \Sexpr{Lres_PAWLS[[2]]$OD$S} & \Sexpr{Lres_PAWLS[[2]]$OD$JD}
+	      & \Sexpr{Lres_PAWLS[[2]]$OD$tpr[1]} & \Sexpr{Lres_PAWLS[[2]]$OD$fpr[1]} & \Sexpr{Lres_PAWLS[[2]]$TIME}\\
+	      
+	      & APAWLS & \Sexpr{Lres_APAWLS[[2]]$CFR} & \Sexpr{Lres_APAWLS[[2]]$OFR} & \Sexpr{Lres_APAWLS[[2]]$AN} & 
+	      \Sexpr{Lres_APAWLS[[2]]$PDR} & \Sexpr{Lres_APAWLS[[2]]$FDR} &
+	      \Sexpr{Lres_APAWLS[[2]]$OD$M} & \Sexpr{Lres_APAWLS[[2]]$OD$S} & \Sexpr{Lres_APAWLS[[2]]$OD$JD}
+	      & \Sexpr{Lres_APAWLS[[2]]$OD$tpr[1]} & \Sexpr{Lres_APAWLS[[2]]$OD$fpr[1]} & \Sexpr{Lres_APAWLS[[2]]$TIME}\\
+	      \\
+	        	  \multirow{8}{*}{{\bf C}}
+	      & ALasso & \Sexpr{Lres_ADL[[3]]$CFR} & \Sexpr{Lres_ADL[[3]]$OFR} & \Sexpr{Lres_ADL[[3]]$AN} & 
+	      \Sexpr{Lres_ADL[[3]]$PDR} & \Sexpr{Lres_ADL[[3]]$FDR} & - & - & - & - & - & \Sexpr{Lres_ADL[[3]]$TIME}\\
+	
+	      & MMNNG & \Sexpr{Lres_mmnng[[3]]$CFR} & \Sexpr{Lres_mmnng[[3]]$OFR} & \Sexpr{Lres_mmnng[[3]]$AN} & 
+	      \Sexpr{Lres_mmnng[[3]]$PDR} & \Sexpr{Lres_mmnng[[3]]$FDR} & - & - & - & - & - & \Sexpr{Lres_mmnng[[3]]$TIME}\\
+	      
+	      & SROS & \Sexpr{Lres_ROSS[[3]]$CFR} & \Sexpr{Lres_ROSS[[3]]$OFR} & \Sexpr{Lres_ROSS[[3]]$AN} & 
+	      \Sexpr{Lres_ROSS[[3]]$PDR} & \Sexpr{Lres_ROSS[[3]]$FDR} & - & - & - & - & - & \Sexpr{Lres_ROSS[[3]]$TIME}\\
+	      
+	      & SROS-2 & \Sexpr{Lres_PAMLS[[3]]$CFR} & \Sexpr{Lres_PAMLS[[3]]$OFR} & \Sexpr{Lres_PAMLS[[3]]$AN} & 
+	      \Sexpr{Lres_PAMLS[[3]]$PDR} & \Sexpr{Lres_PAMLS[[3]]$FDR} &
+	      \Sexpr{Lres_PAMLS[[3]]$OD$M} & \Sexpr{Lres_PAMLS[[3]]$OD$S} & \Sexpr{Lres_PAMLS[[3]]$OD$JD}
+	      & \Sexpr{Lres_PAMLS[[3]]$OD$tpr[1]} & \Sexpr{Lres_PAMLS[[3]]$OD$fpr[1]} & \Sexpr{Lres_PAMLS[[3]]$TIME}\\
+	      
+	     & ASROS-2 & \Sexpr{Lres_APAMLS[[3]]$CFR} & \Sexpr{Lres_APAMLS[[3]]$OFR} & \Sexpr{Lres_APAMLS[[3]]$AN} & 
+	      \Sexpr{Lres_APAMLS[[3]]$PDR} & \Sexpr{Lres_APAMLS[[3]]$FDR} &
+	      \Sexpr{Lres_APAMLS[[3]]$OD$M} & \Sexpr{Lres_APAMLS[[3]]$OD$S} & \Sexpr{Lres_APAMLS[[3]]$OD$JD}
+	      & \Sexpr{Lres_APAMLS[[3]]$OD$tpr[1]} & \Sexpr{Lres_APAMLS[[3]]$OD$fpr[1]} & \Sexpr{Lres_APAMLS[[3]]$TIME}\\
+	      
+	       & sLTS & \Sexpr{Lres_LTS[[3]]$CFR} & \Sexpr{Lres_LTS[[3]]$OFR} & \Sexpr{Lres_LTS[[3]]$AN} & 
+	      \Sexpr{Lres_LTS[[3]]$PDR} & \Sexpr{Lres_LTS[[3]]$FDR} &
+	      \Sexpr{Lres_LTS[[3]]$OD$M} & \Sexpr{Lres_LTS[[3]]$OD$S} & \Sexpr{Lres_LTS[[3]]$OD$JD}
+	      & \Sexpr{Lres_LTS[[3]]$OD$tpr[1]} & \Sexpr{Lres_LTS[[3]]$OD$fpr[1]} & \Sexpr{Lres_LTS[[3]]$TIME}\\
+	      
+	      & PAWLS & \Sexpr{Lres_PAWLS[[3]]$CFR} & \Sexpr{Lres_PAWLS[[3]]$OFR} & \Sexpr{Lres_PAWLS[[3]]$AN} & 
+	      \Sexpr{Lres_PAWLS[[3]]$PDR} & \Sexpr{Lres_PAWLS[[3]]$FDR} &
+	      \Sexpr{Lres_PAWLS[[3]]$OD$M} & \Sexpr{Lres_PAWLS[[3]]$OD$S} & \Sexpr{Lres_PAWLS[[3]]$OD$JD}
+	      & \Sexpr{Lres_PAWLS[[3]]$OD$tpr[1]} & \Sexpr{Lres_PAWLS[[3]]$OD$fpr[1]} & \Sexpr{Lres_PAWLS[[3]]$TIME}\\
+	      
+	      & APAWLS & \Sexpr{Lres_APAWLS[[3]]$CFR} & \Sexpr{Lres_APAWLS[[3]]$OFR} & \Sexpr{Lres_APAWLS[[3]]$AN} & 
+	      \Sexpr{Lres_APAWLS[[3]]$PDR} & \Sexpr{Lres_APAWLS[[3]]$FDR} &
+	      \Sexpr{Lres_APAWLS[[3]]$OD$M} & \Sexpr{Lres_APAWLS[[3]]$OD$S} & \Sexpr{Lres_APAWLS[[3]]$OD$JD}
+	      & \Sexpr{Lres_APAWLS[[3]]$OD$tpr[1]} & \Sexpr{Lres_APAWLS[[3]]$OD$fpr[1]} & \Sexpr{Lres_APAWLS[[3]]$TIME}\\
+	      
+	     \\
+	       	  \multirow{8}{*}{{\bf D}}
+	      & ALasso & \Sexpr{Lres_ADL[[4]]$CFR} & \Sexpr{Lres_ADL[[4]]$OFR} & \Sexpr{Lres_ADL[[4]]$AN} & 
+	      \Sexpr{Lres_ADL[[4]]$PDR} & \Sexpr{Lres_ADL[[4]]$FDR} & - & - & - & - & - & \Sexpr{Lres_ADL[[4]]$TIME}\\
+	
+	      & MMNNG & \Sexpr{Lres_mmnng[[4]]$CFR} & \Sexpr{Lres_mmnng[[4]]$OFR} & \Sexpr{Lres_mmnng[[4]]$AN} & 
+	      \Sexpr{Lres_mmnng[[4]]$PDR} & \Sexpr{Lres_mmnng[[4]]$FDR} & - & - & - & - & - & \Sexpr{Lres_mmnng[[4]]$TIME}\\
+	      
+	      & SROS & \Sexpr{Lres_ROSS[[4]]$CFR} & \Sexpr{Lres_ROSS[[4]]$OFR} & \Sexpr{Lres_ROSS[[4]]$AN} & 
+	      \Sexpr{Lres_ROSS[[4]]$PDR} & \Sexpr{Lres_ROSS[[4]]$FDR} & - & - & - & - & - & \Sexpr{Lres_ROSS[[4]]$TIME}\\
+	      
+	      & SROS-2 & \Sexpr{Lres_PAMLS[[4]]$CFR} & \Sexpr{Lres_PAMLS[[4]]$OFR} & \Sexpr{Lres_PAMLS[[4]]$AN} & 
+	      \Sexpr{Lres_PAMLS[[4]]$PDR} & \Sexpr{Lres_PAMLS[[4]]$FDR} &
+	      \Sexpr{Lres_PAMLS[[4]]$OD$M} & \Sexpr{Lres_PAMLS[[4]]$OD$S} & \Sexpr{Lres_PAMLS[[4]]$OD$JD}
+	      & \Sexpr{Lres_PAMLS[[4]]$OD$tpr[1]} & \Sexpr{Lres_PAMLS[[4]]$OD$fpr[1]} & \Sexpr{Lres_PAMLS[[4]]$TIME}\\
+	      
+	     & ASROS-2 & \Sexpr{Lres_APAMLS[[4]]$CFR} & \Sexpr{Lres_APAMLS[[4]]$OFR} & \Sexpr{Lres_APAMLS[[4]]$AN} & 
+	      \Sexpr{Lres_APAMLS[[4]]$PDR} & \Sexpr{Lres_APAMLS[[4]]$FDR} &
+	      \Sexpr{Lres_APAMLS[[4]]$OD$M} & \Sexpr{round(Lres_APAMLS[[4]]$OD$S,digit=2)} & \Sexpr{Lres_APAMLS[[4]]$OD$JD}
+	      & \Sexpr{Lres_APAMLS[[4]]$OD$tpr[1]} & \Sexpr{Lres_APAMLS[[4]]$OD$fpr[1]} & \Sexpr{Lres_APAMLS[[4]]$TIME}\\
+	      
+	       & sLTS & \Sexpr{Lres_LTS[[4]]$CFR} & \Sexpr{Lres_LTS[[4]]$OFR} & \Sexpr{Lres_LTS[[4]]$AN} & 
+	      \Sexpr{Lres_LTS[[4]]$PDR} & \Sexpr{Lres_LTS[[4]]$FDR} &
+	      \Sexpr{Lres_LTS[[4]]$OD$M} & \Sexpr{Lres_LTS[[4]]$OD$S} & \Sexpr{Lres_LTS[[4]]$OD$JD}
+	      & \Sexpr{Lres_LTS[[4]]$OD$tpr[1]} & \Sexpr{Lres_LTS[[4]]$OD$fpr[1]} & \Sexpr{Lres_LTS[[4]]$TIME}\\
+	      
+	      & PAWLS & \Sexpr{Lres_PAWLS[[4]]$CFR} & \Sexpr{Lres_PAWLS[[4]]$OFR} & \Sexpr{Lres_PAWLS[[4]]$AN} & 
+	      \Sexpr{Lres_PAWLS[[4]]$PDR} & \Sexpr{Lres_PAWLS[[4]]$FDR} &
+	      \Sexpr{Lres_PAWLS[[4]]$OD$M} & \Sexpr{Lres_PAWLS[[4]]$OD$S} & \Sexpr{Lres_PAWLS[[4]]$OD$JD}
+	      & \Sexpr{Lres_PAWLS[[4]]$OD$tpr[1]} & \Sexpr{Lres_PAWLS[[4]]$OD$fpr[1]} & \Sexpr{Lres_PAWLS[[4]]$TIME}\\
+	      
+	      & APAWLS & \Sexpr{Lres_APAWLS[[4]]$CFR} & \Sexpr{Lres_APAWLS[[4]]$OFR} & \Sexpr{Lres_APAWLS[[4]]$AN} & 
+	      \Sexpr{Lres_APAWLS[[4]]$PDR} & \Sexpr{Lres_APAWLS[[4]]$FDR} &
+	      \Sexpr{Lres_APAWLS[[4]]$OD$M} & \Sexpr{round(Lres_APAWLS[[4]]$OD$S,digit=2)} & \Sexpr{Lres_APAWLS[[4]]$OD$JD}
+	      & \Sexpr{Lres_APAWLS[[4]]$OD$tpr[1]} & \Sexpr{Lres_APAWLS[[4]]$OD$fpr[1]} & \Sexpr{Lres_APAWLS[[4]]$TIME}\\
+	      
+	      \\
+	       	  \multirow{8}{*}{{\bf E}}
+	      & ALasso & \Sexpr{Lres_ADL[[5]]$CFR} & \Sexpr{Lres_ADL[[5]]$OFR} & \Sexpr{Lres_ADL[[5]]$AN} & 
+	      \Sexpr{Lres_ADL[[5]]$PDR} & \Sexpr{Lres_ADL[[5]]$FDR} & - & - & - & - & - & \Sexpr{Lres_ADL[[5]]$TIME}\\
+	
+	      & MMNNG & \Sexpr{Lres_mmnng[[5]]$CFR} & \Sexpr{Lres_mmnng[[5]]$OFR} & \Sexpr{Lres_mmnng[[5]]$AN} & 
+	      \Sexpr{Lres_mmnng[[5]]$PDR} & \Sexpr{Lres_mmnng[[5]]$FDR} & - & - & - & - & - & \Sexpr{Lres_mmnng[[5]]$TIME}\\
+	      
+	      & SROS & \Sexpr{Lres_ROSS[[5]]$CFR} & \Sexpr{Lres_ROSS[[5]]$OFR} & \Sexpr{Lres_ROSS[[5]]$AN} & 
+	      \Sexpr{Lres_ROSS[[5]]$PDR} & \Sexpr{Lres_ROSS[[5]]$FDR} & - & - & - & - & - & \Sexpr{Lres_ROSS[[5]]$TIME}\\
+	      
+	      & SROS-2 & \Sexpr{Lres_PAMLS[[5]]$CFR} & \Sexpr{Lres_PAMLS[[5]]$OFR} & \Sexpr{Lres_PAMLS[[5]]$AN} & 
+	      \Sexpr{Lres_PAMLS[[5]]$PDR} & \Sexpr{Lres_PAMLS[[5]]$FDR} &
+	      \Sexpr{Lres_PAMLS[[5]]$OD$M} & \Sexpr{Lres_PAMLS[[5]]$OD$S} & \Sexpr{Lres_PAMLS[[5]]$OD$JD}
+	      & \Sexpr{Lres_PAMLS[[5]]$OD$tpr[1]} & \Sexpr{Lres_PAMLS[[5]]$OD$fpr[1]} & \Sexpr{Lres_PAMLS[[5]]$TIME}\\
+	      
+	     & ASROS-2 & \Sexpr{Lres_APAMLS[[5]]$CFR} & \Sexpr{Lres_APAMLS[[5]]$OFR} & \Sexpr{Lres_APAMLS[[5]]$AN} & 
+	      \Sexpr{Lres_APAMLS[[5]]$PDR} & \Sexpr{Lres_APAMLS[[5]]$FDR} &
+	      \Sexpr{Lres_APAMLS[[5]]$OD$M} & \Sexpr{round(Lres_APAMLS[[5]]$OD$S,digit=2)} & \Sexpr{Lres_APAMLS[[5]]$OD$JD}
+	      & \Sexpr{Lres_APAMLS[[5]]$OD$tpr[1]} & \Sexpr{Lres_APAMLS[[5]]$OD$fpr[1]} & \Sexpr{Lres_APAMLS[[5]]$TIME}\\
+	      
+	       & sLTS & \Sexpr{Lres_LTS[[5]]$CFR} & \Sexpr{Lres_LTS[[5]]$OFR} & \Sexpr{Lres_LTS[[5]]$AN} & 
+	      \Sexpr{Lres_LTS[[5]]$PDR} & \Sexpr{Lres_LTS[[5]]$FDR} &
+	      \Sexpr{Lres_LTS[[5]]$OD$M} & \Sexpr{Lres_LTS[[5]]$OD$S} & \Sexpr{Lres_LTS[[5]]$OD$JD}
+	      & \Sexpr{Lres_LTS[[5]]$OD$tpr[1]} & \Sexpr{Lres_LTS[[5]]$OD$fpr[1]} & \Sexpr{Lres_LTS[[5]]$TIME}\\
+	      
+	      & PAWLS & \Sexpr{Lres_PAWLS[[5]]$CFR} & \Sexpr{Lres_PAWLS[[5]]$OFR} & \Sexpr{Lres_PAWLS[[5]]$AN} & 
+	      \Sexpr{Lres_PAWLS[[5]]$PDR} & \Sexpr{Lres_PAWLS[[5]]$FDR} &
+	      \Sexpr{Lres_PAWLS[[5]]$OD$M} & \Sexpr{Lres_PAWLS[[5]]$OD$S} & \Sexpr{Lres_PAWLS[[5]]$OD$JD}
+	      & \Sexpr{Lres_PAWLS[[5]]$OD$tpr[1]} & \Sexpr{Lres_PAWLS[[5]]$OD$fpr[1]} & \Sexpr{Lres_PAWLS[[5]]$TIME}\\
+	      
+	      & APAWLS & \Sexpr{Lres_APAWLS[[5]]$CFR} & \Sexpr{Lres_APAWLS[[5]]$OFR} & \Sexpr{Lres_APAWLS[[5]]$AN} & 
+	      \Sexpr{Lres_APAWLS[[5]]$PDR} & \Sexpr{Lres_APAWLS[[5]]$FDR} &
+	      \Sexpr{Lres_APAWLS[[5]]$OD$M} & \Sexpr{round(Lres_APAWLS[[5]]$OD$S,digit=2)} & \Sexpr{Lres_APAWLS[[5]]$OD$JD}
+	      & \Sexpr{Lres_APAWLS[[5]]$OD$tpr[1]} & \Sexpr{Lres_APAWLS[[5]]$OD$fpr[1]} & \Sexpr{Lres_APAWLS[[5]]$TIME}\\
+	      
+	   \hline\hline
+	
+	\end{tabular}
+	\end{center}
+	\end{table}
+	
+	
 	% 
 	% %----------------------------------- 20% outliers ----------------------------------------------------%
 	\begin{table}[thp]
@@ -245,6 +437,198 @@ options(digits=2)
 	\end{tabular}
 	\end{center}
 	\end{table}
+	
+	%------------------------------------ Low dimensional case 20% (combined) ------------------------------%
+		\begin{table}[thp]
+	\begin{center}
+	 \caption{Variable Selection and outliers detection Results for Example 1 ($\bbeta=(3,2,1.5,0,0,0,0,0)'$ with 20\% outliers )}\label{table2}
+	\begin{tabular}{ccrrrrrrrrrrrr}\\\hline\hline
+	  & & \multicolumn{5}{c} {Variable Selection} &&  \multicolumn{5}{c} {Outliers detection} & \\
+	   Case & Method & CFR & OFR  & AN & FP& FN  &  M & S  & JD & FP & FN  & TIME\\ \hline
+	  \multirow{8}{*}{{\bf A}}
+	      & ALasso & \Sexpr{Lres_ADL[[1]]$CFR} & \Sexpr{Lres_ADL[[1]]$OFR} & \Sexpr{Lres_ADL[[1]]$AN} & 
+	      \Sexpr{Lres_ADL[[1]]$PDR} & \Sexpr{Lres_ADL[[1]]$FDR} & - & - & - & - & - & \Sexpr{Lres_ADL[[1]]$TIME}\\
+	
+	      & MMNNG & \Sexpr{Lres_mmnng[[1]]$CFR} & \Sexpr{Lres_mmnng[[1]]$OFR} & \Sexpr{Lres_mmnng[[1]]$AN} & 
+	      \Sexpr{Lres_mmnng[[1]]$PDR} & \Sexpr{Lres_mmnng[[1]]$FDR} & - & - & - & - & - & \Sexpr{Lres_mmnng[[1]]$TIME}\\
+	      
+	      & SROS & \Sexpr{Lres_ROSS[[1]]$CFR} & \Sexpr{Lres_ROSS[[1]]$OFR} & \Sexpr{Lres_ROSS[[1]]$AN} & 
+	      \Sexpr{Lres_ROSS[[1]]$PDR} & \Sexpr{Lres_ROSS[[1]]$FDR} & - & - & - & - & - & \Sexpr{Lres_ROSS[[1]]$TIME}\\
+	      
+	      & SROS-2 & \Sexpr{Lres_PAMLS[[1]]$CFR} & \Sexpr{Lres_PAMLS[[1]]$OFR} & \Sexpr{Lres_PAMLS[[1]]$AN} & 
+	      \Sexpr{Lres_PAMLS[[1]]$PDR} & \Sexpr{Lres_PAMLS[[1]]$FDR} &
+	      \Sexpr{Lres_PAMLS[[1]]$OD$M} & \Sexpr{Lres_PAMLS[[1]]$OD$S} & \Sexpr{Lres_PAMLS[[1]]$OD$JD}
+	      & \Sexpr{Lres_PAMLS[[1]]$OD$tpr[1]} & \Sexpr{Lres_PAMLS[[1]]$OD$fpr[1]} & \Sexpr{Lres_PAMLS[[1]]$TIME}\\
+	      
+	     & ASROS-2 & \Sexpr{Lres_APAMLS[[1]]$CFR} & \Sexpr{Lres_APAMLS[[1]]$OFR} & \Sexpr{Lres_APAMLS[[1]]$AN} & 
+	      \Sexpr{Lres_APAMLS[[1]]$PDR} & \Sexpr{Lres_APAMLS[[1]]$FDR} &
+	      \Sexpr{Lres_APAMLS[[1]]$OD$M} & \Sexpr{Lres_APAMLS[[1]]$OD$S} & \Sexpr{Lres_APAMLS[[1]]$OD$JD}
+	      & \Sexpr{Lres_APAMLS[[1]]$OD$tpr[1]} & \Sexpr{Lres_APAMLS[[1]]$OD$fpr[1]} & \Sexpr{Lres_APAMLS[[1]]$TIME}\\
+	      
+	       & sLTS & \Sexpr{Lres_LTS[[1]]$CFR} & \Sexpr{Lres_LTS[[1]]$OFR} & \Sexpr{Lres_LTS[[1]]$AN} & 
+	      \Sexpr{Lres_LTS[[1]]$PDR} & \Sexpr{Lres_LTS[[1]]$FDR} &
+	      \Sexpr{Lres_LTS[[1]]$OD$M} & \Sexpr{Lres_LTS[[1]]$OD$S} & \Sexpr{Lres_LTS[[1]]$OD$JD}
+	      & \Sexpr{Lres_LTS[[1]]$OD$tpr[1]} & \Sexpr{Lres_LTS[[1]]$OD$fpr[1]} & \Sexpr{Lres_LTS[[1]]$TIME}\\
+	      
+	      & PAWLS & \Sexpr{Lres_PAWLS[[1]]$CFR} & \Sexpr{Lres_PAWLS[[1]]$OFR} & \Sexpr{Lres_PAWLS[[1]]$AN} & 
+	      \Sexpr{Lres_PAWLS[[1]]$PDR} & \Sexpr{Lres_PAWLS[[1]]$FDR} &
+	      \Sexpr{Lres_PAWLS[[1]]$OD$M} & \Sexpr{Lres_PAWLS[[1]]$OD$S} & \Sexpr{Lres_PAWLS[[1]]$OD$JD}
+	      & \Sexpr{Lres_PAWLS[[1]]$OD$tpr[1]} & \Sexpr{Lres_PAWLS[[1]]$OD$fpr[1]} & \Sexpr{Lres_PAWLS[[1]]$TIME}\\
+	      
+	      & APAWLS & \Sexpr{Lres_APAWLS[[1]]$CFR} & \Sexpr{Lres_APAWLS[[1]]$OFR} & \Sexpr{Lres_APAWLS[[1]]$AN} & 
+	      \Sexpr{Lres_APAWLS[[1]]$PDR} & \Sexpr{Lres_APAWLS[[1]]$FDR} &
+	      \Sexpr{Lres_APAWLS[[1]]$OD$M} & \Sexpr{Lres_APAWLS[[1]]$OD$S} & \Sexpr{Lres_APAWLS[[1]]$OD$JD}
+	      & \Sexpr{Lres_APAWLS[[1]]$OD$tpr[1]} & \Sexpr{Lres_APAWLS[[1]]$OD$fpr[1]} & \Sexpr{Lres_APAWLS[[1]]$TIME}\\
+	      \\
+	      	  \multirow{8}{*}{{\bf B}}
+	      & ALasso & \Sexpr{Lres_ADL[[2]]$CFR} & \Sexpr{Lres_ADL[[2]]$OFR} & \Sexpr{Lres_ADL[[2]]$AN} & 
+	      \Sexpr{Lres_ADL[[2]]$PDR} & \Sexpr{Lres_ADL[[2]]$FDR} & - & - & - & - & - & \Sexpr{Lres_ADL[[2]]$TIME}\\
+	
+	      & MMNNG & \Sexpr{Lres_mmnng[[2]]$CFR} & \Sexpr{Lres_mmnng[[2]]$OFR} & \Sexpr{Lres_mmnng[[2]]$AN} & 
+	      \Sexpr{Lres_mmnng[[2]]$PDR} & \Sexpr{Lres_mmnng[[2]]$FDR} & - & - & - & - & - & \Sexpr{Lres_mmnng[[2]]$TIME}\\
+	      
+	      & SROS & \Sexpr{Lres_ROSS[[2]]$CFR} & \Sexpr{Lres_ROSS[[2]]$OFR} & \Sexpr{Lres_ROSS[[2]]$AN} & 
+	      \Sexpr{Lres_ROSS[[2]]$PDR} & \Sexpr{Lres_ROSS[[2]]$FDR} & - & - & - & - & - & \Sexpr{Lres_ROSS[[2]]$TIME}\\
+	      
+	      & SROS-2 & \Sexpr{Lres_PAMLS[[2]]$CFR} & \Sexpr{Lres_PAMLS[[2]]$OFR} & \Sexpr{Lres_PAMLS[[2]]$AN} & 
+	      \Sexpr{Lres_PAMLS[[2]]$PDR} & \Sexpr{Lres_PAMLS[[2]]$FDR} &
+	      \Sexpr{Lres_PAMLS[[2]]$OD$M} & \Sexpr{Lres_PAMLS[[2]]$OD$S} & \Sexpr{Lres_PAMLS[[2]]$OD$JD}
+	      & \Sexpr{Lres_PAMLS[[2]]$OD$tpr[1]} & \Sexpr{Lres_PAMLS[[2]]$OD$fpr[1]} & \Sexpr{Lres_PAMLS[[2]]$TIME}\\
+	      
+	     & ASROS-2 & \Sexpr{Lres_APAMLS[[2]]$CFR} & \Sexpr{Lres_APAMLS[[2]]$OFR} & \Sexpr{Lres_APAMLS[[2]]$AN} & 
+	      \Sexpr{Lres_APAMLS[[2]]$PDR} & \Sexpr{Lres_APAMLS[[2]]$FDR} &
+	      \Sexpr{Lres_APAMLS[[2]]$OD$M} & \Sexpr{Lres_APAMLS[[2]]$OD$S} & \Sexpr{Lres_APAMLS[[2]]$OD$JD}
+	      & \Sexpr{Lres_APAMLS[[2]]$OD$tpr[1]} & \Sexpr{Lres_APAMLS[[2]]$OD$fpr[1]} & \Sexpr{Lres_APAMLS[[2]]$TIME}\\
+	      
+	       & sLTS & \Sexpr{Lres_LTS[[2]]$CFR} & \Sexpr{Lres_LTS[[2]]$OFR} & \Sexpr{Lres_LTS[[2]]$AN} & 
+	      \Sexpr{Lres_LTS[[2]]$PDR} & \Sexpr{Lres_LTS[[2]]$FDR} &
+	      \Sexpr{Lres_LTS[[2]]$OD$M} & \Sexpr{Lres_LTS[[2]]$OD$S} & \Sexpr{Lres_LTS[[2]]$OD$JD}
+	      & \Sexpr{Lres_LTS[[2]]$OD$tpr[1]} & \Sexpr{Lres_LTS[[2]]$OD$fpr[1]} & \Sexpr{Lres_LTS[[2]]$TIME}\\
+	      
+	      & PAWLS & \Sexpr{Lres_PAWLS[[2]]$CFR} & \Sexpr{Lres_PAWLS[[2]]$OFR} & \Sexpr{Lres_PAWLS[[2]]$AN} & 
+	      \Sexpr{Lres_PAWLS[[2]]$PDR} & \Sexpr{Lres_PAWLS[[2]]$FDR} &
+	      \Sexpr{Lres_PAWLS[[2]]$OD$M} & \Sexpr{Lres_PAWLS[[2]]$OD$S} & \Sexpr{Lres_PAWLS[[2]]$OD$JD}
+	      & \Sexpr{Lres_PAWLS[[2]]$OD$tpr[1]} & \Sexpr{Lres_PAWLS[[2]]$OD$fpr[1]} & \Sexpr{Lres_PAWLS[[2]]$TIME}\\
+	      
+	      & APAWLS & \Sexpr{Lres_APAWLS[[2]]$CFR} & \Sexpr{Lres_APAWLS[[2]]$OFR} & \Sexpr{Lres_APAWLS[[2]]$AN} & 
+	      \Sexpr{Lres_APAWLS[[2]]$PDR} & \Sexpr{Lres_APAWLS[[2]]$FDR} &
+	      \Sexpr{Lres_APAWLS[[2]]$OD$M} & \Sexpr{Lres_APAWLS[[2]]$OD$S} & \Sexpr{Lres_APAWLS[[2]]$OD$JD}
+	      & \Sexpr{Lres_APAWLS[[2]]$OD$tpr[1]} & \Sexpr{Lres_APAWLS[[2]]$OD$fpr[1]} & \Sexpr{Lres_APAWLS[[2]]$TIME}\\
+	      \\
+	        	  \multirow{8}{*}{{\bf C}}
+	      & ALasso & \Sexpr{Lres_ADL02[[1]]$CFR} & \Sexpr{Lres_ADL02[[1]]$OFR} & \Sexpr{Lres_ADL02[[1]]$AN} & 
+	      \Sexpr{Lres_ADL02[[1]]$PDR} & \Sexpr{Lres_ADL02[[1]]$FDR} & - & - & - & - & - & \Sexpr{Lres_ADL02[[1]]$TIME}\\
+	
+	      & MMNNG & \Sexpr{Lres_mmnng02[[1]]$CFR} & \Sexpr{Lres_mmnng02[[1]]$OFR} & \Sexpr{Lres_mmnng02[[1]]$AN} & 
+	      \Sexpr{Lres_mmnng02[[1]]$PDR} & \Sexpr{Lres_mmnng02[[1]]$FDR} & - & - & - & - & - & \Sexpr{Lres_mmnng02[[1]]$TIME}\\
+	      
+	      & SROS & \Sexpr{Lres_ROSS02[[1]]$CFR} & \Sexpr{Lres_ROSS02[[1]]$OFR} & \Sexpr{Lres_ROSS02[[1]]$AN} & 
+	      \Sexpr{Lres_ROSS02[[1]]$PDR} & \Sexpr{Lres_ROSS02[[1]]$FDR} & - & - & - & - & - & \Sexpr{Lres_ROSS02[[1]]$TIME}\\
+	      
+	      & SROS-2 & \Sexpr{Lres_PAMLS02[[1]]$CFR} & \Sexpr{Lres_PAMLS02[[1]]$OFR} & \Sexpr{Lres_PAMLS02[[1]]$AN} & 
+	      \Sexpr{Lres_PAMLS02[[1]]$PDR} & \Sexpr{Lres_PAMLS02[[1]]$FDR} &
+	      \Sexpr{Lres_PAMLS02[[1]]$OD$M} & \Sexpr{Lres_PAMLS02[[1]]$OD$S} & \Sexpr{Lres_PAMLS02[[1]]$OD$JD}
+	      & \Sexpr{Lres_PAMLS02[[1]]$OD$tpr[1]} & \Sexpr{Lres_PAMLS02[[1]]$OD$fpr[1]} & \Sexpr{Lres_PAMLS02[[1]]$TIME}\\
+	      
+	     & ASROS-2 & \Sexpr{Lres_APAMLS02[[1]]$CFR} & \Sexpr{Lres_APAMLS02[[1]]$OFR} & \Sexpr{Lres_APAMLS02[[1]]$AN} & 
+	      \Sexpr{Lres_APAMLS02[[1]]$PDR} & \Sexpr{Lres_APAMLS02[[1]]$FDR} &
+	      \Sexpr{Lres_APAMLS02[[1]]$OD$M} & \Sexpr{Lres_APAMLS02[[1]]$OD$S} & \Sexpr{Lres_APAMLS02[[1]]$OD$JD}
+	      & \Sexpr{Lres_APAMLS02[[1]]$OD$tpr[1]} & \Sexpr{Lres_APAMLS02[[1]]$OD$fpr[1]} & \Sexpr{Lres_APAMLS02[[1]]$TIME}\\
+	      
+	       & sLTS & \Sexpr{Lres_LTS02[[1]]$CFR} & \Sexpr{Lres_LTS02[[1]]$OFR} & \Sexpr{Lres_LTS02[[1]]$AN} & 
+	      \Sexpr{Lres_LTS02[[1]]$PDR} & \Sexpr{Lres_LTS02[[1]]$FDR} &
+	      \Sexpr{Lres_LTS02[[1]]$OD$M} & \Sexpr{Lres_LTS02[[1]]$OD$S} & \Sexpr{Lres_LTS02[[1]]$OD$JD}
+	      & \Sexpr{Lres_LTS02[[1]]$OD$tpr[1]} & \Sexpr{Lres_LTS02[[1]]$OD$fpr[1]} & \Sexpr{Lres_LTS02[[1]]$TIME}\\
+	      
+	      & PAWLS & \Sexpr{Lres_PAWLS02[[1]]$CFR} & \Sexpr{Lres_PAWLS02[[1]]$OFR} & \Sexpr{Lres_PAWLS02[[1]]$AN} & 
+	      \Sexpr{Lres_PAWLS02[[1]]$PDR} & \Sexpr{Lres_PAWLS02[[1]]$FDR} &
+	      \Sexpr{Lres_PAWLS02[[1]]$OD$M} & \Sexpr{Lres_PAWLS02[[1]]$OD$S} & \Sexpr{Lres_PAWLS02[[1]]$OD$JD}
+	      & \Sexpr{Lres_PAWLS02[[1]]$OD$tpr[1]} & \Sexpr{Lres_PAWLS02[[1]]$OD$fpr[1]} & \Sexpr{Lres_PAWLS02[[1]]$TIME}\\
+	      
+	      & APAWLS & \Sexpr{Lres_APAWLS02[[1]]$CFR} & \Sexpr{Lres_APAWLS02[[1]]$OFR} & \Sexpr{Lres_APAWLS02[[1]]$AN} & 
+	      \Sexpr{Lres_APAWLS02[[1]]$PDR} & \Sexpr{Lres_APAWLS02[[1]]$FDR} &
+	      \Sexpr{Lres_APAWLS02[[1]]$OD$M} & \Sexpr{Lres_APAWLS02[[1]]$OD$S} & \Sexpr{Lres_APAWLS02[[1]]$OD$JD}
+	      & \Sexpr{Lres_APAWLS02[[1]]$OD$tpr[1]} & \Sexpr{Lres_APAWLS02[[1]]$OD$fpr[1]} & \Sexpr{Lres_APAWLS02[[1]]$TIME}\\
+	      
+	     \\
+	       	  \multirow{8}{*}{{\bf D}}
+	      & ALasso & \Sexpr{Lres_ADL02[[2]]$CFR} & \Sexpr{Lres_ADL02[[2]]$OFR} & \Sexpr{Lres_ADL02[[2]]$AN} & 
+	      \Sexpr{Lres_ADL02[[2]]$PDR} & \Sexpr{Lres_ADL02[[2]]$FDR} & - & - & - & - & - & \Sexpr{Lres_ADL02[[2]]$TIME}\\
+	
+	      & MMNNG & \Sexpr{Lres_mmnng02[[2]]$CFR} & \Sexpr{Lres_mmnng02[[2]]$OFR} & \Sexpr{Lres_mmnng02[[2]]$AN} & 
+	      \Sexpr{Lres_mmnng02[[2]]$PDR} & \Sexpr{Lres_mmnng02[[2]]$FDR} & - & - & - & - & - & \Sexpr{Lres_mmnng02[[2]]$TIME}\\
+	      
+	      & SROS & \Sexpr{Lres_ROSS02[[2]]$CFR} & \Sexpr{Lres_ROSS02[[2]]$OFR} & \Sexpr{Lres_ROSS02[[2]]$AN} & 
+	      \Sexpr{Lres_ROSS02[[2]]$PDR} & \Sexpr{Lres_ROSS02[[2]]$FDR} & - & - & - & - & - & \Sexpr{Lres_ROSS02[[2]]$TIME}\\
+	      
+	      & SROS-2 & \Sexpr{Lres_PAMLS02[[2]]$CFR} & \Sexpr{Lres_PAMLS02[[2]]$OFR} & \Sexpr{Lres_PAMLS02[[2]]$AN} & 
+	      \Sexpr{Lres_PAMLS02[[2]]$PDR} & \Sexpr{Lres_PAMLS02[[2]]$FDR} &
+	      \Sexpr{Lres_PAMLS02[[2]]$OD$M} & \Sexpr{Lres_PAMLS02[[2]]$OD$S} & \Sexpr{Lres_PAMLS02[[2]]$OD$JD}
+	      & \Sexpr{Lres_PAMLS02[[2]]$OD$tpr[1]} & \Sexpr{Lres_PAMLS02[[2]]$OD$fpr[1]} & \Sexpr{Lres_PAMLS02[[2]]$TIME}\\
+	      
+	     & ASROS-2 & \Sexpr{Lres_APAMLS02[[2]]$CFR} & \Sexpr{Lres_APAMLS02[[2]]$OFR} & \Sexpr{Lres_APAMLS02[[2]]$AN} & 
+	      \Sexpr{Lres_APAMLS02[[2]]$PDR} & \Sexpr{Lres_APAMLS02[[2]]$FDR} &
+	      \Sexpr{Lres_APAMLS02[[2]]$OD$M} & \Sexpr{round(Lres_APAMLS02[[2]]$OD$S,digit=2)} & \Sexpr{Lres_APAMLS02[[2]]$OD$JD}
+	      & \Sexpr{Lres_APAMLS02[[2]]$OD$tpr[1]} & \Sexpr{Lres_APAMLS02[[2]]$OD$fpr[1]} & \Sexpr{Lres_APAMLS02[[2]]$TIME}\\
+	      
+	       & sLTS & \Sexpr{Lres_LTS02[[2]]$CFR} & \Sexpr{Lres_LTS02[[2]]$OFR} & \Sexpr{Lres_LTS02[[2]]$AN} & 
+	      \Sexpr{Lres_LTS02[[2]]$PDR} & \Sexpr{Lres_LTS02[[2]]$FDR} &
+	      \Sexpr{Lres_LTS02[[2]]$OD$M} & \Sexpr{Lres_LTS02[[2]]$OD$S} & \Sexpr{Lres_LTS02[[2]]$OD$JD}
+	      & \Sexpr{Lres_LTS02[[2]]$OD$tpr[1]} & \Sexpr{Lres_LTS02[[2]]$OD$fpr[1]} & \Sexpr{Lres_LTS02[[2]]$TIME}\\
+	      
+	      & PAWLS & \Sexpr{Lres_PAWLS02[[2]]$CFR} & \Sexpr{Lres_PAWLS02[[2]]$OFR} & \Sexpr{Lres_PAWLS02[[2]]$AN} & 
+	      \Sexpr{Lres_PAWLS02[[2]]$PDR} & \Sexpr{Lres_PAWLS02[[2]]$FDR} &
+	      \Sexpr{Lres_PAWLS02[[2]]$OD$M} & \Sexpr{Lres_PAWLS02[[2]]$OD$S} & \Sexpr{Lres_PAWLS02[[2]]$OD$JD}
+	      & \Sexpr{Lres_PAWLS02[[2]]$OD$tpr[1]} & \Sexpr{Lres_PAWLS02[[2]]$OD$fpr[1]} & \Sexpr{Lres_PAWLS02[[2]]$TIME}\\
+	      
+	      & APAWLS & \Sexpr{Lres_APAWLS02[[2]]$CFR} & \Sexpr{Lres_APAWLS02[[2]]$OFR} & \Sexpr{Lres_APAWLS02[[2]]$AN} & 
+	      \Sexpr{Lres_APAWLS02[[2]]$PDR} & \Sexpr{Lres_APAWLS02[[2]]$FDR} &
+	      \Sexpr{Lres_APAWLS02[[2]]$OD$M} & \Sexpr{round(Lres_APAWLS02[[2]]$OD$S,digit=2)} & \Sexpr{Lres_APAWLS02[[2]]$OD$JD}
+	      & \Sexpr{Lres_APAWLS02[[2]]$OD$tpr[1]} & \Sexpr{Lres_APAWLS02[[2]]$OD$fpr[1]} & \Sexpr{Lres_APAWLS02[[2]]$TIME}\\
+	      
+	      \\
+	       	  \multirow{8}{*}{{\bf E}}
+	      & ALasso & \Sexpr{Lres_ADL02[[3]]$CFR} & \Sexpr{Lres_ADL02[[3]]$OFR} & \Sexpr{Lres_ADL02[[3]]$AN} & 
+	      \Sexpr{Lres_ADL02[[3]]$PDR} & \Sexpr{Lres_ADL02[[3]]$FDR} & - & - & - & - & - & \Sexpr{Lres_ADL02[[3]]$TIME}\\
+	
+	      & MMNNG & \Sexpr{Lres_mmnng02[[3]]$CFR} & \Sexpr{Lres_mmnng02[[3]]$OFR} & \Sexpr{Lres_mmnng02[[3]]$AN} & 
+	      \Sexpr{Lres_mmnng02[[3]]$PDR} & \Sexpr{Lres_mmnng02[[3]]$FDR} & - & - & - & - & - & \Sexpr{Lres_mmnng02[[3]]$TIME}\\
+	      
+	      & SROS & \Sexpr{Lres_ROSS02[[3]]$CFR} & \Sexpr{Lres_ROSS02[[3]]$OFR} & \Sexpr{Lres_ROSS02[[3]]$AN} & 
+	      \Sexpr{Lres_ROSS02[[3]]$PDR} & \Sexpr{Lres_ROSS02[[3]]$FDR} & - & - & - & - & - & \Sexpr{Lres_ROSS02[[3]]$TIME}\\
+	      
+	      & SROS-2 & \Sexpr{Lres_PAMLS02[[3]]$CFR} & \Sexpr{Lres_PAMLS02[[3]]$OFR} & \Sexpr{Lres_PAMLS02[[3]]$AN} & 
+	      \Sexpr{Lres_PAMLS02[[3]]$PDR} & \Sexpr{Lres_PAMLS02[[3]]$FDR} &
+	      \Sexpr{Lres_PAMLS02[[3]]$OD$M} & \Sexpr{Lres_PAMLS02[[3]]$OD$S} & \Sexpr{Lres_PAMLS02[[3]]$OD$JD}
+	      & \Sexpr{Lres_PAMLS02[[3]]$OD$tpr[1]} & \Sexpr{Lres_PAMLS02[[3]]$OD$fpr[1]} & \Sexpr{Lres_PAMLS02[[3]]$TIME}\\
+	      
+	     & ASROS-2 & \Sexpr{Lres_APAMLS02[[3]]$CFR} & \Sexpr{Lres_APAMLS02[[3]]$OFR} & \Sexpr{Lres_APAMLS02[[3]]$AN} & 
+	      \Sexpr{Lres_APAMLS02[[3]]$PDR} & \Sexpr{Lres_APAMLS02[[3]]$FDR} &
+	      \Sexpr{Lres_APAMLS02[[3]]$OD$M} & \Sexpr{round(Lres_APAMLS02[[3]]$OD$S,digit=2)} & \Sexpr{Lres_APAMLS02[[3]]$OD$JD}
+	      & \Sexpr{Lres_APAMLS02[[3]]$OD$tpr[1]} & \Sexpr{Lres_APAMLS02[[3]]$OD$fpr[1]} & \Sexpr{Lres_APAMLS02[[3]]$TIME}\\
+	      
+	       & sLTS & \Sexpr{Lres_LTS02[[3]]$CFR} & \Sexpr{Lres_LTS02[[3]]$OFR} & \Sexpr{Lres_LTS02[[3]]$AN} & 
+	      \Sexpr{Lres_LTS02[[3]]$PDR} & \Sexpr{Lres_LTS02[[3]]$FDR} &
+	      \Sexpr{Lres_LTS02[[3]]$OD$M} & \Sexpr{Lres_LTS02[[3]]$OD$S} & \Sexpr{Lres_LTS02[[3]]$OD$JD}
+	      & \Sexpr{Lres_LTS02[[3]]$OD$tpr[1]} & \Sexpr{Lres_LTS02[[3]]$OD$fpr[1]} & \Sexpr{Lres_LTS02[[3]]$TIME}\\
+	      
+	      & PAWLS & \Sexpr{Lres_PAWLS02[[3]]$CFR} & \Sexpr{Lres_PAWLS02[[3]]$OFR} & \Sexpr{Lres_PAWLS02[[3]]$AN} & 
+	      \Sexpr{Lres_PAWLS02[[3]]$PDR} & \Sexpr{Lres_PAWLS02[[3]]$FDR} &
+	      \Sexpr{Lres_PAWLS02[[3]]$OD$M} & \Sexpr{Lres_PAWLS02[[3]]$OD$S} & \Sexpr{Lres_PAWLS02[[3]]$OD$JD}
+	      & \Sexpr{Lres_PAWLS02[[3]]$OD$tpr[1]} & \Sexpr{Lres_PAWLS02[[3]]$OD$fpr[1]} & \Sexpr{Lres_PAWLS02[[3]]$TIME}\\
+	      
+	      & APAWLS & \Sexpr{Lres_APAWLS02[[3]]$CFR} & \Sexpr{Lres_APAWLS02[[3]]$OFR} & \Sexpr{Lres_APAWLS02[[3]]$AN} & 
+	      \Sexpr{Lres_APAWLS02[[3]]$PDR} & \Sexpr{Lres_APAWLS02[[3]]$FDR} &
+	      \Sexpr{Lres_APAWLS02[[3]]$OD$M} & \Sexpr{round(Lres_APAWLS02[[3]]$OD$S,digit=2)} & \Sexpr{Lres_APAWLS02[[3]]$OD$JD}
+	      & \Sexpr{Lres_APAWLS02[[3]]$OD$tpr[1]} & \Sexpr{Lres_APAWLS02[[3]]$OD$fpr[1]} & \Sexpr{Lres_APAWLS02[[3]]$TIME}\\
+	      
+	   \hline\hline
+	
+	\end{tabular}
+	\end{center}
+	\end{table}
+	
+	
 	% 
 	% 	%----------------------------------- 30% outliers ----------------------------------------------------%
 	\begin{table}[thp]
@@ -288,6 +672,197 @@ options(digits=2)
 	\end{tabular}
 	\end{center}
 	\end{table}
+	
+	%------------------------------------ Low dimensional case 30% (combined) ------------------------------%
+		\begin{table}[thp]
+	\begin{center}
+	 \caption{Variable Selection and outliers detection Results for Example 1 ($\bbeta=(3,2,1.5,0,0,0,0,0)'$ with 30\% outliers )}\label{table3}
+	\begin{tabular}{ccrrrrrrrrrrrr}\\\hline\hline
+	  & & \multicolumn{5}{c} {Variable Selection} &&  \multicolumn{5}{c} {Outliers detection} & \\
+	   Case & Method & CFR & OFR  & AN & FP& FN  &  M & S  & JD & FP & FN  & TIME\\ \hline
+	  \multirow{8}{*}{{\bf A}}
+	      & ALasso & \Sexpr{Lres_ADL[[1]]$CFR} & \Sexpr{Lres_ADL[[1]]$OFR} & \Sexpr{Lres_ADL[[1]]$AN} & 
+	      \Sexpr{Lres_ADL[[1]]$PDR} & \Sexpr{Lres_ADL[[1]]$FDR} & - & - & - & - & - & \Sexpr{Lres_ADL[[1]]$TIME}\\
+	
+	      & MMNNG & \Sexpr{Lres_mmnng[[1]]$CFR} & \Sexpr{Lres_mmnng[[1]]$OFR} & \Sexpr{Lres_mmnng[[1]]$AN} & 
+	      \Sexpr{Lres_mmnng[[1]]$PDR} & \Sexpr{Lres_mmnng[[1]]$FDR} & - & - & - & - & - & \Sexpr{Lres_mmnng[[1]]$TIME}\\
+	      
+	      & SROS & \Sexpr{Lres_ROSS[[1]]$CFR} & \Sexpr{Lres_ROSS[[1]]$OFR} & \Sexpr{Lres_ROSS[[1]]$AN} & 
+	      \Sexpr{Lres_ROSS[[1]]$PDR} & \Sexpr{Lres_ROSS[[1]]$FDR} & - & - & - & - & - & \Sexpr{Lres_ROSS[[1]]$TIME}\\
+	      
+	      & SROS-2 & \Sexpr{Lres_PAMLS[[1]]$CFR} & \Sexpr{Lres_PAMLS[[1]]$OFR} & \Sexpr{Lres_PAMLS[[1]]$AN} & 
+	      \Sexpr{Lres_PAMLS[[1]]$PDR} & \Sexpr{Lres_PAMLS[[1]]$FDR} &
+	      \Sexpr{Lres_PAMLS[[1]]$OD$M} & \Sexpr{Lres_PAMLS[[1]]$OD$S} & \Sexpr{Lres_PAMLS[[1]]$OD$JD}
+	      & \Sexpr{Lres_PAMLS[[1]]$OD$tpr[1]} & \Sexpr{Lres_PAMLS[[1]]$OD$fpr[1]} & \Sexpr{Lres_PAMLS[[1]]$TIME}\\
+	      
+	     & ASROS-2 & \Sexpr{Lres_APAMLS[[1]]$CFR} & \Sexpr{Lres_APAMLS[[1]]$OFR} & \Sexpr{Lres_APAMLS[[1]]$AN} & 
+	      \Sexpr{Lres_APAMLS[[1]]$PDR} & \Sexpr{Lres_APAMLS[[1]]$FDR} &
+	      \Sexpr{Lres_APAMLS[[1]]$OD$M} & \Sexpr{Lres_APAMLS[[1]]$OD$S} & \Sexpr{Lres_APAMLS[[1]]$OD$JD}
+	      & \Sexpr{Lres_APAMLS[[1]]$OD$tpr[1]} & \Sexpr{Lres_APAMLS[[1]]$OD$fpr[1]} & \Sexpr{Lres_APAMLS[[1]]$TIME}\\
+	      
+	       & sLTS & \Sexpr{Lres_LTS[[1]]$CFR} & \Sexpr{Lres_LTS[[1]]$OFR} & \Sexpr{Lres_LTS[[1]]$AN} & 
+	      \Sexpr{Lres_LTS[[1]]$PDR} & \Sexpr{Lres_LTS[[1]]$FDR} &
+	      \Sexpr{Lres_LTS[[1]]$OD$M} & \Sexpr{Lres_LTS[[1]]$OD$S} & \Sexpr{Lres_LTS[[1]]$OD$JD}
+	      & \Sexpr{Lres_LTS[[1]]$OD$tpr[1]} & \Sexpr{Lres_LTS[[1]]$OD$fpr[1]} & \Sexpr{Lres_LTS[[1]]$TIME}\\
+	      
+	      & PAWLS & \Sexpr{Lres_PAWLS[[1]]$CFR} & \Sexpr{Lres_PAWLS[[1]]$OFR} & \Sexpr{Lres_PAWLS[[1]]$AN} & 
+	      \Sexpr{Lres_PAWLS[[1]]$PDR} & \Sexpr{Lres_PAWLS[[1]]$FDR} &
+	      \Sexpr{Lres_PAWLS[[1]]$OD$M} & \Sexpr{Lres_PAWLS[[1]]$OD$S} & \Sexpr{Lres_PAWLS[[1]]$OD$JD}
+	      & \Sexpr{Lres_PAWLS[[1]]$OD$tpr[1]} & \Sexpr{Lres_PAWLS[[1]]$OD$fpr[1]} & \Sexpr{Lres_PAWLS[[1]]$TIME}\\
+	      
+	      & APAWLS & \Sexpr{Lres_APAWLS[[1]]$CFR} & \Sexpr{Lres_APAWLS[[1]]$OFR} & \Sexpr{Lres_APAWLS[[1]]$AN} & 
+	      \Sexpr{Lres_APAWLS[[1]]$PDR} & \Sexpr{Lres_APAWLS[[1]]$FDR} &
+	      \Sexpr{Lres_APAWLS[[1]]$OD$M} & \Sexpr{Lres_APAWLS[[1]]$OD$S} & \Sexpr{Lres_APAWLS[[1]]$OD$JD}
+	      & \Sexpr{Lres_APAWLS[[1]]$OD$tpr[1]} & \Sexpr{Lres_APAWLS[[1]]$OD$fpr[1]} & \Sexpr{Lres_APAWLS[[1]]$TIME}\\
+	      \\
+	      	  \multirow{8}{*}{{\bf B}}
+	      & ALasso & \Sexpr{Lres_ADL[[2]]$CFR} & \Sexpr{Lres_ADL[[2]]$OFR} & \Sexpr{Lres_ADL[[2]]$AN} & 
+	      \Sexpr{Lres_ADL[[2]]$PDR} & \Sexpr{Lres_ADL[[2]]$FDR} & - & - & - & - & - & \Sexpr{Lres_ADL[[2]]$TIME}\\
+	
+	      & MMNNG & \Sexpr{Lres_mmnng[[2]]$CFR} & \Sexpr{Lres_mmnng[[2]]$OFR} & \Sexpr{Lres_mmnng[[2]]$AN} & 
+	      \Sexpr{Lres_mmnng[[2]]$PDR} & \Sexpr{Lres_mmnng[[2]]$FDR} & - & - & - & - & - & \Sexpr{Lres_mmnng[[2]]$TIME}\\
+	      
+	      & SROS & \Sexpr{Lres_ROSS[[2]]$CFR} & \Sexpr{Lres_ROSS[[2]]$OFR} & \Sexpr{Lres_ROSS[[2]]$AN} & 
+	      \Sexpr{Lres_ROSS[[2]]$PDR} & \Sexpr{Lres_ROSS[[2]]$FDR} & - & - & - & - & - & \Sexpr{Lres_ROSS[[2]]$TIME}\\
+	      
+	      & SROS-2 & \Sexpr{Lres_PAMLS[[2]]$CFR} & \Sexpr{Lres_PAMLS[[2]]$OFR} & \Sexpr{Lres_PAMLS[[2]]$AN} & 
+	      \Sexpr{Lres_PAMLS[[2]]$PDR} & \Sexpr{Lres_PAMLS[[2]]$FDR} &
+	      \Sexpr{Lres_PAMLS[[2]]$OD$M} & \Sexpr{Lres_PAMLS[[2]]$OD$S} & \Sexpr{Lres_PAMLS[[2]]$OD$JD}
+	      & \Sexpr{Lres_PAMLS[[2]]$OD$tpr[1]} & \Sexpr{Lres_PAMLS[[2]]$OD$fpr[1]} & \Sexpr{Lres_PAMLS[[2]]$TIME}\\
+	      
+	     & ASROS-2 & \Sexpr{Lres_APAMLS[[2]]$CFR} & \Sexpr{Lres_APAMLS[[2]]$OFR} & \Sexpr{Lres_APAMLS[[2]]$AN} & 
+	      \Sexpr{Lres_APAMLS[[2]]$PDR} & \Sexpr{Lres_APAMLS[[2]]$FDR} &
+	      \Sexpr{Lres_APAMLS[[2]]$OD$M} & \Sexpr{Lres_APAMLS[[2]]$OD$S} & \Sexpr{Lres_APAMLS[[2]]$OD$JD}
+	      & \Sexpr{Lres_APAMLS[[2]]$OD$tpr[1]} & \Sexpr{Lres_APAMLS[[2]]$OD$fpr[1]} & \Sexpr{Lres_APAMLS[[2]]$TIME}\\
+	      
+	       & sLTS & \Sexpr{Lres_LTS[[2]]$CFR} & \Sexpr{Lres_LTS[[2]]$OFR} & \Sexpr{Lres_LTS[[2]]$AN} & 
+	      \Sexpr{Lres_LTS[[2]]$PDR} & \Sexpr{Lres_LTS[[2]]$FDR} &
+	      \Sexpr{Lres_LTS[[2]]$OD$M} & \Sexpr{Lres_LTS[[2]]$OD$S} & \Sexpr{Lres_LTS[[2]]$OD$JD}
+	      & \Sexpr{Lres_LTS[[2]]$OD$tpr[1]} & \Sexpr{Lres_LTS[[2]]$OD$fpr[1]} & \Sexpr{Lres_LTS[[2]]$TIME}\\
+	      
+	      & PAWLS & \Sexpr{Lres_PAWLS[[2]]$CFR} & \Sexpr{Lres_PAWLS[[2]]$OFR} & \Sexpr{Lres_PAWLS[[2]]$AN} & 
+	      \Sexpr{Lres_PAWLS[[2]]$PDR} & \Sexpr{Lres_PAWLS[[2]]$FDR} &
+	      \Sexpr{Lres_PAWLS[[2]]$OD$M} & \Sexpr{Lres_PAWLS[[2]]$OD$S} & \Sexpr{Lres_PAWLS[[2]]$OD$JD}
+	      & \Sexpr{Lres_PAWLS[[2]]$OD$tpr[1]} & \Sexpr{Lres_PAWLS[[2]]$OD$fpr[1]} & \Sexpr{Lres_PAWLS[[2]]$TIME}\\
+	      
+	      & APAWLS & \Sexpr{Lres_APAWLS[[2]]$CFR} & \Sexpr{Lres_APAWLS[[2]]$OFR} & \Sexpr{Lres_APAWLS[[2]]$AN} & 
+	      \Sexpr{Lres_APAWLS[[2]]$PDR} & \Sexpr{Lres_APAWLS[[2]]$FDR} &
+	      \Sexpr{Lres_APAWLS[[2]]$OD$M} & \Sexpr{Lres_APAWLS[[2]]$OD$S} & \Sexpr{Lres_APAWLS[[2]]$OD$JD}
+	      & \Sexpr{Lres_APAWLS[[2]]$OD$tpr[1]} & \Sexpr{Lres_APAWLS[[2]]$OD$fpr[1]} & \Sexpr{Lres_APAWLS[[2]]$TIME}\\
+	      \\
+	        	  \multirow{8}{*}{{\bf C}}
+	      & ALasso & \Sexpr{Lres_ADL03[[1]]$CFR} & \Sexpr{Lres_ADL03[[1]]$OFR} & \Sexpr{Lres_ADL03[[1]]$AN} & 
+	      \Sexpr{Lres_ADL03[[1]]$PDR} & \Sexpr{Lres_ADL03[[1]]$FDR} & - & - & - & - & - & \Sexpr{Lres_ADL03[[1]]$TIME}\\
+	
+	      & MMNNG & \Sexpr{Lres_mmnng03[[1]]$CFR} & \Sexpr{Lres_mmnng03[[1]]$OFR} & \Sexpr{Lres_mmnng03[[1]]$AN} & 
+	      \Sexpr{Lres_mmnng03[[1]]$PDR} & \Sexpr{Lres_mmnng03[[1]]$FDR} & - & - & - & - & - & \Sexpr{Lres_mmnng03[[1]]$TIME}\\
+	      
+	      & SROS & \Sexpr{Lres_ROSS03[[1]]$CFR} & \Sexpr{Lres_ROSS03[[1]]$OFR} & \Sexpr{Lres_ROSS03[[1]]$AN} & 
+	      \Sexpr{Lres_ROSS03[[1]]$PDR} & \Sexpr{Lres_ROSS03[[1]]$FDR} & - & - & - & - & - & \Sexpr{Lres_ROSS03[[1]]$TIME}\\
+	      
+	      & SROS-2 & \Sexpr{Lres_PAMLS03[[1]]$CFR} & \Sexpr{Lres_PAMLS03[[1]]$OFR} & \Sexpr{Lres_PAMLS03[[1]]$AN} & 
+	      \Sexpr{Lres_PAMLS03[[1]]$PDR} & \Sexpr{Lres_PAMLS03[[1]]$FDR} &
+	      \Sexpr{Lres_PAMLS03[[1]]$OD$M} & \Sexpr{Lres_PAMLS03[[1]]$OD$S} & \Sexpr{Lres_PAMLS03[[1]]$OD$JD}
+	      & \Sexpr{Lres_PAMLS03[[1]]$OD$tpr[1]} & \Sexpr{Lres_PAMLS03[[1]]$OD$fpr[1]} & \Sexpr{Lres_PAMLS03[[1]]$TIME}\\
+	      
+	     & ASROS-2 & \Sexpr{Lres_APAMLS03[[1]]$CFR} & \Sexpr{Lres_APAMLS03[[1]]$OFR} & \Sexpr{Lres_APAMLS03[[1]]$AN} & 
+	      \Sexpr{Lres_APAMLS03[[1]]$PDR} & \Sexpr{Lres_APAMLS03[[1]]$FDR} &
+	      \Sexpr{Lres_APAMLS03[[1]]$OD$M} & \Sexpr{Lres_APAMLS03[[1]]$OD$S} & \Sexpr{Lres_APAMLS03[[1]]$OD$JD}
+	      & \Sexpr{Lres_APAMLS03[[1]]$OD$tpr[1]} & \Sexpr{Lres_APAMLS03[[1]]$OD$fpr[1]} & \Sexpr{Lres_APAMLS03[[1]]$TIME}\\
+	      
+	       & sLTS & \Sexpr{Lres_LTS03[[1]]$CFR} & \Sexpr{Lres_LTS03[[1]]$OFR} & \Sexpr{Lres_LTS03[[1]]$AN} & 
+	      \Sexpr{Lres_LTS03[[1]]$PDR} & \Sexpr{Lres_LTS03[[1]]$FDR} &
+	      \Sexpr{Lres_LTS03[[1]]$OD$M} & \Sexpr{Lres_LTS03[[1]]$OD$S} & \Sexpr{Lres_LTS03[[1]]$OD$JD}
+	      & \Sexpr{Lres_LTS03[[1]]$OD$tpr[1]} & \Sexpr{Lres_LTS03[[1]]$OD$fpr[1]} & \Sexpr{Lres_LTS03[[1]]$TIME}\\
+	      
+	      & PAWLS & \Sexpr{Lres_PAWLS03[[1]]$CFR} & \Sexpr{Lres_PAWLS03[[1]]$OFR} & \Sexpr{Lres_PAWLS03[[1]]$AN} & 
+	      \Sexpr{Lres_PAWLS03[[1]]$PDR} & \Sexpr{Lres_PAWLS03[[1]]$FDR} &
+	      \Sexpr{Lres_PAWLS03[[1]]$OD$M} & \Sexpr{Lres_PAWLS03[[1]]$OD$S} & \Sexpr{Lres_PAWLS03[[1]]$OD$JD}
+	      & \Sexpr{Lres_PAWLS03[[1]]$OD$tpr[1]} & \Sexpr{Lres_PAWLS03[[1]]$OD$fpr[1]} & \Sexpr{Lres_PAWLS03[[1]]$TIME}\\
+	      
+	      & APAWLS & \Sexpr{Lres_APAWLS03[[1]]$CFR} & \Sexpr{Lres_APAWLS03[[1]]$OFR} & \Sexpr{Lres_APAWLS03[[1]]$AN} & 
+	      \Sexpr{Lres_APAWLS03[[1]]$PDR} & \Sexpr{Lres_APAWLS03[[1]]$FDR} &
+	      \Sexpr{Lres_APAWLS03[[1]]$OD$M} & \Sexpr{Lres_APAWLS03[[1]]$OD$S} & \Sexpr{Lres_APAWLS03[[1]]$OD$JD}
+	      & \Sexpr{Lres_APAWLS03[[1]]$OD$tpr[1]} & \Sexpr{Lres_APAWLS03[[1]]$OD$fpr[1]} & \Sexpr{Lres_APAWLS03[[1]]$TIME}\\
+	      
+	     \\
+	       	  \multirow{8}{*}{{\bf D}}
+	      & ALasso & \Sexpr{Lres_ADL03[[2]]$CFR} & \Sexpr{Lres_ADL03[[2]]$OFR} & \Sexpr{Lres_ADL03[[2]]$AN} & 
+	      \Sexpr{Lres_ADL03[[2]]$PDR} & \Sexpr{Lres_ADL03[[2]]$FDR} & - & - & - & - & - & \Sexpr{Lres_ADL03[[2]]$TIME}\\
+	
+	      & MMNNG & \Sexpr{Lres_mmnng03[[2]]$CFR} & \Sexpr{Lres_mmnng03[[2]]$OFR} & \Sexpr{Lres_mmnng03[[2]]$AN} & 
+	      \Sexpr{Lres_mmnng03[[2]]$PDR} & \Sexpr{Lres_mmnng03[[2]]$FDR} & - & - & - & - & - & \Sexpr{Lres_mmnng03[[2]]$TIME}\\
+	      
+	      & SROS & \Sexpr{Lres_ROSS03[[2]]$CFR} & \Sexpr{Lres_ROSS03[[2]]$OFR} & \Sexpr{Lres_ROSS03[[2]]$AN} & 
+	      \Sexpr{Lres_ROSS03[[2]]$PDR} & \Sexpr{Lres_ROSS03[[2]]$FDR} & - & - & - & - & - & \Sexpr{Lres_ROSS03[[2]]$TIME}\\
+	      
+	      & SROS-2 & \Sexpr{Lres_PAMLS03[[2]]$CFR} & \Sexpr{Lres_PAMLS03[[2]]$OFR} & \Sexpr{Lres_PAMLS03[[2]]$AN} & 
+	      \Sexpr{Lres_PAMLS03[[2]]$PDR} & \Sexpr{Lres_PAMLS03[[2]]$FDR} &
+	      \Sexpr{Lres_PAMLS03[[2]]$OD$M} & \Sexpr{Lres_PAMLS03[[2]]$OD$S} & \Sexpr{Lres_PAMLS03[[2]]$OD$JD}
+	      & \Sexpr{Lres_PAMLS03[[2]]$OD$tpr[1]} & \Sexpr{Lres_PAMLS03[[2]]$OD$fpr[1]} & \Sexpr{Lres_PAMLS03[[2]]$TIME}\\
+	      
+	     & ASROS-2 & \Sexpr{Lres_APAMLS03[[2]]$CFR} & \Sexpr{Lres_APAMLS03[[2]]$OFR} & \Sexpr{Lres_APAMLS03[[2]]$AN} & 
+	      \Sexpr{Lres_APAMLS03[[2]]$PDR} & \Sexpr{Lres_APAMLS03[[2]]$FDR} &
+	      \Sexpr{Lres_APAMLS03[[2]]$OD$M} & \Sexpr{round(Lres_APAMLS03[[2]]$OD$S,digit=2)} & \Sexpr{Lres_APAMLS03[[2]]$OD$JD}
+	      & \Sexpr{Lres_APAMLS03[[2]]$OD$tpr[1]} & \Sexpr{Lres_APAMLS03[[2]]$OD$fpr[1]} & \Sexpr{Lres_APAMLS03[[2]]$TIME}\\
+	      
+	       & sLTS & \Sexpr{Lres_LTS03[[2]]$CFR} & \Sexpr{Lres_LTS03[[2]]$OFR} & \Sexpr{Lres_LTS03[[2]]$AN} & 
+	      \Sexpr{Lres_LTS03[[2]]$PDR} & \Sexpr{Lres_LTS03[[2]]$FDR} &
+	      \Sexpr{Lres_LTS03[[2]]$OD$M} & \Sexpr{Lres_LTS03[[2]]$OD$S} & \Sexpr{Lres_LTS03[[2]]$OD$JD}
+	      & \Sexpr{Lres_LTS03[[2]]$OD$tpr[1]} & \Sexpr{Lres_LTS03[[2]]$OD$fpr[1]} & \Sexpr{Lres_LTS03[[2]]$TIME}\\
+	      
+	      & PAWLS & \Sexpr{Lres_PAWLS03[[2]]$CFR} & \Sexpr{Lres_PAWLS03[[2]]$OFR} & \Sexpr{Lres_PAWLS03[[2]]$AN} & 
+	      \Sexpr{Lres_PAWLS03[[2]]$PDR} & \Sexpr{Lres_PAWLS03[[2]]$FDR} &
+	      \Sexpr{Lres_PAWLS03[[2]]$OD$M} & \Sexpr{Lres_PAWLS03[[2]]$OD$S} & \Sexpr{Lres_PAWLS03[[2]]$OD$JD}
+	      & \Sexpr{Lres_PAWLS03[[2]]$OD$tpr[1]} & \Sexpr{Lres_PAWLS03[[2]]$OD$fpr[1]} & \Sexpr{Lres_PAWLS03[[2]]$TIME}\\
+	      
+	      & APAWLS & \Sexpr{Lres_APAWLS03[[2]]$CFR} & \Sexpr{Lres_APAWLS03[[2]]$OFR} & \Sexpr{Lres_APAWLS03[[2]]$AN} & 
+	      \Sexpr{Lres_APAWLS03[[2]]$PDR} & \Sexpr{Lres_APAWLS03[[2]]$FDR} &
+	      \Sexpr{Lres_APAWLS03[[2]]$OD$M} & \Sexpr{round(Lres_APAWLS03[[2]]$OD$S,digit=2)} & \Sexpr{Lres_APAWLS03[[2]]$OD$JD}
+	      & \Sexpr{Lres_APAWLS03[[2]]$OD$tpr[1]} & \Sexpr{Lres_APAWLS03[[2]]$OD$fpr[1]} & \Sexpr{Lres_APAWLS03[[2]]$TIME}\\
+	      
+	      \\
+	       	  \multirow{8}{*}{{\bf E}}
+	      & ALasso & \Sexpr{Lres_ADL03[[3]]$CFR} & \Sexpr{Lres_ADL03[[3]]$OFR} & \Sexpr{Lres_ADL03[[3]]$AN} & 
+	      \Sexpr{Lres_ADL03[[3]]$PDR} & \Sexpr{Lres_ADL03[[3]]$FDR} & - & - & - & - & - & \Sexpr{Lres_ADL03[[3]]$TIME}\\
+	
+	      & MMNNG & \Sexpr{Lres_mmnng03[[3]]$CFR} & \Sexpr{Lres_mmnng03[[3]]$OFR} & \Sexpr{Lres_mmnng03[[3]]$AN} & 
+	      \Sexpr{Lres_mmnng03[[3]]$PDR} & \Sexpr{Lres_mmnng03[[3]]$FDR} & - & - & - & - & - & \Sexpr{Lres_mmnng03[[3]]$TIME}\\
+	      
+	      & SROS & \Sexpr{Lres_ROSS03[[3]]$CFR} & \Sexpr{Lres_ROSS03[[3]]$OFR} & \Sexpr{Lres_ROSS03[[3]]$AN} & 
+	      \Sexpr{Lres_ROSS03[[3]]$PDR} & \Sexpr{Lres_ROSS03[[3]]$FDR} & - & - & - & - & - & \Sexpr{Lres_ROSS03[[3]]$TIME}\\
+	      
+	      & SROS-2 & \Sexpr{Lres_PAMLS03[[3]]$CFR} & \Sexpr{Lres_PAMLS03[[3]]$OFR} & \Sexpr{Lres_PAMLS03[[3]]$AN} & 
+	      \Sexpr{Lres_PAMLS03[[3]]$PDR} & \Sexpr{Lres_PAMLS03[[3]]$FDR} &
+	      \Sexpr{Lres_PAMLS03[[3]]$OD$M} & \Sexpr{Lres_PAMLS03[[3]]$OD$S} & \Sexpr{Lres_PAMLS03[[3]]$OD$JD}
+	      & \Sexpr{Lres_PAMLS03[[3]]$OD$tpr[1]} & \Sexpr{Lres_PAMLS03[[3]]$OD$fpr[1]} & \Sexpr{Lres_PAMLS03[[3]]$TIME}\\
+	      
+	     & ASROS-2 & \Sexpr{Lres_APAMLS03[[3]]$CFR} & \Sexpr{Lres_APAMLS03[[3]]$OFR} & \Sexpr{Lres_APAMLS03[[3]]$AN} & 
+	      \Sexpr{Lres_APAMLS03[[3]]$PDR} & \Sexpr{Lres_APAMLS03[[3]]$FDR} &
+	      \Sexpr{Lres_APAMLS03[[3]]$OD$M} & \Sexpr{round(Lres_APAMLS03[[3]]$OD$S,digit=2)} & \Sexpr{Lres_APAMLS03[[3]]$OD$JD}
+	      & \Sexpr{Lres_APAMLS03[[3]]$OD$tpr[1]} & \Sexpr{Lres_APAMLS03[[3]]$OD$fpr[1]} & \Sexpr{Lres_APAMLS03[[3]]$TIME}\\
+	      
+	       & sLTS & \Sexpr{Lres_LTS03[[3]]$CFR} & \Sexpr{Lres_LTS03[[3]]$OFR} & \Sexpr{Lres_LTS03[[3]]$AN} & 
+	      \Sexpr{Lres_LTS03[[3]]$PDR} & \Sexpr{Lres_LTS03[[3]]$FDR} &
+	      \Sexpr{Lres_LTS03[[3]]$OD$M} & \Sexpr{Lres_LTS03[[3]]$OD$S} & \Sexpr{Lres_LTS03[[3]]$OD$JD}
+	      & \Sexpr{Lres_LTS03[[3]]$OD$tpr[1]} & \Sexpr{Lres_LTS03[[3]]$OD$fpr[1]} & \Sexpr{Lres_LTS03[[3]]$TIME}\\
+	      
+	      & PAWLS & \Sexpr{Lres_PAWLS03[[3]]$CFR} & \Sexpr{Lres_PAWLS03[[3]]$OFR} & \Sexpr{Lres_PAWLS03[[3]]$AN} & 
+	      \Sexpr{Lres_PAWLS03[[3]]$PDR} & \Sexpr{Lres_PAWLS03[[3]]$FDR} &
+	      \Sexpr{Lres_PAWLS03[[3]]$OD$M} & \Sexpr{Lres_PAWLS03[[3]]$OD$S} & \Sexpr{Lres_PAWLS03[[3]]$OD$JD}
+	      & \Sexpr{Lres_PAWLS03[[3]]$OD$tpr[1]} & \Sexpr{Lres_PAWLS03[[3]]$OD$fpr[1]} & \Sexpr{Lres_PAWLS03[[3]]$TIME}\\
+	      
+	      & APAWLS & \Sexpr{Lres_APAWLS03[[3]]$CFR} & \Sexpr{Lres_APAWLS03[[3]]$OFR} & \Sexpr{Lres_APAWLS03[[3]]$AN} & 
+	      \Sexpr{Lres_APAWLS03[[3]]$PDR} & \Sexpr{Lres_APAWLS03[[3]]$FDR} &
+	      \Sexpr{Lres_APAWLS03[[3]]$OD$M} & \Sexpr{round(Lres_APAWLS03[[3]]$OD$S,digit=2)} & \Sexpr{Lres_APAWLS03[[3]]$OD$JD}
+	      & \Sexpr{Lres_APAWLS03[[3]]$OD$tpr[1]} & \Sexpr{Lres_APAWLS03[[3]]$OD$fpr[1]} & \Sexpr{Lres_APAWLS03[[3]]$TIME}\\
+	      
+	   \hline\hline
+	
+	\end{tabular}
+	\end{center}
+	\end{table}
+	
 % ----------------------------- Variable Selection for high dimensional case ------------------------------------%
 % ----------------------------- 10% outliers --------------------------------------------------------------------%
 \begin{table}[thp]
@@ -337,6 +912,167 @@ options(digits=2)
 	\end{center}
 	\end{table}
 
+	%------------------------------------ High dimensional case 10% (combined) ------------------------------%
+		\begin{table}[thp]
+	\begin{center}
+	 \caption{Variable Selection and outliers detection Results for Example 2 ($\bbeta=({\bf 2}_{10}',\bzero_{p-10}')'$ with 10\% outliers )}\label{tableH1}
+	\begin{tabular}{ccrrrrrrrrrrrr}\\\hline\hline
+	  & & \multicolumn{5}{c} {Variable Selection} &&  \multicolumn{5}{c} {Outliers detection} & \\
+	   Case & Method & CFR & OFR  & AN & FP& FN  &  M & S  & JD & FP & FN  & TIME\\ \hline
+	  \multirow{8}{*}{{\bf A}}
+	      & ALasso & \Sexpr{Hres_ADL[[1]]$CFR} & \Sexpr{Hres_ADL[[1]]$OFR} & \Sexpr{Hres_ADL[[1]]$AN} & 
+	      \Sexpr{Hres_ADL[[1]]$PDR} & \Sexpr{Hres_ADL[[1]]$FDR} & - & - & - & - & - & \Sexpr{Hres_ADL[[1]]$TIME}\\
+	      
+	      & SROS-2 & \Sexpr{Hres_PAMLS[[1]]$CFR} & \Sexpr{Hres_PAMLS[[1]]$OFR} & \Sexpr{Hres_PAMLS[[1]]$AN} & 
+	      \Sexpr{Hres_PAMLS[[1]]$PDR} & \Sexpr{Hres_PAMLS[[1]]$FDR} &
+	      \Sexpr{Hres_PAMLS[[1]]$OD$M} & \Sexpr{Hres_PAMLS[[1]]$OD$S} & \Sexpr{Hres_PAMLS[[1]]$OD$JD}
+	      & \Sexpr{Hres_PAMLS[[1]]$OD$tpr[1]} & \Sexpr{Hres_PAMLS[[1]]$OD$fpr[1]} & \Sexpr{Hres_PAMLS[[1]]$TIME}\\
+	      
+	     & ASROS-2 & \Sexpr{Hres_APAMLS[[1]]$CFR} & \Sexpr{Hres_APAMLS[[1]]$OFR} & \Sexpr{Hres_APAMLS[[1]]$AN} & 
+	      \Sexpr{Hres_APAMLS[[1]]$PDR} & \Sexpr{Hres_APAMLS[[1]]$FDR} &
+	      \Sexpr{Hres_APAMLS[[1]]$OD$M} & \Sexpr{Hres_APAMLS[[1]]$OD$S} & \Sexpr{Hres_APAMLS[[1]]$OD$JD}
+	      & \Sexpr{Hres_APAMLS[[1]]$OD$tpr[1]} & \Sexpr{Hres_APAMLS[[1]]$OD$fpr[1]} & \Sexpr{Hres_APAMLS[[1]]$TIME}\\
+	      
+	       & sLTS & \Sexpr{Hres_LTS[[1]]$CFR} & \Sexpr{Hres_LTS[[1]]$OFR} & \Sexpr{Hres_LTS[[1]]$AN} & 
+	      \Sexpr{Hres_LTS[[1]]$PDR} & \Sexpr{Hres_LTS[[1]]$FDR} &
+	      \Sexpr{Hres_LTS[[1]]$OD$M} & \Sexpr{Hres_LTS[[1]]$OD$S} & \Sexpr{Hres_LTS[[1]]$OD$JD}
+	      & \Sexpr{Hres_LTS[[1]]$OD$tpr[1]} & \Sexpr{Hres_LTS[[1]]$OD$fpr[1]} & \Sexpr{Hres_LTS[[1]]$TIME}\\
+	      
+	      & PAWLS & \Sexpr{Hres_PAWLS[[1]]$CFR} & \Sexpr{Hres_PAWLS[[1]]$OFR} & \Sexpr{Hres_PAWLS[[1]]$AN} & 
+	      \Sexpr{Hres_PAWLS[[1]]$PDR} & \Sexpr{Hres_PAWLS[[1]]$FDR} &
+	      \Sexpr{Hres_PAWLS[[1]]$OD$M} & \Sexpr{Hres_PAWLS[[1]]$OD$S} & \Sexpr{Hres_PAWLS[[1]]$OD$JD}
+	      & \Sexpr{Hres_PAWLS[[1]]$OD$tpr[1]} & \Sexpr{Hres_PAWLS[[1]]$OD$fpr[1]} & \Sexpr{Hres_PAWLS[[1]]$TIME}\\
+	      
+	      & APAWLS & \Sexpr{Hres_APAWLS[[1]]$CFR} & \Sexpr{Hres_APAWLS[[1]]$OFR} & \Sexpr{Hres_APAWLS[[1]]$AN} & 
+	      \Sexpr{Hres_APAWLS[[1]]$PDR} & \Sexpr{Hres_APAWLS[[1]]$FDR} &
+	      \Sexpr{Hres_APAWLS[[1]]$OD$M} & \Sexpr{Hres_APAWLS[[1]]$OD$S} & \Sexpr{Hres_APAWLS[[1]]$OD$JD}
+	      & \Sexpr{Hres_APAWLS[[1]]$OD$tpr[1]} & \Sexpr{Hres_APAWLS[[1]]$OD$fpr[1]} & \Sexpr{Hres_APAWLS[[1]]$TIME}\\
+	      \\
+	      	  \multirow{8}{*}{{\bf B}}
+	      & ALasso & \Sexpr{Hres_ADL[[2]]$CFR} & \Sexpr{Hres_ADL[[2]]$OFR} & \Sexpr{Hres_ADL[[2]]$AN} & 
+	      \Sexpr{Hres_ADL[[2]]$PDR} & \Sexpr{Hres_ADL[[2]]$FDR} & - & - & - & - & - & \Sexpr{Hres_ADL[[2]]$TIME}\\
+	      
+	      & SROS-2 & \Sexpr{Hres_PAMLS[[2]]$CFR} & \Sexpr{Hres_PAMLS[[2]]$OFR} & \Sexpr{Hres_PAMLS[[2]]$AN} & 
+	      \Sexpr{Hres_PAMLS[[2]]$PDR} & \Sexpr{Hres_PAMLS[[2]]$FDR} &
+	      \Sexpr{Hres_PAMLS[[2]]$OD$M} & \Sexpr{Hres_PAMLS[[2]]$OD$S} & \Sexpr{Hres_PAMLS[[2]]$OD$JD}
+	      & \Sexpr{Hres_PAMLS[[2]]$OD$tpr[1]} & \Sexpr{Hres_PAMLS[[2]]$OD$fpr[1]} & \Sexpr{Hres_PAMLS[[2]]$TIME}\\
+	      
+	     & ASROS-2 & \Sexpr{Hres_APAMLS[[2]]$CFR} & \Sexpr{Hres_APAMLS[[2]]$OFR} & \Sexpr{Hres_APAMLS[[2]]$AN} & 
+	      \Sexpr{Hres_APAMLS[[2]]$PDR} & \Sexpr{Hres_APAMLS[[2]]$FDR} &
+	      \Sexpr{Hres_APAMLS[[2]]$OD$M} & \Sexpr{Hres_APAMLS[[2]]$OD$S} & \Sexpr{Hres_APAMLS[[2]]$OD$JD}
+	      & \Sexpr{Hres_APAMLS[[2]]$OD$tpr[1]} & \Sexpr{Hres_APAMLS[[2]]$OD$fpr[1]} & \Sexpr{Hres_APAMLS[[2]]$TIME}\\
+	      
+	       & sLTS & \Sexpr{Hres_LTS[[2]]$CFR} & \Sexpr{Hres_LTS[[2]]$OFR} & \Sexpr{Hres_LTS[[2]]$AN} & 
+	      \Sexpr{Hres_LTS[[2]]$PDR} & \Sexpr{Hres_LTS[[2]]$FDR} &
+	      \Sexpr{Hres_LTS[[2]]$OD$M} & \Sexpr{Hres_LTS[[2]]$OD$S} & \Sexpr{Hres_LTS[[2]]$OD$JD}
+	      & \Sexpr{Hres_LTS[[2]]$OD$tpr[1]} & \Sexpr{Hres_LTS[[2]]$OD$fpr[1]} & \Sexpr{Hres_LTS[[2]]$TIME}\\
+	      
+	      & PAWLS & \Sexpr{Hres_PAWLS[[2]]$CFR} & \Sexpr{Hres_PAWLS[[2]]$OFR} & \Sexpr{Hres_PAWLS[[2]]$AN} & 
+	      \Sexpr{Hres_PAWLS[[2]]$PDR} & \Sexpr{Hres_PAWLS[[2]]$FDR} &
+	      \Sexpr{Hres_PAWLS[[2]]$OD$M} & \Sexpr{Hres_PAWLS[[2]]$OD$S} & \Sexpr{Hres_PAWLS[[2]]$OD$JD}
+	      & \Sexpr{Hres_PAWLS[[2]]$OD$tpr[1]} & \Sexpr{Hres_PAWLS[[2]]$OD$fpr[1]} & \Sexpr{Hres_PAWLS[[2]]$TIME}\\
+	      
+	      & APAWLS & \Sexpr{Hres_APAWLS[[2]]$CFR} & \Sexpr{Hres_APAWLS[[2]]$OFR} & \Sexpr{Hres_APAWLS[[2]]$AN} & 
+	      \Sexpr{Hres_APAWLS[[2]]$PDR} & \Sexpr{Hres_APAWLS[[2]]$FDR} &
+	      \Sexpr{Hres_APAWLS[[2]]$OD$M} & \Sexpr{Hres_APAWLS[[2]]$OD$S} & \Sexpr{Hres_APAWLS[[2]]$OD$JD}
+	      & \Sexpr{Hres_APAWLS[[2]]$OD$tpr[1]} & \Sexpr{Hres_APAWLS[[2]]$OD$fpr[1]} & \Sexpr{Hres_APAWLS[[2]]$TIME}\\
+	      \\
+	        	  \multirow{8}{*}{{\bf C}}
+	      & ALasso & \Sexpr{Hres_ADL[[3]]$CFR} & \Sexpr{Hres_ADL[[3]]$OFR} & \Sexpr{Hres_ADL[[3]]$AN} & 
+	      \Sexpr{Hres_ADL[[3]]$PDR} & \Sexpr{Hres_ADL[[3]]$FDR} & - & - & - & - & - & \Sexpr{Hres_ADL[[3]]$TIME}\\
+	      
+	      & SROS-2 & \Sexpr{Hres_PAMLS[[3]]$CFR} & \Sexpr{Hres_PAMLS[[3]]$OFR} & \Sexpr{Hres_PAMLS[[3]]$AN} & 
+	      \Sexpr{Hres_PAMLS[[3]]$PDR} & \Sexpr{Hres_PAMLS[[3]]$FDR} &
+	      \Sexpr{Hres_PAMLS[[3]]$OD$M} & \Sexpr{Hres_PAMLS[[3]]$OD$S} & \Sexpr{Hres_PAMLS[[3]]$OD$JD}
+	      & \Sexpr{Hres_PAMLS[[3]]$OD$tpr[1]} & \Sexpr{Hres_PAMLS[[3]]$OD$fpr[1]} & \Sexpr{Hres_PAMLS[[3]]$TIME}\\
+	      
+	     & ASROS-2 & \Sexpr{Hres_APAMLS[[3]]$CFR} & \Sexpr{Hres_APAMLS[[3]]$OFR} & \Sexpr{Hres_APAMLS[[3]]$AN} & 
+	      \Sexpr{Hres_APAMLS[[3]]$PDR} & \Sexpr{Hres_APAMLS[[3]]$FDR} &
+	      \Sexpr{Hres_APAMLS[[3]]$OD$M} & \Sexpr{Hres_APAMLS[[3]]$OD$S} & \Sexpr{Hres_APAMLS[[3]]$OD$JD}
+	      & \Sexpr{Hres_APAMLS[[3]]$OD$tpr[1]} & \Sexpr{Hres_APAMLS[[3]]$OD$fpr[1]} & \Sexpr{Hres_APAMLS[[3]]$TIME}\\
+	      
+	       & sLTS & \Sexpr{Hres_LTS[[3]]$CFR} & \Sexpr{Hres_LTS[[3]]$OFR} & \Sexpr{Hres_LTS[[3]]$AN} & 
+	      \Sexpr{Hres_LTS[[3]]$PDR} & \Sexpr{Hres_LTS[[3]]$FDR} &
+	      \Sexpr{Hres_LTS[[3]]$OD$M} & \Sexpr{Hres_LTS[[3]]$OD$S} & \Sexpr{Hres_LTS[[3]]$OD$JD}
+	      & \Sexpr{Hres_LTS[[3]]$OD$tpr[1]} & \Sexpr{Hres_LTS[[3]]$OD$fpr[1]} & \Sexpr{Hres_LTS[[3]]$TIME}\\
+	      
+	      & PAWLS & \Sexpr{Hres_PAWLS[[3]]$CFR} & \Sexpr{Hres_PAWLS[[3]]$OFR} & \Sexpr{Hres_PAWLS[[3]]$AN} & 
+	      \Sexpr{Hres_PAWLS[[3]]$PDR} & \Sexpr{Hres_PAWLS[[3]]$FDR} &
+	      \Sexpr{Hres_PAWLS[[3]]$OD$M} & \Sexpr{Hres_PAWLS[[3]]$OD$S} & \Sexpr{Hres_PAWLS[[3]]$OD$JD}
+	      & \Sexpr{Hres_PAWLS[[3]]$OD$tpr[1]} & \Sexpr{Hres_PAWLS[[3]]$OD$fpr[1]} & \Sexpr{Hres_PAWLS[[3]]$TIME}\\
+	      
+	      & APAWLS & \Sexpr{Hres_APAWLS[[3]]$CFR} & \Sexpr{Hres_APAWLS[[3]]$OFR} & \Sexpr{Hres_APAWLS[[3]]$AN} & 
+	      \Sexpr{Hres_APAWLS[[3]]$PDR} & \Sexpr{Hres_APAWLS[[3]]$FDR} &
+	      \Sexpr{Hres_APAWLS[[3]]$OD$M} & \Sexpr{Hres_APAWLS[[3]]$OD$S} & \Sexpr{Hres_APAWLS[[3]]$OD$JD}
+	      & \Sexpr{Hres_APAWLS[[3]]$OD$tpr[1]} & \Sexpr{Hres_APAWLS[[3]]$OD$fpr[1]} & \Sexpr{Hres_APAWLS[[3]]$TIME}\\
+	      
+	     \\
+	       	  \multirow{8}{*}{{\bf D}}
+	      & ALasso & \Sexpr{Hres_ADL[[4]]$CFR} & \Sexpr{Hres_ADL[[4]]$OFR} & \Sexpr{Hres_ADL[[4]]$AN} & 
+	      \Sexpr{Hres_ADL[[4]]$PDR} & \Sexpr{Hres_ADL[[4]]$FDR} & - & - & - & - & - & \Sexpr{Hres_ADL[[4]]$TIME}\\
+	
+	      & SROS-2 & \Sexpr{Hres_PAMLS[[4]]$CFR} & \Sexpr{Hres_PAMLS[[4]]$OFR} & \Sexpr{Hres_PAMLS[[4]]$AN} & 
+	      \Sexpr{Hres_PAMLS[[4]]$PDR} & \Sexpr{Hres_PAMLS[[4]]$FDR} &
+	      \Sexpr{Hres_PAMLS[[4]]$OD$M} & \Sexpr{Hres_PAMLS[[4]]$OD$S} & \Sexpr{Hres_PAMLS[[4]]$OD$JD}
+	      & \Sexpr{Hres_PAMLS[[4]]$OD$tpr[1]} & \Sexpr{Hres_PAMLS[[4]]$OD$fpr[1]} & \Sexpr{Hres_PAMLS[[4]]$TIME}\\
+	      
+	     & ASROS-2 & \Sexpr{Hres_APAMLS[[4]]$CFR} & \Sexpr{Hres_APAMLS[[4]]$OFR} & \Sexpr{Hres_APAMLS[[4]]$AN} & 
+	      \Sexpr{Hres_APAMLS[[4]]$PDR} & \Sexpr{Hres_APAMLS[[4]]$FDR} &
+	      \Sexpr{Hres_APAMLS[[4]]$OD$M} & \Sexpr{round(Hres_APAMLS[[4]]$OD$S,digit=2)} & \Sexpr{Hres_APAMLS[[4]]$OD$JD}
+	      & \Sexpr{Hres_APAMLS[[4]]$OD$tpr[1]} & \Sexpr{Hres_APAMLS[[4]]$OD$fpr[1]} & \Sexpr{Hres_APAMLS[[4]]$TIME}\\
+	      
+	       & sLTS & \Sexpr{Hres_LTS[[4]]$CFR} & \Sexpr{Hres_LTS[[4]]$OFR} & \Sexpr{Hres_LTS[[4]]$AN} & 
+	      \Sexpr{Hres_LTS[[4]]$PDR} & \Sexpr{Hres_LTS[[4]]$FDR} &
+	      \Sexpr{Hres_LTS[[4]]$OD$M} & \Sexpr{Hres_LTS[[4]]$OD$S} & \Sexpr{Hres_LTS[[4]]$OD$JD}
+	      & \Sexpr{Hres_LTS[[4]]$OD$tpr[1]} & \Sexpr{Hres_LTS[[4]]$OD$fpr[1]} & \Sexpr{Hres_LTS[[4]]$TIME}\\
+	      
+	      & PAWLS & \Sexpr{Hres_PAWLS[[4]]$CFR} & \Sexpr{Hres_PAWLS[[4]]$OFR} & \Sexpr{Hres_PAWLS[[4]]$AN} & 
+	      \Sexpr{Hres_PAWLS[[4]]$PDR} & \Sexpr{Hres_PAWLS[[4]]$FDR} &
+	      \Sexpr{Hres_PAWLS[[4]]$OD$M} & \Sexpr{Hres_PAWLS[[4]]$OD$S} & \Sexpr{Hres_PAWLS[[4]]$OD$JD}
+	      & \Sexpr{Hres_PAWLS[[4]]$OD$tpr[1]} & \Sexpr{Hres_PAWLS[[4]]$OD$fpr[1]} & \Sexpr{Hres_PAWLS[[4]]$TIME}\\
+	      
+	      & APAWLS & \Sexpr{Hres_APAWLS[[4]]$CFR} & \Sexpr{Hres_APAWLS[[4]]$OFR} & \Sexpr{Hres_APAWLS[[4]]$AN} & 
+	      \Sexpr{Hres_APAWLS[[4]]$PDR} & \Sexpr{Hres_APAWLS[[4]]$FDR} &
+	      \Sexpr{Hres_APAWLS[[4]]$OD$M} & \Sexpr{round(Hres_APAWLS[[4]]$OD$S,digit=2)} & \Sexpr{Hres_APAWLS[[4]]$OD$JD}
+	      & \Sexpr{Hres_APAWLS[[4]]$OD$tpr[1]} & \Sexpr{Hres_APAWLS[[4]]$OD$fpr[1]} & \Sexpr{Hres_APAWLS[[4]]$TIME}\\
+	      
+	      \\
+	       	  \multirow{8}{*}{{\bf E}}
+	      & ALasso & \Sexpr{Hres_ADL[[5]]$CFR} & \Sexpr{Hres_ADL[[5]]$OFR} & \Sexpr{Hres_ADL[[5]]$AN} & 
+	      \Sexpr{Hres_ADL[[5]]$PDR} & \Sexpr{Hres_ADL[[5]]$FDR} & - & - & - & - & - & \Sexpr{Hres_ADL[[5]]$TIME}\\
+	      
+	      & SROS-2 & \Sexpr{Hres_PAMLS[[5]]$CFR} & \Sexpr{Hres_PAMLS[[5]]$OFR} & \Sexpr{Hres_PAMLS[[5]]$AN} & 
+	      \Sexpr{Hres_PAMLS[[5]]$PDR} & \Sexpr{Hres_PAMLS[[5]]$FDR} &
+	      \Sexpr{Hres_PAMLS[[5]]$OD$M} & \Sexpr{Hres_PAMLS[[5]]$OD$S} & \Sexpr{Hres_PAMLS[[5]]$OD$JD}
+	      & \Sexpr{Hres_PAMLS[[5]]$OD$tpr[1]} & \Sexpr{Hres_PAMLS[[5]]$OD$fpr[1]} & \Sexpr{Hres_PAMLS[[5]]$TIME}\\
+	      
+	     & ASROS-2 & \Sexpr{Hres_APAMLS[[5]]$CFR} & \Sexpr{Hres_APAMLS[[5]]$OFR} & \Sexpr{Hres_APAMLS[[5]]$AN} & 
+	      \Sexpr{Hres_APAMLS[[5]]$PDR} & \Sexpr{Hres_APAMLS[[5]]$FDR} &
+	      \Sexpr{Hres_APAMLS[[5]]$OD$M} & \Sexpr{round(Hres_APAMLS[[5]]$OD$S,digit=2)} & \Sexpr{Hres_APAMLS[[5]]$OD$JD}
+	      & \Sexpr{Hres_APAMLS[[5]]$OD$tpr[1]} & \Sexpr{Hres_APAMLS[[5]]$OD$fpr[1]} & \Sexpr{Hres_APAMLS[[5]]$TIME}\\
+	      
+	       & sLTS & \Sexpr{Hres_LTS[[5]]$CFR} & \Sexpr{Hres_LTS[[5]]$OFR} & \Sexpr{Hres_LTS[[5]]$AN} & 
+	      \Sexpr{Hres_LTS[[5]]$PDR} & \Sexpr{Hres_LTS[[5]]$FDR} &
+	      \Sexpr{Hres_LTS[[5]]$OD$M} & \Sexpr{Hres_LTS[[5]]$OD$S} & \Sexpr{Hres_LTS[[5]]$OD$JD}
+	      & \Sexpr{Hres_LTS[[5]]$OD$tpr[1]} & \Sexpr{Hres_LTS[[5]]$OD$fpr[1]} & \Sexpr{Hres_LTS[[5]]$TIME}\\
+	      
+	      & PAWLS & \Sexpr{Hres_PAWLS[[5]]$CFR} & \Sexpr{Hres_PAWLS[[5]]$OFR} & \Sexpr{Hres_PAWLS[[5]]$AN} & 
+	      \Sexpr{Hres_PAWLS[[5]]$PDR} & \Sexpr{Hres_PAWLS[[5]]$FDR} &
+	      \Sexpr{Hres_PAWLS[[5]]$OD$M} & \Sexpr{Hres_PAWLS[[5]]$OD$S} & \Sexpr{Hres_PAWLS[[5]]$OD$JD}
+	      & \Sexpr{Hres_PAWLS[[5]]$OD$tpr[1]} & \Sexpr{Hres_PAWLS[[5]]$OD$fpr[1]} & \Sexpr{Hres_PAWLS[[5]]$TIME}\\
+	      
+	      & APAWLS & \Sexpr{Hres_APAWLS[[5]]$CFR} & \Sexpr{Hres_APAWLS[[5]]$OFR} & \Sexpr{Hres_APAWLS[[5]]$AN} & 
+	      \Sexpr{Hres_APAWLS[[5]]$PDR} & \Sexpr{Hres_APAWLS[[5]]$FDR} &
+	      \Sexpr{Hres_APAWLS[[5]]$OD$M} & \Sexpr{round(Hres_APAWLS[[5]]$OD$S,digit=2)} & \Sexpr{Hres_APAWLS[[5]]$OD$JD}
+	      & \Sexpr{Hres_APAWLS[[5]]$OD$tpr[1]} & \Sexpr{Hres_APAWLS[[5]]$OD$fpr[1]} & \Sexpr{Hres_APAWLS[[5]]$TIME}\\
+	      
+	   \hline\hline
+	
+	\end{tabular}
+	\end{center}
+	\end{table}
+	
+	
 % ----------------------------- 20% outliers --------------------------------------------------------------------%
 \begin{table}[thp]
 	\begin{center}
@@ -373,6 +1109,167 @@ options(digits=2)
 	\end{tabular}
 	\end{center}
 	\end{table}
+	
+	%------------------------------------ High dimensional case 20% (combined) ------------------------------%
+		\begin{table}[thp]
+	\begin{center}
+	 \caption{Variable Selection and outliers detection Results for Example 2 ($\bbeta=({\bf 2}_{10}',\bzero_{p-10}')'$ with 20\% outliers )}\label{tableH2}
+	\begin{tabular}{ccrrrrrrrrrrrr}\\\hline\hline
+	  & & \multicolumn{5}{c} {Variable Selection} &&  \multicolumn{5}{c} {Outliers detection} & \\
+	   Case & Method & CFR & OFR  & AN & FP& FN  &  M & S  & JD & FP & FN  & TIME\\ \hline
+	  \multirow{8}{*}{{\bf A}}
+	      & ALasso & \Sexpr{Hres_ADL[[1]]$CFR} & \Sexpr{Hres_ADL[[1]]$OFR} & \Sexpr{Hres_ADL[[1]]$AN} & 
+	      \Sexpr{Hres_ADL[[1]]$PDR} & \Sexpr{Hres_ADL[[1]]$FDR} & - & - & - & - & - & \Sexpr{Hres_ADL[[1]]$TIME}\\
+	      
+	      & SROS-2 & \Sexpr{Hres_PAMLS[[1]]$CFR} & \Sexpr{Hres_PAMLS[[1]]$OFR} & \Sexpr{Hres_PAMLS[[1]]$AN} & 
+	      \Sexpr{Hres_PAMLS[[1]]$PDR} & \Sexpr{Hres_PAMLS[[1]]$FDR} &
+	      \Sexpr{Hres_PAMLS[[1]]$OD$M} & \Sexpr{Hres_PAMLS[[1]]$OD$S} & \Sexpr{Hres_PAMLS[[1]]$OD$JD}
+	      & \Sexpr{Hres_PAMLS[[1]]$OD$tpr[1]} & \Sexpr{Hres_PAMLS[[1]]$OD$fpr[1]} & \Sexpr{Hres_PAMLS[[1]]$TIME}\\
+	      
+	     & ASROS-2 & \Sexpr{Hres_APAMLS[[1]]$CFR} & \Sexpr{Hres_APAMLS[[1]]$OFR} & \Sexpr{Hres_APAMLS[[1]]$AN} & 
+	      \Sexpr{Hres_APAMLS[[1]]$PDR} & \Sexpr{Hres_APAMLS[[1]]$FDR} &
+	      \Sexpr{Hres_APAMLS[[1]]$OD$M} & \Sexpr{Hres_APAMLS[[1]]$OD$S} & \Sexpr{Hres_APAMLS[[1]]$OD$JD}
+	      & \Sexpr{Hres_APAMLS[[1]]$OD$tpr[1]} & \Sexpr{Hres_APAMLS[[1]]$OD$fpr[1]} & \Sexpr{Hres_APAMLS[[1]]$TIME}\\
+	      
+	       & sLTS & \Sexpr{Hres_LTS[[1]]$CFR} & \Sexpr{Hres_LTS[[1]]$OFR} & \Sexpr{Hres_LTS[[1]]$AN} & 
+	      \Sexpr{Hres_LTS[[1]]$PDR} & \Sexpr{Hres_LTS[[1]]$FDR} &
+	      \Sexpr{Hres_LTS[[1]]$OD$M} & \Sexpr{Hres_LTS[[1]]$OD$S} & \Sexpr{Hres_LTS[[1]]$OD$JD}
+	      & \Sexpr{Hres_LTS[[1]]$OD$tpr[1]} & \Sexpr{Hres_LTS[[1]]$OD$fpr[1]} & \Sexpr{Hres_LTS[[1]]$TIME}\\
+	      
+	      & PAWLS & \Sexpr{Hres_PAWLS[[1]]$CFR} & \Sexpr{Hres_PAWLS[[1]]$OFR} & \Sexpr{Hres_PAWLS[[1]]$AN} & 
+	      \Sexpr{Hres_PAWLS[[1]]$PDR} & \Sexpr{Hres_PAWLS[[1]]$FDR} &
+	      \Sexpr{Hres_PAWLS[[1]]$OD$M} & \Sexpr{Hres_PAWLS[[1]]$OD$S} & \Sexpr{Hres_PAWLS[[1]]$OD$JD}
+	      & \Sexpr{Hres_PAWLS[[1]]$OD$tpr[1]} & \Sexpr{Hres_PAWLS[[1]]$OD$fpr[1]} & \Sexpr{Hres_PAWLS[[1]]$TIME}\\
+	      
+	      & APAWLS & \Sexpr{Hres_APAWLS[[1]]$CFR} & \Sexpr{Hres_APAWLS[[1]]$OFR} & \Sexpr{Hres_APAWLS[[1]]$AN} & 
+	      \Sexpr{Hres_APAWLS[[1]]$PDR} & \Sexpr{Hres_APAWLS[[1]]$FDR} &
+	      \Sexpr{Hres_APAWLS[[1]]$OD$M} & \Sexpr{Hres_APAWLS[[1]]$OD$S} & \Sexpr{Hres_APAWLS[[1]]$OD$JD}
+	      & \Sexpr{Hres_APAWLS[[1]]$OD$tpr[1]} & \Sexpr{Hres_APAWLS[[1]]$OD$fpr[1]} & \Sexpr{Hres_APAWLS[[1]]$TIME}\\
+	      \\
+	      	  \multirow{8}{*}{{\bf B}}
+	      & ALasso & \Sexpr{Hres_ADL[[2]]$CFR} & \Sexpr{Hres_ADL[[2]]$OFR} & \Sexpr{Hres_ADL[[2]]$AN} & 
+	      \Sexpr{Hres_ADL[[2]]$PDR} & \Sexpr{Hres_ADL[[2]]$FDR} & - & - & - & - & - & \Sexpr{Hres_ADL[[2]]$TIME}\\
+	      
+	      & SROS-2 & \Sexpr{Hres_PAMLS[[2]]$CFR} & \Sexpr{Hres_PAMLS[[2]]$OFR} & \Sexpr{Hres_PAMLS[[2]]$AN} & 
+	      \Sexpr{Hres_PAMLS[[2]]$PDR} & \Sexpr{Hres_PAMLS[[2]]$FDR} &
+	      \Sexpr{Hres_PAMLS[[2]]$OD$M} & \Sexpr{Hres_PAMLS[[2]]$OD$S} & \Sexpr{Hres_PAMLS[[2]]$OD$JD}
+	      & \Sexpr{Hres_PAMLS[[2]]$OD$tpr[1]} & \Sexpr{Hres_PAMLS[[2]]$OD$fpr[1]} & \Sexpr{Hres_PAMLS[[2]]$TIME}\\
+	      
+	     & ASROS-2 & \Sexpr{Hres_APAMLS[[2]]$CFR} & \Sexpr{Hres_APAMLS[[2]]$OFR} & \Sexpr{Hres_APAMLS[[2]]$AN} & 
+	      \Sexpr{Hres_APAMLS[[2]]$PDR} & \Sexpr{Hres_APAMLS[[2]]$FDR} &
+	      \Sexpr{Hres_APAMLS[[2]]$OD$M} & \Sexpr{Hres_APAMLS[[2]]$OD$S} & \Sexpr{Hres_APAMLS[[2]]$OD$JD}
+	      & \Sexpr{Hres_APAMLS[[2]]$OD$tpr[1]} & \Sexpr{Hres_APAMLS[[2]]$OD$fpr[1]} & \Sexpr{Hres_APAMLS[[2]]$TIME}\\
+	      
+	       & sLTS & \Sexpr{Hres_LTS[[2]]$CFR} & \Sexpr{Hres_LTS[[2]]$OFR} & \Sexpr{Hres_LTS[[2]]$AN} & 
+	      \Sexpr{Hres_LTS[[2]]$PDR} & \Sexpr{Hres_LTS[[2]]$FDR} &
+	      \Sexpr{Hres_LTS[[2]]$OD$M} & \Sexpr{Hres_LTS[[2]]$OD$S} & \Sexpr{Hres_LTS[[2]]$OD$JD}
+	      & \Sexpr{Hres_LTS[[2]]$OD$tpr[1]} & \Sexpr{Hres_LTS[[2]]$OD$fpr[1]} & \Sexpr{Hres_LTS[[2]]$TIME}\\
+	      
+	      & PAWLS & \Sexpr{Hres_PAWLS[[2]]$CFR} & \Sexpr{Hres_PAWLS[[2]]$OFR} & \Sexpr{Hres_PAWLS[[2]]$AN} & 
+	      \Sexpr{Hres_PAWLS[[2]]$PDR} & \Sexpr{Hres_PAWLS[[2]]$FDR} &
+	      \Sexpr{Hres_PAWLS[[2]]$OD$M} & \Sexpr{Hres_PAWLS[[2]]$OD$S} & \Sexpr{Hres_PAWLS[[2]]$OD$JD}
+	      & \Sexpr{Hres_PAWLS[[2]]$OD$tpr[1]} & \Sexpr{Hres_PAWLS[[2]]$OD$fpr[1]} & \Sexpr{Hres_PAWLS[[2]]$TIME}\\
+	      
+	      & APAWLS & \Sexpr{Hres_APAWLS[[2]]$CFR} & \Sexpr{Hres_APAWLS[[2]]$OFR} & \Sexpr{Hres_APAWLS[[2]]$AN} & 
+	      \Sexpr{Hres_APAWLS[[2]]$PDR} & \Sexpr{Hres_APAWLS[[2]]$FDR} &
+	      \Sexpr{Hres_APAWLS[[2]]$OD$M} & \Sexpr{Hres_APAWLS[[2]]$OD$S} & \Sexpr{Hres_APAWLS[[2]]$OD$JD}
+	      & \Sexpr{Hres_APAWLS[[2]]$OD$tpr[1]} & \Sexpr{Hres_APAWLS[[2]]$OD$fpr[1]} & \Sexpr{Hres_APAWLS[[2]]$TIME}\\
+	      \\
+	        	  \multirow{8}{*}{{\bf C}}
+	      & ALasso & \Sexpr{Hres_ADL02[[1]]$CFR} & \Sexpr{Hres_ADL02[[1]]$OFR} & \Sexpr{Hres_ADL02[[1]]$AN} & 
+	      \Sexpr{Hres_ADL02[[1]]$PDR} & \Sexpr{Hres_ADL02[[1]]$FDR} & - & - & - & - & - & \Sexpr{Hres_ADL02[[1]]$TIME}\\
+	      
+	      & SROS-2 & \Sexpr{Hres_PAMLS02[[1]]$CFR} & \Sexpr{Hres_PAMLS02[[1]]$OFR} & \Sexpr{Hres_PAMLS02[[1]]$AN} & 
+	      \Sexpr{Hres_PAMLS02[[1]]$PDR} & \Sexpr{Hres_PAMLS02[[1]]$FDR} &
+	      \Sexpr{Hres_PAMLS02[[1]]$OD$M} & \Sexpr{Hres_PAMLS02[[1]]$OD$S} & \Sexpr{Hres_PAMLS02[[1]]$OD$JD}
+	      & \Sexpr{Hres_PAMLS02[[1]]$OD$tpr[1]} & \Sexpr{Hres_PAMLS02[[1]]$OD$fpr[1]} & \Sexpr{Hres_PAMLS02[[1]]$TIME}\\
+	      
+	     & ASROS-2 & \Sexpr{Hres_APAMLS02[[1]]$CFR} & \Sexpr{Hres_APAMLS02[[1]]$OFR} & \Sexpr{Hres_APAMLS02[[1]]$AN} & 
+	      \Sexpr{Hres_APAMLS02[[1]]$PDR} & \Sexpr{Hres_APAMLS02[[1]]$FDR} &
+	      \Sexpr{Hres_APAMLS02[[1]]$OD$M} & \Sexpr{Hres_APAMLS02[[1]]$OD$S} & \Sexpr{Hres_APAMLS02[[1]]$OD$JD}
+	      & \Sexpr{Hres_APAMLS02[[1]]$OD$tpr[1]} & \Sexpr{Hres_APAMLS02[[1]]$OD$fpr[1]} & \Sexpr{Hres_APAMLS02[[1]]$TIME}\\
+	      
+	       & sLTS & \Sexpr{Hres_LTS02[[1]]$CFR} & \Sexpr{Hres_LTS02[[1]]$OFR} & \Sexpr{Hres_LTS02[[1]]$AN} & 
+	      \Sexpr{Hres_LTS02[[1]]$PDR} & \Sexpr{Hres_LTS02[[1]]$FDR} &
+	      \Sexpr{Hres_LTS02[[1]]$OD$M} & \Sexpr{Hres_LTS02[[1]]$OD$S} & \Sexpr{Hres_LTS02[[1]]$OD$JD}
+	      & \Sexpr{Hres_LTS02[[1]]$OD$tpr[1]} & \Sexpr{Hres_LTS02[[1]]$OD$fpr[1]} & \Sexpr{Hres_LTS02[[1]]$TIME}\\
+	      
+	      & PAWLS & \Sexpr{Hres_PAWLS02[[1]]$CFR} & \Sexpr{Hres_PAWLS02[[1]]$OFR} & \Sexpr{Hres_PAWLS02[[1]]$AN} & 
+	      \Sexpr{Hres_PAWLS02[[1]]$PDR} & \Sexpr{Hres_PAWLS02[[1]]$FDR} &
+	      \Sexpr{Hres_PAWLS02[[1]]$OD$M} & \Sexpr{Hres_PAWLS02[[1]]$OD$S} & \Sexpr{Hres_PAWLS02[[1]]$OD$JD}
+	      & \Sexpr{Hres_PAWLS02[[1]]$OD$tpr[1]} & \Sexpr{Hres_PAWLS02[[1]]$OD$fpr[1]} & \Sexpr{Hres_PAWLS02[[1]]$TIME}\\
+	      
+	      & APAWLS & \Sexpr{Hres_APAWLS02[[1]]$CFR} & \Sexpr{Hres_APAWLS02[[1]]$OFR} & \Sexpr{Hres_APAWLS02[[1]]$AN} & 
+	      \Sexpr{Hres_APAWLS02[[1]]$PDR} & \Sexpr{Hres_APAWLS02[[1]]$FDR} &
+	      \Sexpr{Hres_APAWLS02[[1]]$OD$M} & \Sexpr{Hres_APAWLS02[[1]]$OD$S} & \Sexpr{Hres_APAWLS02[[1]]$OD$JD}
+	      & \Sexpr{Hres_APAWLS02[[1]]$OD$tpr[1]} & \Sexpr{Hres_APAWLS02[[1]]$OD$fpr[1]} & \Sexpr{Hres_APAWLS02[[1]]$TIME}\\
+	      
+	     \\
+	       	  \multirow{8}{*}{{\bf D}}
+	      & ALasso & \Sexpr{Hres_ADL02[[2]]$CFR} & \Sexpr{Hres_ADL02[[2]]$OFR} & \Sexpr{Hres_ADL02[[2]]$AN} & 
+	      \Sexpr{Hres_ADL02[[2]]$PDR} & \Sexpr{Hres_ADL02[[2]]$FDR} & - & - & - & - & - & \Sexpr{Hres_ADL02[[2]]$TIME}\\
+	
+	      & SROS-2 & \Sexpr{Hres_PAMLS02[[2]]$CFR} & \Sexpr{Hres_PAMLS02[[2]]$OFR} & \Sexpr{Hres_PAMLS02[[2]]$AN} & 
+	      \Sexpr{Hres_PAMLS02[[2]]$PDR} & \Sexpr{Hres_PAMLS02[[2]]$FDR} &
+	      \Sexpr{Hres_PAMLS02[[2]]$OD$M} & \Sexpr{Hres_PAMLS02[[2]]$OD$S} & \Sexpr{Hres_PAMLS02[[2]]$OD$JD}
+	      & \Sexpr{Hres_PAMLS02[[2]]$OD$tpr[1]} & \Sexpr{Hres_PAMLS02[[2]]$OD$fpr[1]} & \Sexpr{Hres_PAMLS02[[2]]$TIME}\\
+	      
+	     & ASROS-2 & \Sexpr{Hres_APAMLS02[[2]]$CFR} & \Sexpr{Hres_APAMLS02[[2]]$OFR} & \Sexpr{Hres_APAMLS02[[2]]$AN} & 
+	      \Sexpr{Hres_APAMLS02[[2]]$PDR} & \Sexpr{Hres_APAMLS02[[2]]$FDR} &
+	      \Sexpr{Hres_APAMLS02[[2]]$OD$M} & \Sexpr{round(Hres_APAMLS02[[2]]$OD$S,digit=2)} & \Sexpr{Hres_APAMLS02[[2]]$OD$JD}
+	      & \Sexpr{Hres_APAMLS02[[2]]$OD$tpr[1]} & \Sexpr{Hres_APAMLS02[[2]]$OD$fpr[1]} & \Sexpr{Hres_APAMLS02[[2]]$TIME}\\
+	      
+	       & sLTS & \Sexpr{Hres_LTS02[[2]]$CFR} & \Sexpr{Hres_LTS02[[2]]$OFR} & \Sexpr{Hres_LTS02[[2]]$AN} & 
+	      \Sexpr{Hres_LTS02[[2]]$PDR} & \Sexpr{Hres_LTS02[[2]]$FDR} &
+	      \Sexpr{Hres_LTS02[[2]]$OD$M} & \Sexpr{Hres_LTS02[[2]]$OD$S} & \Sexpr{Hres_LTS02[[2]]$OD$JD}
+	      & \Sexpr{Hres_LTS02[[2]]$OD$tpr[1]} & \Sexpr{Hres_LTS02[[2]]$OD$fpr[1]} & \Sexpr{Hres_LTS02[[2]]$TIME}\\
+	      
+	      & PAWLS & \Sexpr{Hres_PAWLS02[[2]]$CFR} & \Sexpr{Hres_PAWLS02[[2]]$OFR} & \Sexpr{Hres_PAWLS02[[2]]$AN} & 
+	      \Sexpr{Hres_PAWLS02[[2]]$PDR} & \Sexpr{Hres_PAWLS02[[2]]$FDR} &
+	      \Sexpr{Hres_PAWLS02[[2]]$OD$M} & \Sexpr{Hres_PAWLS02[[2]]$OD$S} & \Sexpr{Hres_PAWLS02[[2]]$OD$JD}
+	      & \Sexpr{Hres_PAWLS02[[2]]$OD$tpr[1]} & \Sexpr{Hres_PAWLS02[[2]]$OD$fpr[1]} & \Sexpr{Hres_PAWLS02[[2]]$TIME}\\
+	      
+	      & APAWLS & \Sexpr{Hres_APAWLS02[[2]]$CFR} & \Sexpr{Hres_APAWLS02[[2]]$OFR} & \Sexpr{Hres_APAWLS02[[2]]$AN} & 
+	      \Sexpr{Hres_APAWLS02[[2]]$PDR} & \Sexpr{Hres_APAWLS02[[2]]$FDR} &
+	      \Sexpr{Hres_APAWLS02[[2]]$OD$M} & \Sexpr{round(Hres_APAWLS02[[2]]$OD$S,digit=2)} & \Sexpr{Hres_APAWLS02[[2]]$OD$JD}
+	      & \Sexpr{Hres_APAWLS02[[2]]$OD$tpr[1]} & \Sexpr{Hres_APAWLS02[[2]]$OD$fpr[1]} & \Sexpr{Hres_APAWLS02[[2]]$TIME}\\
+	      
+	      \\
+	       	  \multirow{8}{*}{{\bf E}}
+	      & ALasso & \Sexpr{Hres_ADL02[[3]]$CFR} & \Sexpr{Hres_ADL02[[3]]$OFR} & \Sexpr{Hres_ADL02[[3]]$AN} & 
+	      \Sexpr{Hres_ADL02[[3]]$PDR} & \Sexpr{Hres_ADL02[[3]]$FDR} & - & - & - & - & - & \Sexpr{Hres_ADL02[[3]]$TIME}\\
+	      
+	      & SROS-2 & \Sexpr{Hres_PAMLS02[[3]]$CFR} & \Sexpr{Hres_PAMLS02[[3]]$OFR} & \Sexpr{Hres_PAMLS02[[3]]$AN} & 
+	      \Sexpr{Hres_PAMLS02[[3]]$PDR} & \Sexpr{Hres_PAMLS02[[3]]$FDR} &
+	      \Sexpr{Hres_PAMLS02[[3]]$OD$M} & \Sexpr{Hres_PAMLS02[[3]]$OD$S} & \Sexpr{Hres_PAMLS02[[3]]$OD$JD}
+	      & \Sexpr{Hres_PAMLS02[[3]]$OD$tpr[1]} & \Sexpr{Hres_PAMLS02[[3]]$OD$fpr[1]} & \Sexpr{Hres_PAMLS02[[3]]$TIME}\\
+	      
+	     & ASROS-2 & \Sexpr{Hres_APAMLS02[[3]]$CFR} & \Sexpr{Hres_APAMLS02[[3]]$OFR} & \Sexpr{Hres_APAMLS02[[3]]$AN} & 
+	      \Sexpr{Hres_APAMLS02[[3]]$PDR} & \Sexpr{Hres_APAMLS02[[3]]$FDR} &
+	      \Sexpr{Hres_APAMLS02[[3]]$OD$M} & \Sexpr{round(Hres_APAMLS02[[3]]$OD$S,digit=2)} & \Sexpr{Hres_APAMLS02[[3]]$OD$JD}
+	      & \Sexpr{Hres_APAMLS02[[3]]$OD$tpr[1]} & \Sexpr{Hres_APAMLS02[[3]]$OD$fpr[1]} & \Sexpr{Hres_APAMLS02[[3]]$TIME}\\
+	      
+	       & sLTS & \Sexpr{Hres_LTS02[[3]]$CFR} & \Sexpr{Hres_LTS02[[3]]$OFR} & \Sexpr{Hres_LTS02[[3]]$AN} & 
+	      \Sexpr{Hres_LTS02[[3]]$PDR} & \Sexpr{Hres_LTS02[[3]]$FDR} &
+	      \Sexpr{Hres_LTS02[[3]]$OD$M} & \Sexpr{Hres_LTS02[[3]]$OD$S} & \Sexpr{Hres_LTS02[[3]]$OD$JD}
+	      & \Sexpr{Hres_LTS02[[3]]$OD$tpr[1]} & \Sexpr{Hres_LTS02[[3]]$OD$fpr[1]} & \Sexpr{Hres_LTS02[[3]]$TIME}\\
+	      
+	      & PAWLS & \Sexpr{Hres_PAWLS02[[3]]$CFR} & \Sexpr{Hres_PAWLS02[[3]]$OFR} & \Sexpr{Hres_PAWLS02[[3]]$AN} & 
+	      \Sexpr{Hres_PAWLS02[[3]]$PDR} & \Sexpr{Hres_PAWLS02[[3]]$FDR} &
+	      \Sexpr{Hres_PAWLS02[[3]]$OD$M} & \Sexpr{Hres_PAWLS02[[3]]$OD$S} & \Sexpr{Hres_PAWLS02[[3]]$OD$JD}
+	      & \Sexpr{Hres_PAWLS02[[3]]$OD$tpr[1]} & \Sexpr{Hres_PAWLS02[[3]]$OD$fpr[1]} & \Sexpr{Hres_PAWLS02[[3]]$TIME}\\
+	      
+	      & APAWLS & \Sexpr{Hres_APAWLS02[[3]]$CFR} & \Sexpr{Hres_APAWLS02[[3]]$OFR} & \Sexpr{Hres_APAWLS02[[3]]$AN} & 
+	      \Sexpr{Hres_APAWLS02[[3]]$PDR} & \Sexpr{Hres_APAWLS02[[3]]$FDR} &
+	      \Sexpr{Hres_APAWLS02[[3]]$OD$M} & \Sexpr{round(Hres_APAWLS02[[3]]$OD$S,digit=2)} & \Sexpr{Hres_APAWLS02[[3]]$OD$JD}
+	      & \Sexpr{Hres_APAWLS02[[3]]$OD$tpr[1]} & \Sexpr{Hres_APAWLS02[[3]]$OD$fpr[1]} & \Sexpr{Hres_APAWLS02[[3]]$TIME}\\
+	      
+	   \hline\hline
+	
+	\end{tabular}
+	\end{center}
+	\end{table}
+	
 	
 
 % ----------------------------- 30% outliers --------------------------------------------------------------------%
@@ -412,6 +1309,167 @@ options(digits=2)
 	\end{tabular}
 	\end{center}
 	\end{table}
+	
+		%------------------------------------ High dimensional case 20% (combined) ------------------------------%
+		\begin{table}[thp]
+	\begin{center}
+	 \caption{Variable Selection and outliers detection Results for Example 2 ($\bbeta=({\bf 2}_{10}',\bzero_{p-10}')'$ with 30\% outliers )}\label{tableH3}
+	\begin{tabular}{ccrrrrrrrrrrrr}\\\hline\hline
+	  & & \multicolumn{5}{c} {Variable Selection} &&  \multicolumn{5}{c} {Outliers detection} & \\
+	   Case & Method & CFR & OFR  & AN & FP& FN  &  M & S  & JD & FP & FN  & TIME\\ \hline
+	  \multirow{8}{*}{{\bf A}}
+	      & ALasso & \Sexpr{Hres_ADL[[1]]$CFR} & \Sexpr{Hres_ADL[[1]]$OFR} & \Sexpr{Hres_ADL[[1]]$AN} & 
+	      \Sexpr{Hres_ADL[[1]]$PDR} & \Sexpr{Hres_ADL[[1]]$FDR} & - & - & - & - & - & \Sexpr{Hres_ADL[[1]]$TIME}\\
+	      
+	      & SROS-2 & \Sexpr{Hres_PAMLS[[1]]$CFR} & \Sexpr{Hres_PAMLS[[1]]$OFR} & \Sexpr{Hres_PAMLS[[1]]$AN} & 
+	      \Sexpr{Hres_PAMLS[[1]]$PDR} & \Sexpr{Hres_PAMLS[[1]]$FDR} &
+	      \Sexpr{Hres_PAMLS[[1]]$OD$M} & \Sexpr{Hres_PAMLS[[1]]$OD$S} & \Sexpr{Hres_PAMLS[[1]]$OD$JD}
+	      & \Sexpr{Hres_PAMLS[[1]]$OD$tpr[1]} & \Sexpr{Hres_PAMLS[[1]]$OD$fpr[1]} & \Sexpr{Hres_PAMLS[[1]]$TIME}\\
+	      
+	     & ASROS-2 & \Sexpr{Hres_APAMLS[[1]]$CFR} & \Sexpr{Hres_APAMLS[[1]]$OFR} & \Sexpr{Hres_APAMLS[[1]]$AN} & 
+	      \Sexpr{Hres_APAMLS[[1]]$PDR} & \Sexpr{Hres_APAMLS[[1]]$FDR} &
+	      \Sexpr{Hres_APAMLS[[1]]$OD$M} & \Sexpr{Hres_APAMLS[[1]]$OD$S} & \Sexpr{Hres_APAMLS[[1]]$OD$JD}
+	      & \Sexpr{Hres_APAMLS[[1]]$OD$tpr[1]} & \Sexpr{Hres_APAMLS[[1]]$OD$fpr[1]} & \Sexpr{Hres_APAMLS[[1]]$TIME}\\
+	      
+	       & sLTS & \Sexpr{Hres_LTS[[1]]$CFR} & \Sexpr{Hres_LTS[[1]]$OFR} & \Sexpr{Hres_LTS[[1]]$AN} & 
+	      \Sexpr{Hres_LTS[[1]]$PDR} & \Sexpr{Hres_LTS[[1]]$FDR} &
+	      \Sexpr{Hres_LTS[[1]]$OD$M} & \Sexpr{Hres_LTS[[1]]$OD$S} & \Sexpr{Hres_LTS[[1]]$OD$JD}
+	      & \Sexpr{Hres_LTS[[1]]$OD$tpr[1]} & \Sexpr{Hres_LTS[[1]]$OD$fpr[1]} & \Sexpr{Hres_LTS[[1]]$TIME}\\
+	      
+	      & PAWLS & \Sexpr{Hres_PAWLS[[1]]$CFR} & \Sexpr{Hres_PAWLS[[1]]$OFR} & \Sexpr{Hres_PAWLS[[1]]$AN} & 
+	      \Sexpr{Hres_PAWLS[[1]]$PDR} & \Sexpr{Hres_PAWLS[[1]]$FDR} &
+	      \Sexpr{Hres_PAWLS[[1]]$OD$M} & \Sexpr{Hres_PAWLS[[1]]$OD$S} & \Sexpr{Hres_PAWLS[[1]]$OD$JD}
+	      & \Sexpr{Hres_PAWLS[[1]]$OD$tpr[1]} & \Sexpr{Hres_PAWLS[[1]]$OD$fpr[1]} & \Sexpr{Hres_PAWLS[[1]]$TIME}\\
+	      
+	      & APAWLS & \Sexpr{Hres_APAWLS[[1]]$CFR} & \Sexpr{Hres_APAWLS[[1]]$OFR} & \Sexpr{Hres_APAWLS[[1]]$AN} & 
+	      \Sexpr{Hres_APAWLS[[1]]$PDR} & \Sexpr{Hres_APAWLS[[1]]$FDR} &
+	      \Sexpr{Hres_APAWLS[[1]]$OD$M} & \Sexpr{Hres_APAWLS[[1]]$OD$S} & \Sexpr{Hres_APAWLS[[1]]$OD$JD}
+	      & \Sexpr{Hres_APAWLS[[1]]$OD$tpr[1]} & \Sexpr{Hres_APAWLS[[1]]$OD$fpr[1]} & \Sexpr{Hres_APAWLS[[1]]$TIME}\\
+	      \\
+	      	  \multirow{8}{*}{{\bf B}}
+	      & ALasso & \Sexpr{Hres_ADL[[2]]$CFR} & \Sexpr{Hres_ADL[[2]]$OFR} & \Sexpr{Hres_ADL[[2]]$AN} & 
+	      \Sexpr{Hres_ADL[[2]]$PDR} & \Sexpr{Hres_ADL[[2]]$FDR} & - & - & - & - & - & \Sexpr{Hres_ADL[[2]]$TIME}\\
+	      
+	      & SROS-2 & \Sexpr{Hres_PAMLS[[2]]$CFR} & \Sexpr{Hres_PAMLS[[2]]$OFR} & \Sexpr{Hres_PAMLS[[2]]$AN} & 
+	      \Sexpr{Hres_PAMLS[[2]]$PDR} & \Sexpr{Hres_PAMLS[[2]]$FDR} &
+	      \Sexpr{Hres_PAMLS[[2]]$OD$M} & \Sexpr{Hres_PAMLS[[2]]$OD$S} & \Sexpr{Hres_PAMLS[[2]]$OD$JD}
+	      & \Sexpr{Hres_PAMLS[[2]]$OD$tpr[1]} & \Sexpr{Hres_PAMLS[[2]]$OD$fpr[1]} & \Sexpr{Hres_PAMLS[[2]]$TIME}\\
+	      
+	     & ASROS-2 & \Sexpr{Hres_APAMLS[[2]]$CFR} & \Sexpr{Hres_APAMLS[[2]]$OFR} & \Sexpr{Hres_APAMLS[[2]]$AN} & 
+	      \Sexpr{Hres_APAMLS[[2]]$PDR} & \Sexpr{Hres_APAMLS[[2]]$FDR} &
+	      \Sexpr{Hres_APAMLS[[2]]$OD$M} & \Sexpr{Hres_APAMLS[[2]]$OD$S} & \Sexpr{Hres_APAMLS[[2]]$OD$JD}
+	      & \Sexpr{Hres_APAMLS[[2]]$OD$tpr[1]} & \Sexpr{Hres_APAMLS[[2]]$OD$fpr[1]} & \Sexpr{Hres_APAMLS[[2]]$TIME}\\
+	      
+	       & sLTS & \Sexpr{Hres_LTS[[2]]$CFR} & \Sexpr{Hres_LTS[[2]]$OFR} & \Sexpr{Hres_LTS[[2]]$AN} & 
+	      \Sexpr{Hres_LTS[[2]]$PDR} & \Sexpr{Hres_LTS[[2]]$FDR} &
+	      \Sexpr{Hres_LTS[[2]]$OD$M} & \Sexpr{Hres_LTS[[2]]$OD$S} & \Sexpr{Hres_LTS[[2]]$OD$JD}
+	      & \Sexpr{Hres_LTS[[2]]$OD$tpr[1]} & \Sexpr{Hres_LTS[[2]]$OD$fpr[1]} & \Sexpr{Hres_LTS[[2]]$TIME}\\
+	      
+	      & PAWLS & \Sexpr{Hres_PAWLS[[2]]$CFR} & \Sexpr{Hres_PAWLS[[2]]$OFR} & \Sexpr{Hres_PAWLS[[2]]$AN} & 
+	      \Sexpr{Hres_PAWLS[[2]]$PDR} & \Sexpr{Hres_PAWLS[[2]]$FDR} &
+	      \Sexpr{Hres_PAWLS[[2]]$OD$M} & \Sexpr{Hres_PAWLS[[2]]$OD$S} & \Sexpr{Hres_PAWLS[[2]]$OD$JD}
+	      & \Sexpr{Hres_PAWLS[[2]]$OD$tpr[1]} & \Sexpr{Hres_PAWLS[[2]]$OD$fpr[1]} & \Sexpr{Hres_PAWLS[[2]]$TIME}\\
+	      
+	      & APAWLS & \Sexpr{Hres_APAWLS[[2]]$CFR} & \Sexpr{Hres_APAWLS[[2]]$OFR} & \Sexpr{Hres_APAWLS[[2]]$AN} & 
+	      \Sexpr{Hres_APAWLS[[2]]$PDR} & \Sexpr{Hres_APAWLS[[2]]$FDR} &
+	      \Sexpr{Hres_APAWLS[[2]]$OD$M} & \Sexpr{Hres_APAWLS[[2]]$OD$S} & \Sexpr{Hres_APAWLS[[2]]$OD$JD}
+	      & \Sexpr{Hres_APAWLS[[2]]$OD$tpr[1]} & \Sexpr{Hres_APAWLS[[2]]$OD$fpr[1]} & \Sexpr{Hres_APAWLS[[2]]$TIME}\\
+	      \\
+	        	  \multirow{8}{*}{{\bf C}}
+	      & ALasso & \Sexpr{Hres_ADL03[[1]]$CFR} & \Sexpr{Hres_ADL03[[1]]$OFR} & \Sexpr{Hres_ADL03[[1]]$AN} & 
+	      \Sexpr{Hres_ADL03[[1]]$PDR} & \Sexpr{Hres_ADL03[[1]]$FDR} & - & - & - & - & - & \Sexpr{Hres_ADL03[[1]]$TIME}\\
+	      
+	      & SROS-2 & \Sexpr{Hres_PAMLS03[[1]]$CFR} & \Sexpr{Hres_PAMLS03[[1]]$OFR} & \Sexpr{Hres_PAMLS03[[1]]$AN} & 
+	      \Sexpr{Hres_PAMLS03[[1]]$PDR} & \Sexpr{Hres_PAMLS03[[1]]$FDR} &
+	      \Sexpr{Hres_PAMLS03[[1]]$OD$M} & \Sexpr{Hres_PAMLS03[[1]]$OD$S} & \Sexpr{Hres_PAMLS03[[1]]$OD$JD}
+	      & \Sexpr{Hres_PAMLS03[[1]]$OD$tpr[1]} & \Sexpr{Hres_PAMLS03[[1]]$OD$fpr[1]} & \Sexpr{Hres_PAMLS03[[1]]$TIME}\\
+	      
+	     & ASROS-2 & \Sexpr{Hres_APAMLS03[[1]]$CFR} & \Sexpr{Hres_APAMLS03[[1]]$OFR} & \Sexpr{Hres_APAMLS03[[1]]$AN} & 
+	      \Sexpr{Hres_APAMLS03[[1]]$PDR} & \Sexpr{Hres_APAMLS03[[1]]$FDR} &
+	      \Sexpr{Hres_APAMLS03[[1]]$OD$M} & \Sexpr{Hres_APAMLS03[[1]]$OD$S} & \Sexpr{Hres_APAMLS03[[1]]$OD$JD}
+	      & \Sexpr{Hres_APAMLS03[[1]]$OD$tpr[1]} & \Sexpr{Hres_APAMLS03[[1]]$OD$fpr[1]} & \Sexpr{Hres_APAMLS03[[1]]$TIME}\\
+	      
+	       & sLTS & \Sexpr{Hres_LTS03[[1]]$CFR} & \Sexpr{Hres_LTS03[[1]]$OFR} & \Sexpr{Hres_LTS03[[1]]$AN} & 
+	      \Sexpr{Hres_LTS03[[1]]$PDR} & \Sexpr{Hres_LTS03[[1]]$FDR} &
+	      \Sexpr{Hres_LTS03[[1]]$OD$M} & \Sexpr{Hres_LTS03[[1]]$OD$S} & \Sexpr{Hres_LTS03[[1]]$OD$JD}
+	      & \Sexpr{Hres_LTS03[[1]]$OD$tpr[1]} & \Sexpr{Hres_LTS03[[1]]$OD$fpr[1]} & \Sexpr{Hres_LTS03[[1]]$TIME}\\
+	      
+	      & PAWLS & \Sexpr{Hres_PAWLS03[[1]]$CFR} & \Sexpr{Hres_PAWLS03[[1]]$OFR} & \Sexpr{Hres_PAWLS03[[1]]$AN} & 
+	      \Sexpr{Hres_PAWLS03[[1]]$PDR} & \Sexpr{Hres_PAWLS03[[1]]$FDR} &
+	      \Sexpr{Hres_PAWLS03[[1]]$OD$M} & \Sexpr{Hres_PAWLS03[[1]]$OD$S} & \Sexpr{Hres_PAWLS03[[1]]$OD$JD}
+	      & \Sexpr{Hres_PAWLS03[[1]]$OD$tpr[1]} & \Sexpr{Hres_PAWLS03[[1]]$OD$fpr[1]} & \Sexpr{Hres_PAWLS03[[1]]$TIME}\\
+	      
+	      & APAWLS & \Sexpr{Hres_APAWLS03[[1]]$CFR} & \Sexpr{Hres_APAWLS03[[1]]$OFR} & \Sexpr{Hres_APAWLS03[[1]]$AN} & 
+	      \Sexpr{Hres_APAWLS03[[1]]$PDR} & \Sexpr{Hres_APAWLS03[[1]]$FDR} &
+	      \Sexpr{Hres_APAWLS03[[1]]$OD$M} & \Sexpr{Hres_APAWLS03[[1]]$OD$S} & \Sexpr{Hres_APAWLS03[[1]]$OD$JD}
+	      & \Sexpr{Hres_APAWLS03[[1]]$OD$tpr[1]} & \Sexpr{Hres_APAWLS03[[1]]$OD$fpr[1]} & \Sexpr{Hres_APAWLS03[[1]]$TIME}\\
+	      
+	     \\
+	       	  \multirow{8}{*}{{\bf D}}
+	      & ALasso & \Sexpr{Hres_ADL03[[2]]$CFR} & \Sexpr{Hres_ADL03[[2]]$OFR} & \Sexpr{Hres_ADL03[[2]]$AN} & 
+	      \Sexpr{Hres_ADL03[[2]]$PDR} & \Sexpr{Hres_ADL03[[2]]$FDR} & - & - & - & - & - & \Sexpr{Hres_ADL03[[2]]$TIME}\\
+	
+	      & SROS-2 & \Sexpr{Hres_PAMLS03[[2]]$CFR} & \Sexpr{Hres_PAMLS03[[2]]$OFR} & \Sexpr{Hres_PAMLS03[[2]]$AN} & 
+	      \Sexpr{Hres_PAMLS03[[2]]$PDR} & \Sexpr{Hres_PAMLS03[[2]]$FDR} &
+	      \Sexpr{Hres_PAMLS03[[2]]$OD$M} & \Sexpr{Hres_PAMLS03[[2]]$OD$S} & \Sexpr{Hres_PAMLS03[[2]]$OD$JD}
+	      & \Sexpr{Hres_PAMLS03[[2]]$OD$tpr[1]} & \Sexpr{Hres_PAMLS03[[2]]$OD$fpr[1]} & \Sexpr{Hres_PAMLS03[[2]]$TIME}\\
+	      
+	     & ASROS-2 & \Sexpr{Hres_APAMLS03[[2]]$CFR} & \Sexpr{Hres_APAMLS03[[2]]$OFR} & \Sexpr{Hres_APAMLS03[[2]]$AN} & 
+	      \Sexpr{Hres_APAMLS03[[2]]$PDR} & \Sexpr{Hres_APAMLS03[[2]]$FDR} &
+	      \Sexpr{Hres_APAMLS03[[2]]$OD$M} & \Sexpr{round(Hres_APAMLS03[[2]]$OD$S,digit=2)} & \Sexpr{Hres_APAMLS03[[2]]$OD$JD}
+	      & \Sexpr{Hres_APAMLS03[[2]]$OD$tpr[1]} & \Sexpr{Hres_APAMLS03[[2]]$OD$fpr[1]} & \Sexpr{Hres_APAMLS03[[2]]$TIME}\\
+	      
+	       & sLTS & \Sexpr{Hres_LTS03[[2]]$CFR} & \Sexpr{Hres_LTS03[[2]]$OFR} & \Sexpr{Hres_LTS03[[2]]$AN} & 
+	      \Sexpr{Hres_LTS03[[2]]$PDR} & \Sexpr{Hres_LTS03[[2]]$FDR} &
+	      \Sexpr{Hres_LTS03[[2]]$OD$M} & \Sexpr{Hres_LTS03[[2]]$OD$S} & \Sexpr{Hres_LTS03[[2]]$OD$JD}
+	      & \Sexpr{Hres_LTS03[[2]]$OD$tpr[1]} & \Sexpr{Hres_LTS03[[2]]$OD$fpr[1]} & \Sexpr{Hres_LTS03[[2]]$TIME}\\
+	      
+	      & PAWLS & \Sexpr{Hres_PAWLS03[[2]]$CFR} & \Sexpr{Hres_PAWLS03[[2]]$OFR} & \Sexpr{Hres_PAWLS03[[2]]$AN} & 
+	      \Sexpr{Hres_PAWLS03[[2]]$PDR} & \Sexpr{Hres_PAWLS03[[2]]$FDR} &
+	      \Sexpr{Hres_PAWLS03[[2]]$OD$M} & \Sexpr{Hres_PAWLS03[[2]]$OD$S} & \Sexpr{Hres_PAWLS03[[2]]$OD$JD}
+	      & \Sexpr{Hres_PAWLS03[[2]]$OD$tpr[1]} & \Sexpr{Hres_PAWLS03[[2]]$OD$fpr[1]} & \Sexpr{Hres_PAWLS03[[2]]$TIME}\\
+	      
+	      & APAWLS & \Sexpr{Hres_APAWLS03[[2]]$CFR} & \Sexpr{Hres_APAWLS03[[2]]$OFR} & \Sexpr{Hres_APAWLS03[[2]]$AN} & 
+	      \Sexpr{Hres_APAWLS03[[2]]$PDR} & \Sexpr{Hres_APAWLS03[[2]]$FDR} &
+	      \Sexpr{Hres_APAWLS03[[2]]$OD$M} & \Sexpr{round(Hres_APAWLS03[[2]]$OD$S,digit=2)} & \Sexpr{Hres_APAWLS03[[2]]$OD$JD}
+	      & \Sexpr{Hres_APAWLS03[[2]]$OD$tpr[1]} & \Sexpr{Hres_APAWLS03[[2]]$OD$fpr[1]} & \Sexpr{Hres_APAWLS03[[2]]$TIME}\\
+	      
+	      \\
+	       	  \multirow{8}{*}{{\bf E}}
+	      & ALasso & \Sexpr{Hres_ADL03[[3]]$CFR} & \Sexpr{Hres_ADL03[[3]]$OFR} & \Sexpr{Hres_ADL03[[3]]$AN} & 
+	      \Sexpr{Hres_ADL03[[3]]$PDR} & \Sexpr{Hres_ADL03[[3]]$FDR} & - & - & - & - & - & \Sexpr{Hres_ADL03[[3]]$TIME}\\
+	      
+	      & SROS-2 & \Sexpr{Hres_PAMLS03[[3]]$CFR} & \Sexpr{Hres_PAMLS03[[3]]$OFR} & \Sexpr{Hres_PAMLS03[[3]]$AN} & 
+	      \Sexpr{Hres_PAMLS03[[3]]$PDR} & \Sexpr{Hres_PAMLS03[[3]]$FDR} &
+	      \Sexpr{Hres_PAMLS03[[3]]$OD$M} & \Sexpr{Hres_PAMLS03[[3]]$OD$S} & \Sexpr{Hres_PAMLS03[[3]]$OD$JD}
+	      & \Sexpr{Hres_PAMLS03[[3]]$OD$tpr[1]} & \Sexpr{Hres_PAMLS03[[3]]$OD$fpr[1]} & \Sexpr{Hres_PAMLS03[[3]]$TIME}\\
+	      
+	     & ASROS-2 & \Sexpr{Hres_APAMLS03[[3]]$CFR} & \Sexpr{Hres_APAMLS03[[3]]$OFR} & \Sexpr{Hres_APAMLS03[[3]]$AN} & 
+	      \Sexpr{Hres_APAMLS03[[3]]$PDR} & \Sexpr{Hres_APAMLS03[[3]]$FDR} &
+	      \Sexpr{Hres_APAMLS03[[3]]$OD$M} & \Sexpr{round(Hres_APAMLS03[[3]]$OD$S,digit=2)} & \Sexpr{Hres_APAMLS03[[3]]$OD$JD}
+	      & \Sexpr{Hres_APAMLS03[[3]]$OD$tpr[1]} & \Sexpr{Hres_APAMLS03[[3]]$OD$fpr[1]} & \Sexpr{Hres_APAMLS03[[3]]$TIME}\\
+	      
+	       & sLTS & \Sexpr{Hres_LTS03[[3]]$CFR} & \Sexpr{Hres_LTS03[[3]]$OFR} & \Sexpr{Hres_LTS03[[3]]$AN} & 
+	      \Sexpr{Hres_LTS03[[3]]$PDR} & \Sexpr{Hres_LTS03[[3]]$FDR} &
+	      \Sexpr{Hres_LTS03[[3]]$OD$M} & \Sexpr{Hres_LTS03[[3]]$OD$S} & \Sexpr{Hres_LTS03[[3]]$OD$JD}
+	      & \Sexpr{Hres_LTS03[[3]]$OD$tpr[1]} & \Sexpr{Hres_LTS03[[3]]$OD$fpr[1]} & \Sexpr{Hres_LTS03[[3]]$TIME}\\
+	      
+	      & PAWLS & \Sexpr{Hres_PAWLS03[[3]]$CFR} & \Sexpr{Hres_PAWLS03[[3]]$OFR} & \Sexpr{Hres_PAWLS03[[3]]$AN} & 
+	      \Sexpr{Hres_PAWLS03[[3]]$PDR} & \Sexpr{Hres_PAWLS03[[3]]$FDR} &
+	      \Sexpr{Hres_PAWLS03[[3]]$OD$M} & \Sexpr{Hres_PAWLS03[[3]]$OD$S} & \Sexpr{Hres_PAWLS03[[3]]$OD$JD}
+	      & \Sexpr{Hres_PAWLS03[[3]]$OD$tpr[1]} & \Sexpr{Hres_PAWLS03[[3]]$OD$fpr[1]} & \Sexpr{Hres_PAWLS03[[3]]$TIME}\\
+	      
+	      & APAWLS & \Sexpr{Hres_APAWLS03[[3]]$CFR} & \Sexpr{Hres_APAWLS03[[3]]$OFR} & \Sexpr{Hres_APAWLS03[[3]]$AN} & 
+	      \Sexpr{Hres_APAWLS03[[3]]$PDR} & \Sexpr{Hres_APAWLS03[[3]]$FDR} &
+	      \Sexpr{Hres_APAWLS03[[3]]$OD$M} & \Sexpr{round(Hres_APAWLS03[[3]]$OD$S,digit=2)} & \Sexpr{Hres_APAWLS03[[3]]$OD$JD}
+	      & \Sexpr{Hres_APAWLS03[[3]]$OD$tpr[1]} & \Sexpr{Hres_APAWLS03[[3]]$OD$fpr[1]} & \Sexpr{Hres_APAWLS03[[3]]$TIME}\\
+	      
+	   \hline\hline
+	
+	\end{tabular}
+	\end{center}
+	\end{table}
+	
 % ----------------------------- outliers detection---------------------------------------------------------------%
 % ----------------------------- outliers detection 10% outliers--------------------------------------------------%
 		\begin{table}[thp]
