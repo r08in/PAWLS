@@ -9,15 +9,38 @@ beta = c(3, 2, 1.5, 0, 0, 0, 0, 0)
 
 model <- c("A","B", "C", "D","E")
 m <- length(model)
-par(mfrow = c(3, 2))
-for(i in 1:m){
-  out <- GenerateDataByModel(n = n, beta = beta, model = model[i], pro=0.2)
-  res <- srcdreg(out$x, out$y,search = "all")
-  lambda <- res$lambda1s
-  weight <- matrix(res$res$w[,res$index2,],50,50)
-  PlotEfficiency(lambda,weight,out$x,main=paste("Case",model[i]))
+np <- 3
+par(mfrow = c(1, np))
+col <- c("black","grey","blue","green","red")
+for(j in 1:np){
+  for(i in 1:m){
+    out <- GenerateDataByModel(n = n, beta = beta, model = model[i], pro=0.2)
+    res <- pawls(out$x, out$y,search = "grid")
+    lambda <- res$lambda1s
+    browser()
+    weight <- matrix(as.vector(res$res$w[,res$index2,]),50,50)
+    pdata <- ComputeEfficiency(length(lambda),weight,out$x)
+    if(i==1){
+      plot(pdata$op,pdata$varb[,j],type="n",xlim=c(0,0.6), 
+                xlab="Percent of Outliers", main=main, ylab=expression(paste("Var(",hat(beta),")",sep = "")))
+    }
+    lines(op,varb[,j],lwd=2, lty=1,col=col[i])
+  }
 }
 
+
+ComputeEfficiency <- function(L,weight,x, sigma=2)
+{
+  n <- dim(x)[1]
+  p <- dim(x)[2]
+  varb <- matrix(0,nrow=L,ncol=p)
+  for(i in 1 : L){
+    varb[i,] <- diag(solve(t(x) %*% diag(weight[i,]^2) %*% x))  * sigma^2
+  }
+  op <- apply(weight!=1,1,sum)/n
+  #
+  list(varb=varb,op=op)
+}
 
 
 
