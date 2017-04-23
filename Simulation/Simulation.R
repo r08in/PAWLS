@@ -202,7 +202,7 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
             ofr[i] <- ifelse(common_size == pnum & msize[i] > pnum, 1, 0)  # over fit
             cfr2[i] <- ifelse(common_size == pnum & msize[i] <= pnum + over_size, 1, 0)  # over fit by at most 2
             pdr[i] <- common_size/pnum  # positive discover rate
-            fdr[i] <- (msize[i] - common_size)/msize[i]  #
+            fdr[i] <- ifelse(msize[i]==0,0,(msize[i] - common_size)/msize[i])  #
             mses[i] <- sum((res$beta - beta)^2)
             setTxtProgressBar(pb, (j - 1) * L + i)
             if(method == "MMNNG_DATA"){
@@ -419,52 +419,4 @@ PlotEfficiency <- function(lambda,weight,x, sigma=2,main=NULL)
   for(i in 1:p){
     lines(op,varb[,i],lwd=2, lty=1,col=col[i])
   }
-}
-
-ComputeFPFN4beta <- function(res,beta){
-  m <- length(res)
-  m <- ifelse(m>5,5,m)
-  tp <- which(beta!=0)
-  tn <- which(beta==0)
-  for(i in 1:m){
-    betas <- res[[i]]$betas
-    L <- dim(betas)[1]
-    fp <- 0
-    fn <- 0
-    for(j in 1:L){
-      ap <- which(betas[j,-1]!=0)
-      an <- which(betas[j,-1]==0)
-      fp <- fp + length(intersect(ap,tn)) / length(tn)
-      fn <- fn + length(intersect(an,tp)) / length(tp)
-    }
-    res[[i]]$fp <- fp/L
-    res[[i]]$fn <- fn/L
-  }
-  res
-}
-ComputeFPFN4w <- function(res,pro=0.1){
-  m <- 5
-  for(i in 1:m){
-    ws <- res[[i]]$ws
-    L <- dim(ws)[1]
-    n <- dim(ws)[2]
-    if(res[[i]]$model=="A" || res[[i]]$model=="B"){
-      tp <- NULL
-      tn <- 1:n
-    } else{
-      tp <- 1:(n*pro)
-      tn <- (n*pro+1) : n
-    }
-    fp <- 0
-    fn <- 0
-    for(j in 1:L){
-      ap <- which(ws[j,]!=1)
-      an <- which(ws[j,]==1)
-      fp <- fp + length(intersect(ap,tn)) / length(tn)
-      fn <- fn + length(intersect(an,tp)) / length(tp)
-    }
-    res[[i]]$OD$fp <- fp/L
-    res[[i]]$OD$fn <- fn/L
-  }
-  res
 }

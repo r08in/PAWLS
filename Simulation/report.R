@@ -1,3 +1,82 @@
+load("Output/Lres_APAWLS.rda")
+load("Output/Lres_APAWLS02.rda")
+load("Output/Lres_APAWLS03.rda")
+load("Output/Lres_PAWLS.rda")
+load("Output/Lres_PAWLS02.rda")
+load("Output/Lres_PAWLS03.rda")
+load("Output/Lres_APAMLS.rda")
+load("Output/Lres_APAMLS02.rda")
+load("Output/Lres_APAMLS03.rda")
+load("Output/Lres_PAMLS.rda")
+load("Output/Lres_PAMLS02.rda")
+load("Output/Lres_PAMLS03.rda")
+load("Output/Lres_mmnng.rda")
+load("Output/Lres_mmnng02.rda")
+load("Output/Lres_mmnng03.rda")
+load("Output/Lres_LTS.rda")
+load("Output/Lres_LTS02.rda")
+load("Output/Lres_LTS03.rda")
+load("Output/Lres_ROSS.rda")
+load("Output/Lres_ROSS02.rda")
+load("Output/Lres_ROSS03.rda")
+load("Output/Lres_ADL.rda")
+load("Output/Lres_ADL02.rda")
+load("Output/Lres_ADL03.rda")
+load("Output/Lres_IPOD.rda")
+
+load("Output/Hres_ADL.rda")
+load("Output/Hres_LTS.rda")
+load("Output/Hres_APAWLS.rda")
+load("Output/Hres_ADL02.rda")
+load("Output/Hres_LTS02.rda")
+load("Output/Hres_APAWLS02.rda")
+load("Output/Hres_ADL03.rda")
+load("Output/Hres_LTS03.rda")
+load("Output/Hres_APAWLS03.rda")
+load("Output/Hres_PAWLS.rda")
+load("Output/Hres_PAWLS02.rda")
+load("Output/Hres_PAWLS03.rda")
+load("Output/Hres_APAMLS.rda")
+load("Output/Hres_APAMLS02.rda")
+load("Output/Hres_APAMLS03.rda")
+load("Output/Hres_PAMLS.rda")
+load("Output/Hres_PAMLS02.rda")
+load("Output/Hres_PAMLS03.rda")
+
+load("Output/APAWLS_AIC.rda")
+load("Output/APAWLS_BIC.rda")
+load("Output/PAWLS_AIC.rda")
+load("Output/PAWLS_BIC.rda")
+L <- 100
+res <- list(Lres_ADL, Lres_mmnng, Lres_ROSS, Lres_PAMLS, Lres_APAMLS, Lres_LTS, Lres_PAWLS, Lres_APAWLS)
+res02 <- list(Lres_ADL02, Lres_mmnng02, Lres_ROSS02, Lres_PAMLS02, Lres_APAMLS02,
+              Lres_LTS02, Lres_PAWLS02, Lres_APAWLS02)
+group0 <- c(rep("ALasso", L), rep("MMNNG", L), rep("SROS", L), rep("SROS-2", L), rep("ASROS-2", L),
+           rep("SLTS", L), rep("PAWLS", L), rep("APAWLS", L))
+model <- c("A","B", "C","D", "E")
+g <- 8
+m <- 5
+# attach(mtcars)
+# par(mfrow = c(2, 3))
+for(i in 1:m){
+  mse <- NULL
+  group <- group0
+  for(j in 1:g){
+    if(i<=2){
+      mse <- c(mse, res[[j]][[i]]$mses)
+    } else{
+      if(j==1){
+        group <- group0[-(1:L)]
+      }else{
+        mse <- c(mse,res02[[j]][[i-2]]$mses)       
+      }
+    }
+  }
+  x11()
+  boxplot(mse ~ group, main = paste("Case",model[i],sep=""), outline = FALSE)
+}
+
+
 ##### beta MSE#####
 treamMSE = function(se, pro = 0.1) {
     num = round(length(se) * pro)

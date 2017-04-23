@@ -3,21 +3,21 @@
 ## BIC
 BIC_grid = function(wloss, beta, w) {
   
-  l1 <- dim(beta)[1]
-  l2 <-  dim(beta)[2]
-  index1 <- 1
+  l2 <- dim(beta)[1]
+  l1 <-  dim(beta)[2]
   index2 <- 1
+  index1 <- 1
   BIC.max <- 1e+08
   bicPre = BIC.max
-  bicTemp <- matrix(0, l1, l2)
-  bicTemp2<- matrix(0, l1, l2)
-  wdf <- matrix(0, l1, l2)
-  bdf <- matrix(0, l1, l2)
+  bicTemp <- matrix(0, l2, l1)
+  bicTemp2<- matrix(0, l2, l1)
+  wdf <- matrix(0, l2, l1)
+  bdf <- matrix(0, l2, l1)
   n <- length(w[1, 1, ])
   pro <- 0.5
   
-  for (i in 1 : l1) {
-    for (j in 1 : l2) {
+  for (i in 1 : l2) {
+    for (j in 1 : l1) {
       wdf[i, j] <- sum(w[i, j, ] != 1 + 0)
       bdf[i, j] <- sum(beta[i, j, ] != 0 + 0)
       bicTemp[i, j] <- log(wloss[i, j]/(n)) + (bdf[i, j] + wdf[i, j]) * log(n)/(n)
@@ -26,16 +26,16 @@ BIC_grid = function(wloss, beta, w) {
       }else{
         bicTemp2[i,j]=bicTemp[i,j]
         if (bicTemp[i, j] <= bicPre) {
-          index1 = i
-          index2 = j
+          index2 = i
+          index1 = j
           bicPre = bicTemp[i, j]
         }
       }
     }
   }
   bicTemp2 <- ifelse(bicTemp2==-BIC.max,max(bicTemp),bicTemp2)
-  res = list(beta = beta[index1, index2, ], w = w[index1,index2,], raw.bic = bicTemp, 
-             bic=bicTemp2,index1=index1,index2=index2)
+  res = list(beta = beta[index2, index1, ], w = w[index2,index1,], raw.bic = bicTemp, 
+             bic=bicTemp2,index2=index2,index1=index1)
 }
 
 BIC_cross = function(loss, dfw, dfb, n ) {

@@ -95,7 +95,7 @@ plot(fpr,tpr,type="p")
 
 # APAWLS
 
-test_APAWLS  <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS", 
+Lres_APAWLS  <- simulation(L, n, beta, c("A", "B", "C", "D","E"), method = "PAWLS", initial = "PAWLS", 
                          lambda2.min=0.05, lambda1.min=0.001,
                          seed = NULL, useDataFile = TRUE,       
                          updateInitial =FALSE, intercept = TRUE)

@@ -1,3 +1,21 @@
+source("Simulation/Simulation.R")
+# n=50,p=8----------------------------------------------
+L = 100
+n = 50
+p = 8
+beta = c(3, 2, 1.5, 0, 0, 0, 0, 0)
+#beta = c(0, 0, 0, 0, 0, 0, 0, 0)
+
+model <- c("A","B", "C","E")
+m <- length(model)
+par(mfrow = c(2, 2))
+for(i in 1:m){
+  out <- GenerateDataByModel(n = n, beta = beta, model = model[i], pro=0.2)
+  res <- pawls(out$x, out$y,lambda1.min=0.05,lambda2.min=0.001,search = "grid")
+  lambda <- res$lambda2
+  weight <- matrix(res$ws[,res$index1,],50,50)
+  PlotEfficiency(lambda,weight,out$x,main=paste("Case",model[i]))
+}
 
 source("Simulation/Simulation.R")
 # n=50,p=8----------------------------------------------
@@ -14,19 +32,23 @@ par(mfrow = c(1, np))
 col <- c("black","grey","blue","green","red")
 for(j in 1:np){
   for(i in 1:m){
+    set.seed(2016)
     out <- GenerateDataByModel(n = n, beta = beta, model = model[i], pro=0.2)
-    res <- pawls(out$x, out$y,search = "grid")
-    lambda <- res$lambda1s
-    browser()
-    weight <- matrix(as.vector(res$res$w[,res$index2,]),50,50)
+    res <- pawls(out$x, out$y,lambda1.min=0.05,lambda2.min=0.001,search = "grid")
+    lambda <- res$lambda2
+    weight <- matrix(res$ws[,res$index1,],50,50)
     pdata <- ComputeEfficiency(length(lambda),weight,out$x)
     if(i==1){
-      plot(pdata$op,pdata$varb[,j],type="n",xlim=c(0,0.6), 
-                xlab="Percent of Outliers", main=main, ylab=expression(paste("Var(",hat(beta),")",sep = "")))
+      plot(pdata$op,pdata$varb[,j],type="n", xlim=c(0,0.5),ylim=c(0,0.5),
+           xlab="Percent of Outliers", main=NULL, ylab=expression(paste("Var(",hat(beta),")",sep = "")))
     }
-    lines(op,varb[,j],lwd=2, lty=1,col=col[i])
+    lines(pdata$op,pdata$varb[,j],lwd=2, lty=1,col=col[i])
   }
+  legend(0,0.5,c("Case A", "Case B", "Case C","Case D","Case E"),
+         col=col,lty=1, lwd=2, ncol = 2)
 }
+
+
 
 
 ComputeEfficiency <- function(L,weight,x, sigma=2)
@@ -41,7 +63,6 @@ ComputeEfficiency <- function(L,weight,x, sigma=2)
   #
   list(varb=varb,op=op)
 }
-
 
 
 n = 50

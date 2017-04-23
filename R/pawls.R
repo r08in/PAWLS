@@ -125,6 +125,10 @@ pawls = function(x, y, nlambda1 = 100, nlambda2 = 50, lambda1 = NULL, lambda2 = 
                   lambda2 = lambda2,
                   opt.lambda1 = lambda1[res2$index1],
                   opt.lambda2 = lambda2[res2$index2],
+                  index1=res2$index1,
+                  index2=res2$index2,
+                  ws = res1$w,
+                  betas = res1$betas,
                   iter = res1$iter,
                   raw.bic = res2$raw.bic,
                   bic = res2$bic)
