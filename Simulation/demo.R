@@ -15,6 +15,12 @@ e[i] <- e[i] + 5                # vertical outliers
 y <- c(x %*% beta + sigma * e)  # response
 x[i,] <- x[i,] + 5              # bad leverage points
 
-## fit
-pawls(x,y,lambda1 = 0.1, lambda2 = 0.005)
-pawls(x,y,lambda1.min = 0.0001, lambda2.min = 0.001)
+## fit pawls model over a find grid of tuning parameters
+pawls(x,y)
+
+## fit adaptive pawls model over a find grid of tuning parameters
+pawls(x,y,lambda1.min = 0.001, lambda2.min = 0.05, initial = "PAWLS")
+
+## fit adaptive pawls model using corss search over a grid of tuning parameters
+pawls(x,y,lambda1.min = 0.001, lambda2.min = 0.05, initial = "PAWLS", search="cross")
+

@@ -5,10 +5,10 @@
 \title{Penalized adaptive weighted least squares regression}
 \usage{
 pawls(x, y, nlambda1 = 100, nlambda2 = 50, lambda1 = NULL,
-  lambda2 = NULL, lambda1.min = ifelse(n > p, 0.001, 0.05),
-  lambda2.min = ifelse(n > p, 0.05, 0.001), beta0 = NULL, w0 = NULL,
-  initial = c("uniform", "PAWLS"), delta = 1e-06, maxIter = 1000,
-  intercept = TRUE, standardize = TRUE, search = c("cross", "grid"))
+  lambda2 = NULL, lambda1.min = 0.05, lambda2.min = 0.001, beta0 = NULL,
+  w0 = NULL, initial = c("uniform", "PAWLS"), delta = 1e-06,
+  maxIter = 1000, intercept = TRUE, standardize = TRUE,
+  search = c("grid", "cross"))
 }
 \arguments{
 \item{x}{a numeric matrix containing the predictor variables without an intercept.  \code{pawls}
@@ -29,12 +29,10 @@ spaced on the log scale.}
 spaced on the log scale.}
 
 \item{lambda1.min}{a numeric value giving the smallest value for \code{lambda1}, as a fraction of the
-\code{lambda1} maximum. The default is .001 if the number of observations is larger than the number of
-covariates and .05 otherwise. Note that the \code{lambda1}  maximum  is an estimate of tuning parameter that set all the coefficientes to 0.}
+\code{lambda1} maximum. The default is .05. Note that the \code{lambda1}  maximum  is an estimate of tuning parameter that set all the coefficientes to 0.}
 
 \item{lambda2.min}{a numeric value giving the smallest value for \code{lambda2}, as a fraction of the
-\code{lambda2} maximum.  The default is .05 if the number of observations is larger than the number of
-covariates and .001 otherwise. Note that the \code{lambda2}  maximum  is an estimate of tuning parameter that set all the weights to 1.}
+\code{lambda2} maximum.  The default is .001. Note that the \code{lambda2}  maximum  is an estimate of tuning parameter that set all the weights to 1.}
 
 \item{beta0}{the initial estimates of coefficients to be used in the adaptive penalty for \code{beta}.}
 
@@ -57,11 +55,11 @@ to have unit L2 norm (the default is TRUE).}
 
 \item{search}{a character string specifying the algorithm to select tunning parameters for both coefficients and weight
 vectors. If "cross", the optimal tuning parameters are searched alternatively by minimizing \code{BIC}. If "grid", 
-the optimal tuning parameters are selected as the pair that minimizs \code{BIC} over a fine grid.}
+the optimal tuning parameters are selected as the pair that minimizs \code{BIC} over a fine grid. The default is "grid".}
 }
 \value{
-An object of class "pawls.cross"(if \code{search=\code{cross}}) or "pawls.grid" 
-(if \code{search=\code{grid}}) contaning:
+An object of class "pawls.cross"(if \code{search=cross}) or \code{"pawls.grid"} 
+(if \code{search=grid}) contaning:
 
 \item{beta}{ a numeric vector containing the respective coefficient estimates with the optimal tuning parameters.}
 \item{w}{ a numeric vector containing the respective weight estimates with the optimal tuning parameters.}
@@ -70,22 +68,47 @@ An object of class "pawls.cross"(if \code{search=\code{cross}}) or "pawls.grid"
 \item{opt.lambda1}{a numeric value giving the optimal \code{lambda1} in the sense of minimzing \code{BIC}.}
 \item{opt.lambda2}{a numeric value giving the optimal \code{lambda2} in the sense of minimzing \code{BIC}.}
 \item{iter}{a numeric matrix with \code{nlambda2} rows and \code{nlambda1} columns giving the number of iteration until convergence
-at each pair of tuning parameters(\code{search=\code{grid}}) or a nueric value giving the number of iteration 
-in corss search until convergence(\code{search=\code{cross}}).}
+at each pair of tuning parameters(\code{search=grid}) or a nueric value giving the number of iteration 
+in corss search until convergence(\code{search=cross}).}
 \item{betas}{ a 3-dimension numeric array containing the coefficient estimates. The dimensions are equal to \code{nlambda2}, \code{nlambda1} 
-and the number of coefficients, respectively. It belongs to the object of class "pawls.grid" only.}
+and the number of coefficients, respectively. It belongs to the object of class \code{"pawls.grid"} only.}
 \item{ws}{ a 3-dimension numeric array containing the weight estimates. The dimensions are equal to \code{nlambda2}, \code{nlambda1} 
-and the number of observations, respectively. It belongs to the object of class "pawls.grid" only.}
+and the number of observations, respectively. It belongs to the object of class \code{"pawls.grid"} only.}
 \item{raw.bic}{a numeric matrix with \code{nlambda2} rows and \code{nlambda1} columns giving the raw \code{BIC}
-value for each pair of tuning prameters. It belongs to the object of class "pawls.grid" only.}
+value for each pair of tuning prameters. It belongs to the object of class \code{"pawls.grid"} only.}
 \item{bic}{a numeric matrix with \code{nlambda2} rows and \code{nlambda1} columns giving the \code{BIC}
-value for each pair of tuning prameters. It belongs to the object of class "pawls.grid" only.}
+value for each pair of tuning prameters. It belongs to the object of class \code{"pawls.grid"} only.}
 }
 \description{
 Compute weighted least squares regression with \eqn{L_{1}}{L1} regularization on both the
 coefficients and weight vectors.
 }
+\examples{
+## generate data
+library("mvtnorm")
+set.seed(123)  # for reproducibility
+n = 100 # number of observations
+p = 8 # number of variables
+beta = c(1, 2, 3, 0, 0, 0, 0, 0) # coefficients
+sigma <- 0.5      # controls signal-to-noise ratio
+epsilon <- 0.1    # contamination level
+Sigma <- 0.5^t(sapply(1:p, function(i, j) abs(i-j), 1:p))
+x <- rmvnorm(n, sigma=Sigma)    # predictor matrix
+e <- rnorm(n)                   # error terms
+i <- 1:ceiling(epsilon*n)       # observations to be contaminated
+e[i] <- e[i] + 5                # vertical outliers
+y <- c(x \%*\% beta + sigma * e)  # response
+x[i,] <- x[i,] + 5              # bad leverage points
+
+## fit pawls model over a find grid of tuning parameters
+pawls(x,y)
+
+## fit adaptive pawls model over a find grid of tuning parameters
+pawls(x,y,lambda1.min = 0.001, lambda2.min = 0.05, initial = "PAWLS")
+
+## fit adaptive pawls model using corss search over a grid of tuning parameters
+pawls(x,y,lambda1.min = 0.001, lambda2.min = 0.05, initial = "PAWLS", search="cross")
+}
 \author{
 Bin Luo, Xiaoli Gao
 }
-

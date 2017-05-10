@@ -10,5 +10,5 @@ Description: Efficient algorithms for fitting weighted least squares regression 
  and outliers detection efficiently.
 Imports:
 License: GPL-2
-Suggests:
-RoxygenNote: 5.0.1
+Suggests: mvtnorm
+RoxygenNote: 6.0.1
