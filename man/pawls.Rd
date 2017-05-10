@@ -16,9 +16,9 @@ standardizes the data and includes an intercept by default.}
 
 \item{y}{a numeric vector containing the response variable.}
 
-\item{nlambda1}{The number of lambda1 values (the default is 100).}
+\item{nlambda1}{the number of lambda1 values (the default is 100).}
 
-\item{nlambda2}{The number of lambda2 values (the default is 50).}
+\item{nlambda2}{the number of lambda2 values (the default is 50).}
 
 \item{lambda1}{a numeric vector of non-negative values to be used as tuning parameters of the penalty
  for coefficients. By default, a sequence of values of length \code{nlambda1} is computed, equally
@@ -57,10 +57,35 @@ to have unit L2 norm (the default is TRUE).}
 
 \item{search}{a character string specifying the algorithm to select tunning parameters for both coefficients and weight
 vectors. If "cross", the optimal tuning parameters are searched alternatively by minimizing \code{BIC}. If "grid", 
-the optimal tuning parameters are selected as the pair that minimiz \code{BIC} over a fine grid.}
+the optimal tuning parameters are selected as the pair that minimizs \code{BIC} over a fine grid.}
+}
+\value{
+An object of class "pawls.cross"(if \code{search=\code{cross}}) or "pawls.grid" 
+(if \code{search=\code{grid}}) contaning:
+
+\item{beta}{ a numeric vector containing the respective coefficient estimates with the optimal tuning parameters.}
+\item{w}{ a numeric vector containing the respective weight estimates with the optimal tuning parameters.}
+\item{lambda1}{same as above.}
+\item{lambda2}{same as above.}
+\item{opt.lambda1}{a numeric value giving the optimal \code{lambda1} in the sense of minimzing \code{BIC}.}
+\item{opt.lambda2}{a numeric value giving the optimal \code{lambda2} in the sense of minimzing \code{BIC}.}
+\item{iter}{a numeric matrix with \code{nlambda2} rows and \code{nlambda1} columns giving the number of iteration until convergence
+at each pair of tuning parameters(\code{search=\code{grid}}) or a nueric value giving the number of iteration 
+in corss search until convergence(\code{search=\code{cross}}).}
+\item{betas}{ a 3-dimension numeric array containing the coefficient estimates. The dimensions are equal to \code{nlambda2}, \code{nlambda1} 
+and the number of coefficients, respectively. It belongs to the object of class "pawls.grid" only.}
+\item{ws}{ a 3-dimension numeric array containing the weight estimates. The dimensions are equal to \code{nlambda2}, \code{nlambda1} 
+and the number of observations, respectively. It belongs to the object of class "pawls.grid" only.}
+\item{raw.bic}{a numeric matrix with \code{nlambda2} rows and \code{nlambda1} columns giving the raw \code{BIC}
+value for each pair of tuning prameters. It belongs to the object of class "pawls.grid" only.}
+\item{bic}{a numeric matrix with \code{nlambda2} rows and \code{nlambda1} columns giving the \code{BIC}
+value for each pair of tuning prameters. It belongs to the object of class "pawls.grid" only.}
 }
 \description{
 Compute weighted least squares regression with \eqn{L_{1}}{L1} regularization on both the
 coefficients and weight vectors.
+}
+\author{
+Bin Luo, Xiaoli Gao
 }
 

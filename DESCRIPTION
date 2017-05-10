@@ -1,14 +1,14 @@
 Package: pawls
 Type: Package
-Title: What the package does (short line)
-Version: 1.0
+Title: Penalized adaptive weighted least squares regression
+Version: 1.0.0
 Date: 2015-01-03
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: 
+Author: Bin Luo, Xiaoli Gao
+Maintainer: Bin Luo <b_luo@uncg.edu>
+Description: Efficient algorithms for fitting weighted least squares regression with \eqn{L_{1}}{L1} regularization on both the
+ coefficients and weight vectors, which is able to perform simultaneous variable selection 
+ and outliers detection efficiently.
 Imports:
-    MASS
-License: What license is it under?
+License: GPL-2
 Suggests:
-    testthat
 RoxygenNote: 5.0.1

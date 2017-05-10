@@ -6,8 +6,8 @@
 #' @param x a numeric matrix containing the predictor variables without an intercept.  \code{pawls}
 #' standardizes the data and includes an intercept by default.
 #' @param y a numeric vector containing the response variable.
-#' @param nlambda1 The number of lambda1 values (the default is 100).
-#' @param nlambda2 The number of lambda2 values (the default is 50).
+#' @param nlambda1 the number of lambda1 values (the default is 100).
+#' @param nlambda2 the number of lambda2 values (the default is 50).
 #' @param lambda1  a numeric vector of non-negative values to be used as tuning parameters of the penalty
 #'  for coefficients. By default, a sequence of values of length \code{nlambda1} is computed, equally
 #' spaced on the log scale. 
@@ -34,7 +34,31 @@
 #' to have unit L2 norm (the default is TRUE). 
 #' @param search a character string specifying the algorithm to select tunning parameters for both coefficients and weight
 #' vectors. If "cross", the optimal tuning parameters are searched alternatively by minimizing \code{BIC}. If "grid", 
-#' the optimal tuning parameters are selected as the pair that minimiz \code{BIC} over a fine grid.
+#' the optimal tuning parameters are selected as the pair that minimizs \code{BIC} over a fine grid.
+#' @return 
+#' An object of class "pawls.cross"(if \code{search=\code{cross}}) or "pawls.grid" 
+#' (if \code{search=\code{grid}}) contaning:
+#' 
+#' \item{beta}{ a numeric vector containing the respective coefficient estimates with the optimal tuning parameters.}
+#' \item{w}{ a numeric vector containing the respective weight estimates with the optimal tuning parameters.}
+#' \item{lambda1}{same as above.}
+#' \item{lambda2}{same as above.}
+#' \item{opt.lambda1}{a numeric value giving the optimal \code{lambda1} in the sense of minimzing \code{BIC}.}
+#' \item{opt.lambda2}{a numeric value giving the optimal \code{lambda2} in the sense of minimzing \code{BIC}.}
+#' \item{iter}{a numeric matrix with \code{nlambda2} rows and \code{nlambda1} columns giving the number of iteration until convergence
+#' at each pair of tuning parameters(\code{search=\code{grid}}) or a nueric value giving the number of iteration 
+#' in corss search until convergence(\code{search=\code{cross}}).}
+#' \item{betas}{ a 3-dimension numeric array containing the coefficient estimates. The dimensions are equal to \code{nlambda2}, \code{nlambda1} 
+#' and the number of coefficients, respectively. It belongs to the object of class "pawls.grid" only.}
+#' \item{ws}{ a 3-dimension numeric array containing the weight estimates. The dimensions are equal to \code{nlambda2}, \code{nlambda1} 
+#' and the number of observations, respectively. It belongs to the object of class "pawls.grid" only.}
+#' \item{raw.bic}{a numeric matrix with \code{nlambda2} rows and \code{nlambda1} columns giving the raw \code{BIC}
+#' value for each pair of tuning prameters. It belongs to the object of class "pawls.grid" only.}
+#' \item{bic}{a numeric matrix with \code{nlambda2} rows and \code{nlambda1} columns giving the \code{BIC}
+#' value for each pair of tuning prameters. It belongs to the object of class "pawls.grid" only.}
+#' @author Bin Luo, Xiaoli Gao
+#' @example 
+#' 
 pawls = function(x, y, nlambda1 = 100, nlambda2 = 50, lambda1 = NULL, lambda2 = NULL, lambda1.min=ifelse(n>p,0.001,0.05),
     lambda2.min=ifelse(n>p,0.05,0.001), beta0 = NULL, w0 = NULL,initial = c("uniform","PAWLS"), delta = 1e-06, 
     maxIter = 1e03, intercept = TRUE, standardize = TRUE, search = c("cross", "grid")) {
@@ -125,11 +149,11 @@ pawls = function(x, y, nlambda1 = 100, nlambda2 = 50, lambda1 = NULL, lambda2 = 
                   lambda2 = lambda2,
                   opt.lambda1 = lambda1[res2$index1],
                   opt.lambda2 = lambda2[res2$index2],
-                  index1=res2$index1,
-                  index2=res2$index2,
+                  iter = res1$iter,
+                  index1=res2$index1,#
+                  index2=res2$index2,#
                   ws = res1$w,
                   betas = res1$betas,
-                  iter = res1$iter,
                   raw.bic = res2$raw.bic,
                   bic = res2$bic)
       class(fit) <- "pawls.grid"
@@ -143,9 +167,9 @@ pawls = function(x, y, nlambda1 = 100, nlambda2 = 50, lambda1 = NULL, lambda2 = 
                   lambda2 = lambda2,
                   opt.lambda1 = res$opt.lambda1,
                   opt.lambda2 = res$opt.lambda2,
-                  iter = res$iter,
-                  crit1 = res$crit1,
-                  crit2 = res$crit2)
+                  crit1 = res$crit1, #
+                  crit2 = res$crit2, #
+                  iter = res$iter)
       class(fit) <- "pawls.cross"
     }
     

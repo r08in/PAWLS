@@ -1,33 +1,20 @@
+## generate data
+# example is not high-dimensional to keep computation time low
+library("mvtnorm")
+set.seed(123)  # for reproducibility
+n = 100 # number of observations
+p = 8 # number of variables
+beta = c(1, 2, 3, 0, 0, 0, 0, 0) # coefficients
+sigma <- 0.5      # controls signal-to-noise ratio
+epsilon <- 0.1    # contamination level
+Sigma <- 0.5^t(sapply(1:p, function(i, j) abs(i-j), 1:p))
+x <- rmvnorm(n, sigma=Sigma)    # predictor matrix
+e <- rnorm(n)                   # error terms
+i <- 1:ceiling(epsilon*n)       # observations to be contaminated
+e[i] <- e[i] + 5                # vertical outliers
+y <- c(x %*% beta + sigma * e)  # response
+x[i,] <- x[i,] + 5              # bad leverage points
 
-##------------------------------------------------------------------##
-##----------------------- Low Dimension ----------------------------##
-##------------------------------------------------------------------##
-L = 100
-n = 50
-p = 8
-beta = c(3, 2, 1.5, 0, 0, 0, 0, 0)
-
-outA_50 = simulation(L, n, beta, "A", method = "PAWLS", initial = "PAWLS", seed = NULL, useDataFile = TRUE, 
-    updateInitial = TRUE)
-outB_50 = simulation(L, n, beta, "B", method = "PAWLS", initial = "PAWLS", seed = NULL, useDataFile = TRUE, 
-    updateInitial = TRUE)
-outC_50 = simulation(L, n, beta, "C", method = "PAWLS", initial = "PAWLS", seed = NULL, useDataFile = TRUE, 
-    updateInitial = TRUE)
-outD2_50 = simulation(L, n, beta, "D2", method = "PAWLS", initial = "PAWLS", seed = NULL, useDataFile = TRUE, 
-    updateInitial = TRUE)
-
-##-------------------------------------------------------------------##
-##----------------------- high Dimension ----------------------------##
-##-------------------------------------------------------------------##
-
-L = 100
-n = 100
-p = 500
-num = 10
-beta = c(rep(2, num), rep(0, p - num))
-
-outA0_500 = simulation(L, n, beta, "A", method = "PAWLS", initial = "PAWLS", seed = 2015, updateInitial = TRUE)
-outC0_500 = simulation(L, n, beta, "C", method = "PAWLS", initial = "PAWLS", seed = 2015, updateInitial = TRUE)
-outB0_500 = simulation(L, n, beta, "B", method = "PAWLS", initial = "PAWLS", seed = 2015, updateInitial = TRUE)
-outD20_500 = simulation(L, n, beta, "D2", method = "PAWLS", initial = "PAWLS", seed = 2015, updateInitial = TRUE)
-
+## fit
+pawls(x,y,lambda1 = 0.1, lambda2 = 0.005)
+pawls(x,y,lambda1.min = 0.0001, lambda2.min = 0.001)
