@@ -12,12 +12,6 @@
 //calculate the value of ||Xj'Y/n||
 double* CrossProduct(double *x, double *y,int begin,int end, int n)
 {
-  //error checking
-  if(end<begin)
-  {
-    printf("inside CrossProduct: end should not be smaller than begin!\n");
-    abort();
-  }
   double * val=Calloc(end-begin+1, double);
   
   for(int j=begin;j<=end;j++)
@@ -28,7 +22,6 @@ double* CrossProduct(double *x, double *y,int begin,int end, int n)
       val[j-begin]+=x[j*n+i]*y[i];
     }
     val[j-begin]=val[j-begin]/n;
-    //printf(" j:%d, val:%f\n",j,val[j]);
   }  
   return val;
 }

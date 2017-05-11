@@ -199,7 +199,6 @@ SEXP PAWLS_GRID( SEXP X_, SEXP Y_, SEXP Penalty1_, SEXP Penalty2_, SEXP Lambda1_
     }
     else if(strcmp(penalty2,"L1")==0)//L1
     {
-      //fprintf(f,"Lam2\n");
       for(int i=0;i<n;i++)
       {
         Lam2[i]=lambda2[l2]/fabs(1-w0[i])*n;//init sqrt(lambda2/fabs(log(w0))n)
@@ -210,11 +209,9 @@ SEXP PAWLS_GRID( SEXP X_, SEXP Y_, SEXP Penalty1_, SEXP Penalty2_, SEXP Lambda1_
     //iteration for each lambda1
     for(int l1=lstart1;l1<L1;l1++)
     {
-      //fprintf(f,"\nLam1\n");
       for(int i=0;i<m;i++)
       {
         Lam1[i]=lambda1[l1]/fabs(beta0[i]);
-        //fprintf(f,"%f ",Lam1[i]);
       }
       
       if(intercept==true)
@@ -271,7 +268,6 @@ SEXP PAWLS_GRID( SEXP X_, SEXP Y_, SEXP Penalty1_, SEXP Penalty2_, SEXP Lambda1_
         //update w
         if(strcmp(penalty2,"L1")==0)//L1
         {
-          //fprintf(f,"w:\n" );
           double sqr=0;
           for(int i=0;i<n;i++)
           {
@@ -284,8 +280,6 @@ SEXP PAWLS_GRID( SEXP X_, SEXP Y_, SEXP Penalty1_, SEXP Penalty2_, SEXP Lambda1_
             {
               w[i*L2*L1+l1*L2+l2]=1;
             }
-            //fprintf(f,"w(%d,%d,%d)=%f ",l2,l1,i,w[i*L2*L1+l1*L2+l2]);
-            //fprintf(f,"\n");
           }
         }
         

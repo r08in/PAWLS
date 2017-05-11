@@ -174,7 +174,7 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
               updateInitialTimes <- ifelse(updateInitial, 2, 0)
               ptm <- proc.time()
               res = pawls(out$x, out$y, nlambda2 = 50, nlambda1 = 100, lambda2 = lambda2,
-                            lambda1=lambda1, delta = 1e-06, 
+                            lambda1=lambda1, delta = 1e-06, lambda1.min = lambda1.min,lambda2.min = lambda2.min,
                 maxIter = 1000, initial = initial, intercept = intercept, standardize = standardize, search = search)
               times[i] <- (proc.time() - ptm)[1]
               b[i, ] = res$beta

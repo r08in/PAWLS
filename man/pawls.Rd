@@ -58,8 +58,8 @@ vectors. If "cross", the optimal tuning parameters are searched alternatively by
 the optimal tuning parameters are selected as the pair that minimizs \code{BIC} over a fine grid. The default is "grid".}
 }
 \value{
-An object of class "pawls.cross"(if \code{search=cross}) or \code{"pawls.grid"} 
-(if \code{search=grid}) contaning:
+An object of class "pawls.cross"(\code{search=cross}) or \code{"pawls.grid"} 
+(\code{search=grid}) contaning:
 
 \item{beta}{ a numeric vector containing the respective coefficient estimates with the optimal tuning parameters.}
 \item{w}{ a numeric vector containing the respective weight estimates with the optimal tuning parameters.}
@@ -68,7 +68,7 @@ An object of class "pawls.cross"(if \code{search=cross}) or \code{"pawls.grid"}
 \item{opt.lambda1}{a numeric value giving the optimal \code{lambda1} in the sense of minimzing \code{BIC}.}
 \item{opt.lambda2}{a numeric value giving the optimal \code{lambda2} in the sense of minimzing \code{BIC}.}
 \item{iter}{a numeric matrix with \code{nlambda2} rows and \code{nlambda1} columns giving the number of iteration until convergence
-at each pair of tuning parameters(\code{search=grid}) or a nueric value giving the number of iteration 
+at each pair of tuning parameters(\code{search=grid}) or a numeric value giving the number of iteration 
 in corss search until convergence(\code{search=cross}).}
 \item{betas}{ a 3-dimension numeric array containing the coefficient estimates. The dimensions are equal to \code{nlambda2}, \code{nlambda1} 
 and the number of coefficients, respectively. It belongs to the object of class \code{"pawls.grid"} only.}
