@@ -1,11 +1,11 @@
 Package: pawls
 Type: Package
 Title: Penalized Adaptive Weighted Least Squares Regression
-Version: 1.0.0
+Version: 1.0.1
 Date: 2017-05-01
 Author: Bin Luo, Xiaoli Gao
 Maintainer: Bin Luo <b_luo@uncg.edu>
-Description: Efficient algorithms for fitting weighted least squares regression with \eqn{L_{1}}{L1} regularization on both the
+Description: Efficient algorithms for fitting weighted least squares regression with L1 regularization on both the
  coefficients and weight vectors, which is able to perform simultaneous variable selection 
  and outliers detection efficiently.
 Imports:

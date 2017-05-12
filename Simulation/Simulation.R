@@ -180,8 +180,8 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
               b[i, ] = res$beta
               w[i, ] = res$w
               iter[i] = res$iter
-              crit2[i,] = res$crit2
-              crit1[i,] =  res$crit1
+              #crit2[i,] = res$crit2
+              #crit1[i,] =  res$crit1
               lam2[i,] =  res$lambda2
               lam1[i,] = res$lambda1
               if(search=="grid"){

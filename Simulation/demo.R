@@ -16,8 +16,8 @@ y <- c(x %*% beta + sigma * e)  # response
 x[i,] <- x[i,] + 5              # bad leverage points
 
 ## fit pawls model over a find grid of tuning parameters
-pawls(x,y)
-
+out <- pawls(x,y)
+out2 <- pawls(x,y,lambda1 = out$opt.lambda1,lambda2 = out$opt.lambda2)
 ## fit adaptive pawls model over a find grid of tuning parameters
 pawls(x,y,lambda1.min = 0.001, lambda2.min = 0.05, initial = "PAWLS")
 

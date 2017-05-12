@@ -297,7 +297,7 @@ SEXP PAWLS_GRID( SEXP X_, SEXP Y_, SEXP Penalty1_, SEXP Penalty2_, SEXP Lambda1_
         {
           wPre[i]=w[i*L2*L1+l1*L2+l2];
         }
-        
+
         //Check for convergence
         if(VectorProduct(shift,shift)<delta)
         {
