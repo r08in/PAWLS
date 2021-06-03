@@ -1,7 +1,7 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.6.29) (preloaded format=pdflatex 2020.7.29)  3 JUN 2021 08:44
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.6.29) (preloaded format=pdflatex 2020.7.29)  27 MAY 2021 15:33
 entering extended mode
-**./result.tex
-(result.tex
+**./result_revise.tex
+(result_revise.tex
 LaTeX2e <2020-02-02> patch level 5
 L3 programming layer <2020-07-17>
 (C:\Users\bl242\AppData\Local\Programs\MiKTeX\tex/latex/base\article.cls
@@ -356,8 +356,8 @@ mode.def
 File: l3backend-pdfmode.def 2020-06-29 L3 backend support: PDF mode
 \l__kernel_color_stack_int=\count273
 \l__pdf_internal_box=\box99
-) (result.aux)
-\openout1 = `result.aux'.
+) (result_revise.aux)
+\openout1 = `result_revise.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 134.
 LaTeX Font Info:    ... okay on input line 134.
@@ -415,9 +415,9 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 134.
 LaTeX Info: Redefining \pageref on input line 134.
 LaTeX Info: Redefining \nameref on input line 134.
- (result.out) (result.out)
+ (result_revise.out) (result_revise.out)
 \@outlinefile=\write3
-\openout3 = `result.out'.
+\openout3 = `result_revise.out'.
 
 LaTeX Font Info:    Trying to load font information for U+msa on input line 143
 .
@@ -431,52 +431,48 @@ LaTeX Font Info:    Trying to load font information for U+msb on input line 143
 (C:\Users\bl242\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Overfull \hbox (48.7785pt too wide) in paragraph at lines 144--307
+Overfull \hbox (47.63956pt too wide) in paragraph at lines 144--181
  [] 
  []
 
 
-LaTeX Warning: Float too large for page by 71.69998pt on input line 308.
-
-
-Overfull \hbox (70.48679pt too wide) in paragraph at lines 662--795
+Overfull \hbox (70.48679pt too wide) in paragraph at lines 536--669
  [] 
  []
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1083.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 957.
 [1
 
-{C:/Users/bl242/AppData/Local/MiKTeX/pdftex/config/pdftex.map}] [2pdfTeX warnin
-g (ext4): destination with the same identifier (name{table.1}) has been already
- used, duplicate ignored
+{C:/Users/bl242/AppData/Local/MiKTeX/pdftex/config/pdftex.map}pdfTeX warning (e
+xt4): destination with the same identifier (name{table.1}) has been already use
+d, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.1083 \end{document}
-                     ] [3pdfTeX warning (ext4): destination with the same ident
-ifier (name{table.2}) has been already used, duplicate ignored
+l.957 \end{document}
+                    ] [2pdfTeX warning (ext4): destination with the same identi
+fier (name{table.2}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.1083 \end{document}
-                     ]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1083.
- (result.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1083.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1083.
-
-Package rerunfilecheck Info: File `result.out' has not changed.
+l.957 \end{document}
+                    ]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 957.
+ (result_revise.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 957.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 957.
+Package rerunfilecheck Info: File `result_revise.out' has not changed.
 (rerunfilecheck)             Checksum: 10F3BA3AE4AB0025951C80712319A28F;51.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1083.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 957.
  ) 
 Here is how much of TeX's memory you used:
- 6632 strings out of 481225
- 99684 string characters out of 2906174
- 400275 words of memory out of 3000000
+ 6631 strings out of 481225
+ 99790 string characters out of 2906174
+ 383282 words of memory out of 3000000
  22061 multiletter control sequences out of 15000+200000
  540149 words of font info for 48 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 43i,10n,37p,289b,314s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 43i,10n,37p,296b,316s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Users/bl242/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
 cmbx10.pfb><C:/Users/bl242/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
 fonts/cm/cmbx12.pfb><C:/Users/bl242/AppData/Local/Programs/MiKTeX/fonts/type1/p
@@ -486,9 +482,9 @@ TeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/bl242/AppData/Local/Prog
 rams/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/bl242/AppData/Loc
 al/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/bl242/Ap
 pData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
-Output written on result.pdf (3 pages, 85352 bytes).
+Output written on result_revise.pdf (2 pages, 83812 bytes).
 PDF statistics:
- 60 PDF objects out of 1000 (max. 8388607)
- 7 named destinations out of 1000 (max. 500000)
+ 54 PDF objects out of 1000 (max. 8388607)
+ 6 named destinations out of 1000 (max. 500000)
  9 words of extra memory for PDF output out of 10000 (max. 10000000)
 

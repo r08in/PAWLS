@@ -236,9 +236,17 @@ GenerateDummyModel = function(sizeInfo, groupInfo, validGroupNumInfo, offSet = 0
 }
 
 # Data modification for different model
-GenerateDataByModel = function(n, beta, errorSigma = 2, r = 0.5, model = c("A", "B", "C", "D", "E"), 
+GenerateDataByModel = function(n, beta, errorSigma = 2, r = 0.5, model = c("A", "B", "C", "D", "E","F"), 
     dataType = c("Lasso", "Ridge"), pro = 0.1) {
     p = length(beta)
+    pnum = sum(beta != 0)
+    oNum = round(n * pro)
+    if(n>p){
+      x_ind = c(sample(1:pnum, size=2), sample((pnum+1):p, size=2))
+    }else{
+      x_ind = c(sample(1:pnum, size=round(0.5*pnum)), 
+                sample((pnum+1):p, size=round(0.1*(p-pnum))))
+    }
     if (model == "A") {
         out = GenerateData(n = n, dataSetNum = 1, beta = beta, errorSigma = errorSigma, r = r, dataType = dataType)  #errorSigma=2
     } else if (model == "B") {
@@ -246,63 +254,31 @@ GenerateDataByModel = function(n, beta, errorSigma = 2, r = 0.5, model = c("A", 
             r = r, dataType = dataType)  #errorSigma is df=2
     } else if (model == "C") {
         out = GenerateData(n = n, dataSetNum = 1, beta = beta, errorSigma = errorSigma, r = r, dataType = dataType)
-        oNum = round(n * pro)
         u1 = runif(oNum, 0, 1)
         u2 = runif(oNum, 0, 1)
         out$y[1:oNum] = out$y[1:oNum] + ifelse(u1 < 0.5, -1, 1) * (20 + 10 * u2)
     } else if (model == "D") {
         out = GenerateData(n = n, dataSetNum = 1, beta = beta, errorSigma = errorSigma, r = r, dataType = dataType)
-        pnum = sum(beta != 0)
-        oNum = round(n * pro)
         u1 = runif(oNum, 0, 1)
-        u2 = runif(oNum, 0, 1)
-        out$y[1:oNum] = out$y[1:oNum] + ifelse(u1 < 0.5, -1, 1) * (20 + 10 * u2)
-        out$x[1:oNum, (pnum + 1):(pnum + 5)] = out$x[1:oNum, (pnum + 1):(pnum + 5)] + 10
-    } else if (model == "E2") {
+        u2 = runif(oNum, 0, 1) 
+        out$x[1:oNum, x_ind] = out$x[1:oNum, x_ind] + ifelse(u1 < 0.5, -1, 1) * (10 + 5 * u2)
+    } else if (model == "E") {
       out = GenerateData(n = n, dataSetNum = 1, beta = beta, errorSigma = errorSigma, r = r, dataType = dataType)
-      pnum = sum(beta != 0)
-      ratio <- 3
-      oNum = round(n * pro)
-      xx <- out$x
-      svd_out <- svd(xx)
-      u <- svd_out$u
-      v <- svd_out$v
-      d <- svd_out$d
-     # u[n:(n-oNum+1),] <- u[n:(n-oNum+1),] * ratio
-      u[1:oNum,] <- u[1:oNum,] * ratio
-      xx <- u %*% diag(d) %*% t(v)
-      out$x <- xx
+      u1 = runif(oNum, 0, 1)
+      u2 = runif(oNum, 0, 1)
+      o_ind1 <- 1:round(oNum/2)
+      o_ind2 <- (round(oNum/2)+1):oNum
+      out$y[o_ind1] = out$y[o_ind1] + ifelse(u1[o_ind1] < 0.5, -1, 1) * (20 + 10 * u2[o_ind1])
+      # if(n>p) k = 2
+      # if(n<=p) k= 0.1 * p
+      # x_ind = sample(1:p, size=k)
+      out$x[o_ind2, x_ind] = out$x[o_ind2, x_ind] + ifelse(u1[o_ind2] < 0.5, -1, 1) * (10 + 5 * u2[o_ind2])
+    }else if (model == "F") {
+      out = GenerateData(n = n, dataSetNum = 1, beta = beta, errorSigma = errorSigma, r = r, dataType = dataType)
       u1 = runif(oNum, 0, 1)
       u2 = runif(oNum, 0, 1)
       out$y[1:oNum] = out$y[1:oNum] + ifelse(u1 < 0.5, -1, 1) * (20 + 10 * u2)
-    }else if (model == "E") {
-      out = GenerateData(n = n, dataSetNum = 1, beta = beta, errorSigma = errorSigma, r = r, dataType = dataType)
-      pnum = sum(beta != 0)
-      oNum = round(n * pro)
-      xx <- out$x
-      svd_out <- svd(xx)
-      v <- svd_out$v
-      xx[1:oNum,] <- xx[1:oNum,] + matrix(rep(5* v[,dim(v)[2]],oNum),nrow=oNum,byrow = TRUE)
-      out$x <- xx
-      u1 = runif(oNum, 0, 1)
-      u2 = runif(oNum, 0, 1)
-      out$y[1:oNum] = out$y[1:oNum] + ifelse(u1 < 0.5, -1, 1) * (20 + 10 * u2)
-      #out$y[1:oNum] = xx[1:oNum,]%*% beta + errorSigma * rnorm(oNum, 0, 1) + 
-        #ifelse(u1 < 0.5, -1, 1) * (20 + 10 * u2)
-    }else if (model == "E3") {
-      out = GenerateData(n = n, dataSetNum = 1, beta = beta, errorSigma = errorSigma, r = r, dataType = dataType)
-      pnum = sum(beta != 0)
-      oNum = round(n * pro)
-      xx <- out$x
-      svd_out <- svd(xx)
-      v <- svd_out$v
-      xx[1:oNum,] <- xx[1:oNum,] + matrix(rep(5* v[,p],oNum),nrow=oNum,byrow = TRUE)
-      out$x <- xx
-      u1 = runif(oNum, 0, 1)
-      u2 = runif(oNum, 0, 1)
-      #out$y[1:oNum] = out$y[1:oNum] + ifelse(u1 < 0.5, -1, 1) * (20 + 10 * u2)
-      out$y[1:oNum] = xx[1:oNum,]%*% beta + errorSigma * rnorm(oNum, 0, 1) + 
-        ifelse(u1 < 0.5, -1, 1) * (20 + 10 * u2)
+      out$x[1:oNum, x_ind] = out$x[1:oNum, x_ind] + ifelse(u1 < 0.5, 1, -1) * (10 + 5 * u2)
     }else if (model == "C2") {
         out = GenerateData(n = n, dataSetNum = 1, beta = beta, errorSigma = errorSigma, r = r, dataType = dataType)
         oNum = round(n * 0.1)

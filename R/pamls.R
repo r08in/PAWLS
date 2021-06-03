@@ -2,7 +2,7 @@ pamls= function(x, y, penalty1 = c("L1"), penalty2 = c("L1"), lambda1 = NULL,
     lambda2 = NULL, nlambda1 = 50, nlambda2 = 100, 
     lambda1.min=1e-03, 
     lambda2.min=0.05, 
-    beta0 = NULL, gam0 = NULL, startBeta = NULL, startGam = NULL, initial = "uniform", delta = 1e-06, maxIter = 1000, intercept = TRUE,  updateInitialTimes = 0, 
+    beta0 = NULL, gam0 = NULL, startBeta = NULL, startGam = NULL, initial = "uniform", delta = 1e-06, maxIter = 1000, intercept = TRUE, standardize = TRUE, updateInitialTimes = 0, 
     criterion = c("BIC", "AIC"), initCrit=c("BIC", "AIC"), search = c("cross", "all"), ...) {
     ## error checking
     if (class(x) != "matrix") {
@@ -54,13 +54,25 @@ pamls= function(x, y, penalty1 = c("L1"), penalty2 = c("L1"), lambda1 = NULL,
     
     # intercept
     if (intercept) {
-        x = AddIntercept(x)
-        p = p+1
+        x = cbind(rep(1,n), x)
+    }
+    
+    # sandardize
+    std = 0
+    scale = 0
+    if (standardize) {
+        std <- .Call("Standardize", x, y)
+        XX <- std[[1]]
+        yy <- std[[2]]
+        scale <- std[[3]]
+    } else {
+        XX = x
+        yy = y
     }
     
     ## setup parameter
     if (missing(lambda1) || missing(lambda2)||is.null(lambda1)||is.null(lambda2)) {
-        lambda = ComputeParameter(x, y, nlambda1, nlambda2, lambda1.min=lambda1.min, lambda2.min=lambda2.min, beta0, gam0)
+        lambda = ComputeParameter(XX, yy, nlambda1, nlambda2, lambda1.min=lambda1.min, lambda2.min=lambda2.min, beta0, gam0)
         if (is.null(lambda1)) 
             lambda1 = lambda$lambda1
         if (is.null(lambda2)) 
@@ -72,16 +84,21 @@ pamls= function(x, y, penalty1 = c("L1"), penalty2 = c("L1"), lambda1 = NULL,
     if (criterion == "BIC" || criterion == "AIC") {
         # search for the whole grid
         if (search == "all") {
-            res = Innerpamls(x, y, lambda1, lambda2, beta0, gam0, delta, 
+            res = Innerpamls(XX, yy, lambda1, lambda2, beta0, gam0, delta, 
                 maxIter, intercept = intercept)
             res = BIC4PAMLS(res$loss, res$beta, res$gam, lambda1, lambda2, criterion = criterion)
         } else {
             # (search=='cross')
-            res = pamlsreg(x, y, lambda1, lambda2, beta0, gam0, delta, maxIter, 
+            res = pamlsreg(XX, yy, lambda1, lambda2, beta0, gam0, delta, maxIter, 
                 intercept = intercept, criterion = criterion, startBeta = startBeta, startGam = startGam)
         }
         
     } 
+    ## unstandardize
+    if (standardize) {
+        scale = ifelse(scale == 0, 0, 1/scale)
+        res$beta = res$beta * scale
+    }
     res
 }
 # without search the whole grid of lambda

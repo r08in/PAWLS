@@ -61,7 +61,7 @@ SEXP CleanupG(double *r, double *betaPre, double *wPre, double * shift,
 
 
 SEXP PAWLS_GRID( SEXP X_, SEXP Y_, SEXP Penalty1_, SEXP Penalty2_, SEXP Lambda1_, SEXP Lambda2_,
-               SEXP Beta0_, SEXP W0_, SEXP Delta_, SEXP MaxIter_, 
+               SEXP Penalty_factor1_, SEXP Penalty_factor2_, SEXP Delta_, SEXP MaxIter_, 
                SEXP Intercept_, SEXP StarBeta_, SEXP StarW_ )
 {
   //data convert
@@ -71,8 +71,8 @@ SEXP PAWLS_GRID( SEXP X_, SEXP Y_, SEXP Penalty1_, SEXP Penalty2_, SEXP Lambda1_
   const char *penalty1 = CHAR(STRING_ELT(Penalty1_, 0));
   double *lambda2=REAL(Lambda2_);
   double *lambda1=REAL(Lambda1_);
-  double *beta0=REAL(Beta0_);
-  double *w0=REAL(W0_);
+  double *Penalty_factor1=REAL(Penalty_factor1_);
+  double *Penalty_factor2=REAL(Penalty_factor2_);
   double *starBeta=NULL;
   if(StarBeta_!=NULL)
   {
@@ -192,7 +192,7 @@ SEXP PAWLS_GRID( SEXP X_, SEXP Y_, SEXP Penalty1_, SEXP Penalty2_, SEXP Lambda1_
       
       for(int i=0;i<n;i++)
       {
-        Lam2[i]=sqrt(lambda2[l2]/fabs(log(w0[i]))*n) ;//init sqrt(lambda2/fabs(log(w0))n)
+        Lam2[i]=sqrt(lambda2[l2]* Penalty_factor2[i]*n) ;//init sqrt(lambda2/fabs(log(Penalty_factor2))n)
         
         
       }
@@ -201,7 +201,7 @@ SEXP PAWLS_GRID( SEXP X_, SEXP Y_, SEXP Penalty1_, SEXP Penalty2_, SEXP Lambda1_
     {
       for(int i=0;i<n;i++)
       {
-        Lam2[i]=lambda2[l2]/fabs(1-w0[i])*n;//init sqrt(lambda2/fabs(log(w0))n)
+        Lam2[i]=lambda2[l2]* Penalty_factor2[i] *n;//init sqrt(lambda2/fabs(log(Penalty_factor2))n)
       }
       
     }
@@ -211,7 +211,7 @@ SEXP PAWLS_GRID( SEXP X_, SEXP Y_, SEXP Penalty1_, SEXP Penalty2_, SEXP Lambda1_
     {
       for(int i=0;i<m;i++)
       {
-        Lam1[i]=lambda1[l1]/fabs(beta0[i]);
+        Lam1[i]=lambda1[l1] * fabs(Penalty_factor1[i]);
       }
       
       if(intercept==true)

@@ -5,8 +5,9 @@ source('Simulation/mmnngreg.R')
 
 simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL, method = "PAWLS", 
     matlab = NULL, seed = 2014, useDataFile = FALSE, standardize = TRUE, penalty1 = "1-w0", updateInitial = FALSE, 
-    criterion = "BIC", initCrit="BIC",intercept = TRUE, initial = "uniform", lambda2 = NULL, 
-    lambda1 = NULL,lambda2.min=1e-03, lambda1.min=0.05, search = "cross", type = c("Lasso", 
+    criterion = "BIC", initCrit="BIC",intercept = TRUE, initial = c("uniform", "PAWLS"), lambda2 = NULL, 
+    lambda1 = NULL,lambda2.min=0.01, lambda1.min=0.03, #was 0.03
+    search = "all", type = c("Lasso", 
         "Ridge"), pro=0.1) {
     mcount <- length(model)
     
@@ -18,7 +19,7 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
     ofr <- rep(0, L)
     cfr2 <- rep(0, L)
     pdr <- rep(0, L)
-    fdr <- rep(0, L)
+    fdr <- fnr <- fpr<-rep(0, L)
     over_size <- 2
     msize <- rep(0, L)
     mses <- rep(0, L)
@@ -37,14 +38,30 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
     dfw <- rep(0,L)
     dfb <- rep(0,L)
     pb <- txtProgressBar(1, mcount * L, style = 3)
+    p = length(beta)
+    # initiate
+    if (!is.null(seed)) {
+      set.seed(seed)
+    }
+    # cl <- makeCluster(parallel::detectCores())
+    # registerDoParallel(cl)
+    if(!useDataFile){
+      for(j in 1:mcount){
+        data <- NULL
+        for(i in 1:L){
+          out = GenerateDataByModel(n = n, beta = beta, model = model[j], dataType = type, pro=pro)
+          data <- c(data, list(out))
+        }
+        f = paste("data\\", model[j], n, "X", p, "_", pro, ".rda", sep = "")
+        save(data, file = f)
+      }
+      useDataFile <- TRUE
+    }
     for (j in 1:mcount) {
         # for each model
         
-        # initiate
-        if (!is.null(seed)) {
-            set.seed(seed)
-        }
-        p = length(beta)
+
+        
         if (useDataFile) {
             f = paste("data\\", model[j], n, "X", p, "_", pro, ".rda", sep = "")
             load(f)
@@ -56,6 +73,23 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
         gam = array(0, dim = c(L, n))
         # ROC
         # simulation
+        
+        # In parallel
+        # if(method=="PAWLS"){
+        #   res_list <- foreach(
+        #     x = lapply(data, getElement, "x"), y = lapply(data, getElement, "y"),
+        #     .packages = "pawls"
+        #   ) %dopar% {
+        #     res = cv.pawls(x, y, nlambda2 = 50, nlambda1 = 100, lambda2 = lambda2,
+        #                    lambda1=lambda1, lambda1.min = lambda1.min,lambda2.min = lambda2.min,
+        #                    intercept = intercept)
+        #     if(initial=="PAWLS"){
+        #       res=cv.pawls(x, y, beta0=res$beta, w0=res$w, lambda1=res$lambda1, 
+        #                    lambda2=res$lambda2,intercept = intercept)
+        #     }
+        #     res
+        #   }
+        # }
         for (i in 1:L) {
             # data
             if (useDataFile) {
@@ -117,26 +151,23 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
               times[i] <- (proc.time() - ptm)[1]
               if(class(try_res)[1]=="try-error"){
                 browser()
-                res$beta <- rep(0,ifelse(intercept, p+1, p))
+                res <- list(beta=rep(0,ifelse(intercept, p+1, p)))
               } else{
-                res$beta <- try_res$betac
+                res <- list(beta=try_res$betac)
               }
             } else if (method == "MMNNG_DATA") {
-                # load data file and result file
-                dfile <- paste("data\\", model[j], n, "X", p,"_", pro, ".rda", sep = "")
+                # load result file
                 rfile <- paste("data\\", model[j], n, "X", p,"_", pro, "_res", ".rda", sep = "")
-                lf <- try(load(dfile))
+                lf <- try(load(rfile))
                 if (class(lf) == "try-error") {
-                  data <- list(out)
-                  res_temp <- list(cfr=rep(0,L), cfr2=rep(0,L),ofr=rep(0,L),pdr=rep(0,L),
-                                   fdr=rep(0,L), msize=rep(0,L),mses=rep(0,L),times=rep(0,L),ind=1, count=rep(0,L))
+                  res_temp <- list(cfr=rep(NA,L), cfr2=rep(NA,L),ofr=rep(NA,L),pdr=rep(NA,L),
+                                   fdr=rep(NA,L), fpr=rep(NA,L), fnr=rep(NA,L), msize=rep(NA,L),mses=rep(NA,L),times=rep(NA,L),ind=1, count=rep(NA,L))
                 } else {
-                  if (length(data) == L) break
-                  data = c(data, list(out))
-                  load(rfile)
+                  if(res_temp$ind >= i){
+                    next
+                  }
                   res_temp$ind <- res_temp$ind+1
                 }
-                save(data, file = dfile)
                 save(res_temp, file=rfile)
                 
                 # fit mmnngreg
@@ -173,9 +204,21 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
             }else if (method == "PAWLS") {
               updateInitialTimes <- ifelse(updateInitial, 2, 0)
               ptm <- proc.time()
-              res = pawls(out$x, out$y, nlambda2 = 50, nlambda1 = 100, lambda2 = lambda2,
-                            lambda1=lambda1, delta = 1e-06, lambda1.min = lambda1.min,lambda2.min = lambda2.min,
-                maxIter = 1000, initial = initial, intercept = intercept, standardize = standardize, search = search)
+              penalty.factor2 <- 1/(apply(abs(out$x),1, max))^2
+              res = bic.pawls(out$x, out$y, nlambda2 = 50, nlambda1 = 100, lambda2 = lambda2,
+                            lambda1=lambda1, lambda1.min = lambda1.min,lambda2.min = lambda2.min,
+                             intercept = intercept,penalty.factor2=penalty.factor2)
+              if(initial=="PAWLS"){
+                # res1=cv.pawls(out$x, out$y,beta0=res$beta, w0=res$w, lambda1=res$lambda1,
+                #          lambda2=res$lambda2,intercept = intercept)
+                penalty.factor1 <- pmin(1e3, 1/abs(res$beta))
+                penalty.factor2 <- penalty.factor2 * pmin(1e3, 1/(1-res$w))
+                res=bic.pawls(out$x, out$y,penalty.factor1=penalty.factor1, 
+                             penalty.factor2=penalty.factor2,
+                             lambda1=res$lambda1,lambda2=res$lambda2,
+                             intercept = intercept)
+              }
+             # res <- res_list[[i]]
               times[i] <- (proc.time() - ptm)[1]
               b[i, ] = res$beta
               w[i, ] = res$w
@@ -184,10 +227,6 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
               #crit1[i,] =  res$crit1
               lam2[i,] =  res$lambda2
               lam1[i,] = res$lambda1
-              if(search=="grid"){
-                bic[i,,] = res$raw.bic
-                bic2[i,,] = res$bic
-              }
               
             }
             
@@ -203,6 +242,8 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
             cfr2[i] <- ifelse(common_size == pnum & msize[i] <= pnum + over_size, 1, 0)  # over fit by at most 2
             pdr[i] <- common_size/pnum  # positive discover rate
             fdr[i] <- ifelse(msize[i]==0,0,(msize[i] - common_size)/msize[i])  #
+            fpr[i] <- (msize[i]-common_size)/(p-pnum)
+            fnr[i] <- (pnum-common_size)/pnum
             mses[i] <- sum((res$beta - beta)^2)
             setTxtProgressBar(pb, (j - 1) * L + i)
             if(method == "MMNNG_DATA"){
@@ -213,6 +254,8 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
               res_temp$ofr[ind] <- ofr[i]
               res_temp$pdr[ind] <- pdr[i]
               res_temp$fdr[ind] <- fdr[i]
+              res_temp$fpr[ind] <- fpr[i]
+              res_temp$fnr[ind] <- fnr[i]
               res_temp$msize[ind] <- msize[i]
               res_temp$mses[ind] <- mses[i]
               res_temp$times[ind] <- times[i]
@@ -232,14 +275,17 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
           times <- res_temp$times
         }
         # compute measurement MSE
-        MSE <- round(mean(mses), 3)
+        MSE <- round(mean(mses, na.rm=T), 3)
+        SE <- sd(mses, na.rm=T)
         # CFR, OFR, PDR, FDR, AN
-        CFR <- round(mean(cfr), 3) * 100
-        OFR <- round(mean(ofr), 3) * 100
-        CFR2 <- round(mean(cfr2), 3) * 100
-        PDR <- round(mean(pdr), 3) * 100
-        FDR <- round(mean(fdr), 3) * 100
-        AN <- round(mean(msize), 3)
+        CFR <- round(mean(cfr, na.rm=T), 3) * 100
+        OFR <- round(mean(ofr, na.rm=T), 3) * 100
+        CFR2 <- round(mean(cfr2, na.rm=T), 3) * 100
+        PDR <- round(mean(pdr, na.rm=T), 3) * 100
+        FDR <- round(mean(fdr, na.rm=T), 3) * 100
+        FPR <- round(mean(fpr, na.rm=T),3) * 100
+        FNR <- round(mean(fnr, na.rm=T),3) * 100
+        AN <- round(mean(msize, na.rm=T), 3)
         TIME <- sum(times)
         # outlier dectection
         OD <- "not applicable."
@@ -258,17 +304,21 @@ simulation = function(L, n, beta = NULL, model = c("A", "B", "C", "D"), p = NULL
        
         # BIC curve
         if(method=="PAWLS"||method=="PAMLS"){
-          nres[[j]] <- list(model = model[j], CFR = CFR, CFR2 = CFR2, OFR = OFR, PDR = PDR, FDR = FDR, 
-                            AN = AN, MSE = MSE, mses=mses, TIME = TIME,iter=iter,OD=OD,
+          nres[[j]] <- list(model = model[j], CFR = CFR, CFR2 = CFR2, OFR = OFR, 
+                            PDR = PDR, FDR = FDR, FPR=FPR, FNR=FNR,
+                            AN = AN, MSE = MSE, SE=SE, mses=mses, TIME = TIME,iter=iter,OD=OD,
                             crit2=crit2,lam2=lam2,crit1=crit1,lam1=lam1,betas=b,ws=w,
                             bic=bic,bic2=bic2
                             )
         } else{
-          nres[[j]] <- list(model = model[j], CFR = CFR, CFR2 = CFR2, OFR = OFR, PDR = PDR, FDR = FDR, 
-                            AN = AN, MSE = MSE, mses=mses, TIME = TIME, iw=iw, ib=ib,OD=OD)
+          nres[[j]] <- list(model = model[j], CFR = CFR, CFR2 = CFR2, OFR = OFR, 
+                            PDR = PDR, FDR = FDR,  FPR=FPR, FNR=FNR,
+                            AN = AN, MSE = MSE, SE=SE, mses=mses, TIME = TIME, iw=iw, ib=ib,OD=OD)
         }
     }
     # return
+    # stopCluster(cl)
+    # registerDoSEQ()
     nres
 }
 

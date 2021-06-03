@@ -81,18 +81,18 @@
 #' ## fit adaptive pawls model using corss search over a grid of tuning parameters
 #' pawls(x,y,lambda1.min = 0.001, lambda2.min = 0.05, initial = "PAWLS", search="cross")
 #' @export
-pawls = function(x, y, nlambda1 = 100, nlambda2 = 50, lambda1 = NULL, lambda2 = NULL, lambda1.min=0.05,
-    lambda2.min=0.001, beta0 = NULL, w0 = NULL,initial = c("uniform","PAWLS"), delta = 1e-06, 
-    maxIter = 1e03, intercept = TRUE, standardize = TRUE, search = c("grid","cross")) {
+pawls = function(x, y, nlambda1 = 100, nlambda2 = 50, lambda1 = NULL, lambda2 = NULL, lambda1.min=0.001,
+    lambda2.min=0.01, penalty.factor1 = rep(1,p), penalty.factor2 = rep(1,n), delta = 1e-06, 
+    maxIter = 1e03, intercept = TRUE) {
     n = length(y)
     p = dim(x)[2]
     ## check error
-    if (class(x) != "matrix") {
+    if (!"matrix" %in% class(x)) {
         tmp <- try(x <- as.matrix(x), silent = TRUE)
         if (class(tmp)[1] == "try-error") 
             stop("x must be a matrix or able to be coerced to a matrix")
     }
-    if (class(y) != "numeric") {
+    if (!"numeric" %in%class(y)) {
         tmp <- try(y <- as.numeric(y), silent = TRUE)
         if (class(tmp)[1] == "try-error") 
             stop("y must numeric or able to be coerced to numeric")
@@ -100,60 +100,29 @@ pawls = function(x, y, nlambda1 = 100, nlambda2 = 50, lambda1 = NULL, lambda2 = 
     if (any(is.na(y)) | any(is.na(x))) 
     stop("Missing data (NA's) detected.Take actions to eliminate missing data before passing 
          X and y to pawls.")
-    initial <- match.arg(initial)
-    search <- match.arg(search)
     
     ## default setting
     penalty2 <- "L1"
     penalty1 <- "L1"
-    criterion <- "BIC"
-    startBeta <- NULL
-    startW <- NULL
     
     if (!is.null(lambda1)) 
       nlambda1 <- length(lambda1)
     if (!is.null(lambda2)) 
         nlambda2 <- length(lambda2)
 
-    ## set initial
-    if (initial == "PAWLS") {
-      init = pawls(x, y, lambda1.min = 0.05,lambda2.min = 0.001,intercept = intercept,search = "grid")
-      beta0 = SetBeta0(init$beta)
-      w0 = ifelse(init$w == 1, 0.99, init$w)
-    } else if (initial == "uniform") {
-      if (is.null(beta0)) {
-        beta0 = rep(1, p)
-        if (intercept) 
-          beta0 = c(1, beta0)
-      }
-      if (is.null(w0)) 
-        w0 = rep(0.99, n)
-      beta0 = SetBeta0(beta0)
-      w0 = ifelse(w0 == 1, 0.99, w0)
-    }
-    
+
     ## check intercept
     if (intercept) {
-        x = AddIntercept(x)
-    }
-    
-    ## sandardize
-    std = 0
-    scale = 0
-    if (standardize) {
-        std <- .Call("Standardize", x, y)
-        XX <- std[[1]]
-        yy <- std[[2]]
-        scale <- std[[3]]
-    } else {
-        XX = x
-        yy = y
+      x <- cbind(rep(1, n), x)
+      p <- p+1
+      peantly.factor1 <- c(0, penalty.factor1)
     }
     
     ## set tunning parameter
     if (is.null(lambda1)||is.null(lambda2)) {
-        lambda = setup_parameter(x=XX, y=yy, nlambda1=nlambda1, nlambda2=nlambda2, 
-                                 lambda1.min=lambda1.min, lambda2.min=lambda2.min, beta0=beta0, w0=w0)
+        lambda = setup_parameter(x=x, y=y, nlambda1=nlambda1, nlambda2=nlambda2, 
+                                 lambda1.min=lambda1.min, lambda2.min=lambda2.min,
+                                 penalty.factor1, penalty.factor2)
         if (is.null(lambda1)) 
           lambda1 = lambda$lambda1
         if (is.null(lambda2)) 
@@ -161,52 +130,19 @@ pawls = function(x, y, nlambda1 = 100, nlambda2 = 50, lambda1 = NULL, lambda2 = 
     }
     
     ## Fit
-    if (search == "grid") { # search for the whole grid
-      res1 <- pawls_grid(x=XX, y=yy, penalty1 = penalty1, penalty2 = penalty2, lambda1=lambda1, lambda2=lambda2,
-                     beta0=beta0, w0=w0, delta=delta, maxIter=maxIter, intercept = intercept)
-      res2 <-  BIC_grid(res1$wloss, res1$beta, res1$w)
-      fit <- list(beta = res2$beta,
-                  w = res2$w,
-                  lambda1 = lambda1,
-                  lambda2 = lambda2,
-                  opt.lambda1 = lambda1[res2$index1],
-                  opt.lambda2 = lambda2[res2$index2],
-                  iter = res1$iter,
-                  ws = res1$w,
-                  betas = res1$betas,
-                  raw.bic = res2$raw.bic,
-                  bic = res2$bic)
-      class(fit) <- "pawls.grid"
-    } else {# serach="cross"
-      res = pawls_cross(x=XX, y=yy, penalty1 = penalty1, penalty2 = penalty2, lambda1=lambda1, lambda2=lambda2, 
-                        beta0=beta0, w0=w0, delta=delta, maxIter=maxIter, intercept = intercept, 
-                        criterion = criterion, startBeta = startBeta, startW = startW)
-      fit <- list(beta = res$beta,
-                  w = res$w,
-                  lambda1 = lambda1,
-                  lambda2 = lambda2,
-                  opt.lambda1 = res$opt.lambda1,
-                  opt.lambda2 = res$opt.lambda2,
-                  iter = res$iter)
-      class(fit) <- "pawls.cross"
-    }
     
-    ## unstandardize
-    if (standardize) {
-        scale = ifelse(scale == 0, 0, 1/scale)
-        fit$beta = fit$beta * scale
-    }
+    startBeta = rep(0, p)
+    startW = rep(1, n)
+    res <- .Call("PAWLS_GRID", x, y, penalty1, penalty2, lambda1, lambda2, penalty.factor1, penalty.factor2, delta, maxIter, 
+                 ifelse(intercept, 1, 0), startBeta = startBeta, startW = startW)
+    
+    fit = list(beta = array(res[[1]], dim = c(nlambda2, nlambda1, p)), w = array(res[[2]], dim = c(nlambda2, nlambda1, n)), 
+               wloss = array(res[[3]], dim = c(nlambda2, nlambda1)), loss = array(res[[4]], dim = c(nlambda2, nlambda1)), 
+               iter = array(res[[5]], dim = c(nlambda2, nlambda1)))
+    fit$lambda1 <- lambda1
+    fit$lambda2 <- lambda2
+    fit$intercept <- intercept
     fit
 }
 
-SetBeta0 = function(beta0) {
-    b = 1e-6
-    ifelse(abs(beta0) < b, b, beta0)
-}
 
-AddIntercept = function(x) {
-    n = dim(x)[1]
-    x1 = rep(1, n)
-    xx = cbind(x1, x)
-    xx
-}
